@@ -45,13 +45,14 @@ var thrust_magnitude = 0.1;
 var mass = 1;
 var dangle = 2 * Math.PI/180;
 var interval = 20;
-var go = true;
 var plane = document.getElementById('plane');
 var width = plane.getBoundingClientRect().width;
 var height = plane.getBoundingClientRect().height;
 var stage = document.getElementById('stage');
 var stage_width = stage.getAttribute('width')/1;
 var stage_height = stage.getAttribute('height')/1;
+var gravity = 0.02;
+var go = true;
 
 var input = {
   'elevator_up': null,
@@ -90,11 +91,11 @@ function updateOrientation(){
 
 function updateVelocity(){
 
-  var forces = [
-    getThrustForce()
-  ];
-
-  var forces_total = sumVectors(forces);
+  var forces_total = sumVectors([
+    getThrustForce(),
+    getGravityForce(),
+    getLiftDragForce()
+  ]);
 
   var acceleration = {
     angle: forces_total.angle,
@@ -102,6 +103,17 @@ function updateVelocity(){
   };
 
   velocity = sumVectors([velocity, acceleration]);
+}
+
+function getGravityForce(){
+  return {angle: -Math.PI/2, magnitude: gravity*mass};
+}
+
+function getLiftDragForce(){
+  return {
+    angle: 0,
+    magnitude: 0
+  };
 }
 
 function sumVectors(vectors){
