@@ -31,6 +31,8 @@ var frame = 0;
 var x = 500;
 var y = 150;
 var angle = 0;
+var dx = 0;
+var dy = 0;
 var dangle = 2;
 var interval = 20;
 var go = true;
@@ -58,8 +60,10 @@ function clearInput(){
 
 function update(){
   frame++;
-  updateAngle()
-  //x-=1;
+  updateAngle();
+  updateVelocity();
+  x += dx;
+  y += dy;
 }
 
 function updateAngle(){
@@ -69,6 +73,14 @@ function updateAngle(){
   if(input.elevator_down){
     angle+=dangle;
   }
+  console.log(angle);
+}
+
+function updateVelocity(){
+
+  dx = -Math.cos(angle*Math.PI/180);
+  dy = -Math.sin(angle*Math.PI/180);
+
 }
 
 function render(){
@@ -87,10 +99,6 @@ var planea = {
 
 
 function updateAcceleration(){
-
-}
-
-function updateVelocity(){
 
 }
 
