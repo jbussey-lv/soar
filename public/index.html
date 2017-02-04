@@ -22,18 +22,20 @@
 
 
 function placeElement(element, x, y, angle){
+  var angle_degrees = angle  * 180/Math.PI;
   element.setAttribute('x', x-width/2);
   element.setAttribute('y', y-height/2);
-  element.setAttribute('transform', 'rotate('+angle+' '+x+' '+y+')')
+  element.setAttribute('transform', 'rotate('+angle_degrees+' '+x+' '+y+')')
 }
 
 var frame = 0;
 var x = 500;
 var y = 150;
-var angle = 0;
-var dx = 0;
-var dy = 0;
-var dangle = 2;
+var angle = 0 * Math.PI/180;
+var speed = 0;
+var throttle_force = 0.1;
+var mass = 1;
+var dangle = 2 * Math.PI/180;;
 var interval = 20;
 var go = true;
 var plane = document.getElementById('plane');
@@ -61,9 +63,8 @@ function clearInput(){
 function update(){
   frame++;
   updateAngle();
-  updateVelocity();
-  x += dx;
-  y += dy;
+  updateSpeed();
+  updatePosition();
 }
 
 function updateAngle(){
@@ -73,14 +74,22 @@ function updateAngle(){
   if(input.elevator_down){
     angle+=dangle;
   }
-  console.log(angle);
 }
 
-function updateVelocity(){
+function updateSpeed(){
+  if(input.throttle){
+    speed += throttle_force / mass;
+  }
+  if(input.brake){
+    speed -= throttle_force / mass;
+  }
+}
 
-  dx = -Math.cos(angle*Math.PI/180);
-  dy = -Math.sin(angle*Math.PI/180);
-
+function updatePosition(){
+  var dx = -speed * Math.cos(angle);
+  var dy = -speed * Math.sin(angle);
+  x += dx;
+  y += dy;
 }
 
 function render(){
@@ -97,21 +106,19 @@ var planea = {
     theta: 0
 }
 
-
-function updateAcceleration(){
-
-}
-
-function updatePosition(){
-
-}
-
 document.addEventListener('keydown', function(event) {
+  console.log(event.keyCode);
     if(event.keyCode == 37) {
         input.elevator_up = true;
     }
-    else if(event.keyCode == 39) {
+    if(event.keyCode == 39) {
         input.elevator_down = true;
+    }
+    if(event.keyCode == 38) {
+        input.throttle = true;
+    }
+    if(event.keyCode == 40) {
+        input.brake = true;
     }
 });
 
@@ -119,8 +126,14 @@ document.addEventListener('keyup', function(event) {
     if(event.keyCode == 37) {
         input.elevator_up = false;
     }
-    else if(event.keyCode == 39) {
+    if(event.keyCode == 39) {
         input.elevator_down = false;
+    }
+    if(event.keyCode == 38) {
+        input.throttle = false;
+    }
+    if(event.keyCode == 40) {
+        input.brake = false;
     }
 });
 
