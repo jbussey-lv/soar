@@ -14,31 +14,67 @@
 
 
   <image xlink:href="img/plane.png" id="plane"/>
+
 </svg>
 
 <script>
 
-function placeElement(element_id, x, y, angle){
 
-  var element = document.getElementById(element_id);
-  var width = element.getAttribute('width');
-  var height = element.getAttribute('height');
 
-  element.setAttribute('x', x);
-  element.setAttribute('y', y);
+function placeElement(element, x, y, angle){
+  element.setAttribute('x', x-width/2);
+  element.setAttribute('y', y-height/2);
   element.setAttribute('transform', 'rotate('+angle+' '+x+' '+y+')')
 }
 
-x = 600;
-y = 150;
-interval = 20;
+var x = 500;
+var y = 150;
+var angle = 0;
+var dangle = 2;
+var interval = 20;
+var go = true;
+var plane = document.getElementById('plane');
+var width = plane.getBoundingClientRect().width;
+var height = plane.getBoundingClientRect().height;
+
+var input = {
+  'elevator_up': null,
+  'elevator_down': null
+};
+
 
 setInterval(function(){
-  placeElement('plane', x, y, 0);
-  x-=1;
+  if(go){
+    update();
+    render();
+    clearInput();
+  }
 }, interval);
 
-var plane = {
+function clearInput(){
+  input.elevator_up = null;
+  input.elevator_down = null;
+}
+
+function update(){
+  updateAngle()
+  //x-=1;
+}
+
+function updateAngle(){
+  if(input.elevator_up){
+    angle-=dangle;
+  }
+  if(input.elevator_down){
+    angle+=dangle;
+  }
+}
+
+function render(){
+  placeElement(plane, x, y, angle);
+}
+
+var planea = {
     x: 50,
     y: 50,
     dx: 10,
@@ -61,14 +97,15 @@ function updatePosition(){
 
 }
 
-function updateAngle(){
+document.addEventListener('keydown', function(event) {
+    if(event.keyCode == 37) {
+        input.elevator_up = true;
+    }
+    else if(event.keyCode == 39) {
+        input.elevator_down = true;
+    }
+});
 
-
-}
-
-function render(){
-
-}
 
 </script>
 </body>
