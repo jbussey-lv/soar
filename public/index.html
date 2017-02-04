@@ -39,11 +39,11 @@ var keys = [
 var frame = 0;
 var x = 500;
 var y = 150;
-var angle = 0 * Math.PI/180;
-var speed = 0;
+var velocity = {magnitude: 0, angle: 0 * Math.PI/180}; // directon of tranvel compared to groun
+var orientation = 0 * Math.PI/180; // direction plane is facing (may differ from angle of travel)
 var throttle_force = 0.1;
 var mass = 1;
-var dangle = 2 * Math.PI/180;;
+var dangle = 2 * Math.PI/180;
 var interval = 20;
 var go = true;
 var plane = document.getElementById('plane');
@@ -73,53 +73,56 @@ function clearInput(){
 
 function update(){
   frame++;
-  updateAngle();
-  updateSpeed();
+  updateOrientation();
+  updateVelocity();
   updatePosition();
 }
 
-function updateAngle(){
+function updateOrientation(){
   if(input.pitch_up){
-    angle-=dangle;
+    orientation-=dangle;
   }
   if(input.pitch_down){
-    angle+=dangle;
+    orientation+=dangle;
+  }
+  velocity.angle = orientation;
+}
+
+function updateVelocity(){
+
+  var forces = [
+    getThrustForce()
+  ];
+
+  if(input.throttle){
+    velocity.magnitude += throttle_force / mass;
+  }
+  if(input.brake){
+    velocity.magnitude -= throttle_force / mass;
   }
 }
 
-function updateSpeed(){
-  if(input.throttle){
-    speed += throttle_force / mass;
-  }
-  if(input.brake){
-    speed -= throttle_force / mass;
-  }
+function getThrustForce(){
+
+
 }
 
 function updatePosition(){
-  var dx = -speed * Math.cos(angle);
-  var dy = -speed * Math.sin(angle);
+  var dx = -velocity.magnitude * Math.cos(velocity.angle);
+  var dy = -velocity.magnitude * Math.sin(velocity.angle);
   x += dx;
   y += dy;
 
   // bound to box
   if(y > stage_height){y = stage_height;}
+  if(y < 0){y = 0;}
 
   if(x<0){x = stage_width+x;}
+  if(x>stage_width){x = x-stage_width;}
 }
 
 function render(){
-  placeElement(plane, x, y, angle);
-}
-
-var planea = {
-    x: 50,
-    y: 50,
-    dx: 10,
-    dy: 0,
-    ddx: 0,
-    ddy: 0,
-    theta: 0
+  placeElement(plane, x, y, orientation );
 }
 
 document.addEventListener('keydown', function(event) {
