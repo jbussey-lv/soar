@@ -66,7 +66,7 @@ var height = plane.getBoundingClientRect().height;
 var stage = document.getElementById('stage');
 var stage_width = stage.getAttribute('width')/1;
 var stage_height = stage.getAttribute('height')/1;
-var lift_drag_constant = 1;
+var lift_drag_constant = 0.01;
 var gravity = 0.02;
 var interval = 20;
 var vector_scale = 1500;
@@ -132,8 +132,12 @@ function getLiftDragForce(){
   var air_velocity = getAirVelocity();
   var relative_air_velocity = subtractVectors(velocity, air_velocity);
 
+  var angle_of_attack = relative_air_velocity.angle - orientation;
+
   var angle = orientation + Math.PI/2;
-  var magnitude = -1 * lift_drag_constant * relative_air_velocity.magnitude * Math.sin(relative_air_velocity.angle);
+  var magnitude = lift_drag_constant * relative_air_velocity.magnitude * Math.cos(angle_of_attack);
+
+  if((angle_of_attack % 2*Math.PI) > Math.PI/2){magnitude *= -1;}
   
   return {
     angle: angle,
