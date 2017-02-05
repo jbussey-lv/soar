@@ -13,8 +13,11 @@
      id="stage"
      style='background-color: #CCC;'>
 
-
   <image xlink:href="img/plane.png" id="plane"/>
+
+  <line id="weight" x1="100" y1="200" x2="250" y2="50" stroke="red" stroke-width="2" />
+  <line id="thrust" x1="120" y1="200" x2="250" y2="50" stroke="green" stroke-width="2" />
+  <line id="lift-drag" x1="130" y1="200" x2="250" y2="50" stroke="blue" stroke-width="2" />
 
 </svg>
 
@@ -27,6 +30,17 @@ function placeElement(element, x, y, angle){
   element.setAttribute('x', x-width/2);
   element.setAttribute('y', y-height/2);
   element.setAttribute('transform', 'rotate('+angle_degrees+' '+x+' '+y+')')
+}
+
+function placeVector(element, x1, y1, vector){
+
+  var x2 = x1 - vector_scale * vector.magnitude * Math.cos(vector.angle);
+  var y2 = y1 - vector_scale * vector.magnitude * Math.sin(vector.angle);
+
+  element.setAttribute('x1', x1);
+  element.setAttribute('y1', y1);
+  element.setAttribute('x2', x2);
+  element.setAttribute('y2', y2);
 }
 
 var keys = [
@@ -44,14 +58,18 @@ var orientation = 0 * Math.PI/180; // direction plane is facing (may differ from
 var thrust_magnitude = 0.1;
 var mass = 1;
 var dangle = 2 * Math.PI/180;
-var interval = 20;
 var plane = document.getElementById('plane');
+var weight = document.getElementById('weight');
+var lift_drag = document.getElementById('lift-drag');
 var width = plane.getBoundingClientRect().width;
 var height = plane.getBoundingClientRect().height;
 var stage = document.getElementById('stage');
 var stage_width = stage.getAttribute('width')/1;
 var stage_height = stage.getAttribute('height')/1;
+var lift_drag_constant = 1;
 var gravity = 0.02;
+var interval = 20;
+var vector_scale = 1500;
 var go = true;
 
 var input = {
@@ -110,10 +128,31 @@ function getGravityForce(){
 }
 
 function getLiftDragForce(){
+
+  var air_velocity = getAirVelocity();
+  var relative_air_velocity = subtractVectors(velocity, air_velocity);
+
+  var angle = orientation + Math.PI/2;
+  var magnitude = -1 * lift_drag_constant * relative_air_velocity.magnitude * Math.sin(relative_air_velocity.angle);
+  
   return {
-    angle: 0,
-    magnitude: 0
+    angle: angle,
+    magnitude: magnitude
   };
+}
+
+function getAirVelocity(){
+  return {angle: 0, magnitude: 0};
+}
+
+function subtractVectors(v1, v2){
+
+  var v2_reversed = {
+    angle: v2.angle,
+    magnitude: (-1 * v2.magnitude)
+  };
+
+  return sumVectors([v1, v2_reversed]); 
 }
 
 function sumVectors(vectors){
@@ -153,6 +192,9 @@ function updatePosition(){
 
 function render(){
   placeElement(plane, x, y, orientation );
+  placeVector(weight, x, y, getGravityForce());
+  placeVector(thrust, x, y, getThrustForce());
+  placeVector(lift_drag, x, y, getLiftDragForce());
 }
 
 document.addEventListener('keydown', function(event) {
