@@ -18,6 +18,7 @@
   <line id="weight" x1="100" y1="200" x2="250" y2="50" stroke="red" stroke-width="2" />
   <line id="thrust" x1="120" y1="200" x2="250" y2="50" stroke="green" stroke-width="2" />
   <line id="lift-drag" x1="130" y1="200" x2="250" y2="50" stroke="blue" stroke-width="2" />
+  <line id="parasitic-drag" x1="130" y1="200" x2="250" y2="50" stroke="yellow" stroke-width="2" />
 
 </svg>
 
@@ -63,12 +64,14 @@ var dangle = 0.5 * Math.PI/180;
 var plane = document.getElementById('plane');
 var weight = document.getElementById('weight');
 var lift_drag = document.getElementById('lift-drag');
+var parasitic_drag = document.getElementById('parasitic-drag');
 var width = plane.getBoundingClientRect().width;
 var height = plane.getBoundingClientRect().height;
 var stage = document.getElementById('stage');
 var stage_width = stage.getAttribute('width')/1;
 var stage_height = stage.getAttribute('height')/1;
 var lift_drag_constant = 0.1;
+var parasitic_drag_coeficient = -0.001;
 var gravity = -0.008;
 var interval = 20;
 var vector_scale = 1500;
@@ -127,7 +130,8 @@ function updateVelocity(){
   var forces_total = sumVectors([
     getThrustForce(),
     getGravityForce(),
-    getLiftDragForce()
+    getLiftDragForce(),
+    getParasiticDragForce()
   ]);
 
   var acceleration = {
@@ -175,6 +179,16 @@ function getLiftDragForce(){
                 * lift_drag_constant;
   
   return {angle: angle, magnitude: magnitude};
+}
+
+function getParasiticDragForce(){
+
+  var headwind_magnitude = getRelativeHeadwindMagnitude();
+
+  return {
+    magnitude: headwind_magnitude * parasitic_drag_coeficient,
+    angle: orientation + Math.PI
+  };
 }
 
 function getWindVelocity(){
@@ -234,6 +248,7 @@ function render(){
   placeVector(weight, x, y, getGravityForce());
   placeVector(thrust, x, y, getThrustForce());
   placeVector(lift_drag, x, y, getLiftDragForce());
+  placeVector(parasitic_drag, x, y, getParasiticDragForce());
 }
 
 document.addEventListener('keydown', function(event) {
