@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
+    <script src="/js/Angle.js"></script>
+    <script src="/js/Vector.js"></script>
 </head>
 <body>
 <svg version="1.1"
@@ -57,7 +59,7 @@ var keys = [
 var frame = 0;
 var x = 200;
 var y = 100;
-var velocity = {magnitude: 0, angle: 0}; // directon of tranvel compared to groun
+var velocity = Vector.create(0, 0); // directon of tranvel compared to groun
 var orientation = 0; // direction plane is facing (may differ from angle of travel)
 var thrust_magnitude = 0.015;
 var mass = 1;
@@ -72,11 +74,11 @@ var stage = document.getElementById('stage');
 var stage_width = stage.getAttribute('width')/1;
 var stage_height = stage.getAttribute('height')/1;
 var lift_drag_constant = 0.1;
-var parasitic_drag_coeficient = -0.0004;
+var parasitic_drag_coeficient = -0.00001;
 var gravity = -0.002;
 var interval = 20;
 var vector_scale = 3500;
-var go = true;
+var go = false;//true;
 
 // var plane = {
 //   'id': plane,
@@ -205,7 +207,6 @@ function getWindVelocity(){
     console.log('wind');
     var mag = -0.4;
   }else{
-    console.log('');
     mag= 0;
   }
 
