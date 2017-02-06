@@ -21,26 +21,28 @@
 
 </svg>
 
+<button onClick="toggleGo()" id="toggle-go">Go/Stop</button>
+
 <script>
 
 
 
 function placeElement(element, x, y, angle){
-  var angle_degrees = angle  * 180/Math.PI;
+  var angle_degrees = -1 * angle  * 180/Math.PI;
   element.setAttribute('x', x-width/2);
-  element.setAttribute('y', y-height/2);
-  element.setAttribute('transform', 'rotate('+angle_degrees+' '+x+' '+y+')')
+  element.setAttribute('y', stage_height - y - height/2);
+  element.setAttribute('transform', 'rotate('+angle_degrees+' '+x+' '+(stage_height - y)+')')
 }
 
 function placeVector(element, x1, y1, vector){
 
-  var x2 = x1 - vector_scale * vector.magnitude * Math.cos(vector.angle);
-  var y2 = y1 - vector_scale * vector.magnitude * Math.sin(vector.angle);
+  var x2 = x1 + vector_scale * vector.magnitude * Math.cos(-1*vector.angle);
+  var y2 = y1 - vector_scale * vector.magnitude * Math.sin(-1*vector.angle);
 
   element.setAttribute('x1', x1);
-  element.setAttribute('y1', y1);
+  element.setAttribute('y1', stage_height - y1);
   element.setAttribute('x2', x2);
-  element.setAttribute('y2', y2);
+  element.setAttribute('y2', stage_height - y2);
 }
 
 var keys = [
@@ -51,13 +53,13 @@ var keys = [
 ];
 
 var frame = 0;
-var x = 500;
-var y = 150;
-var velocity = {magnitude: 0, angle: 0 * Math.PI/180}; // directon of tranvel compared to groun
-var orientation = 0 * Math.PI/180; // direction plane is facing (may differ from angle of travel)
-var thrust_magnitude = 0.1;
+var x = 200;
+var y = 100;
+var velocity = {magnitude: 0, angle: 0}; // directon of tranvel compared to groun
+var orientation = 0; // direction plane is facing (may differ from angle of travel)
+var thrust_magnitude = 0.03;
 var mass = 1;
-var dangle = 2 * Math.PI/180;
+var dangle = 0.5 * Math.PI/180;
 var plane = document.getElementById('plane');
 var weight = document.getElementById('weight');
 var lift_drag = document.getElementById('lift-drag');
@@ -66,8 +68,8 @@ var height = plane.getBoundingClientRect().height;
 var stage = document.getElementById('stage');
 var stage_width = stage.getAttribute('width')/1;
 var stage_height = stage.getAttribute('height')/1;
-var lift_drag_constant = 0.01;
-var gravity = 0.02;
+var lift_drag_constant = 0.1;
+var gravity = -0.008;
 var interval = 20;
 var vector_scale = 1500;
 var go = true;
@@ -78,6 +80,9 @@ var input = {
   'throttle': null
 };
 
+function toggleGo(){
+  go = go == 1 ? 0 : 1;
+}
 
 setInterval(function(){
   if(go){
@@ -98,12 +103,22 @@ function update(){
   updatePosition();
 }
 
+function getRelativeHeadwindMagnitude(){
+  var relative_air_velocity = getRelativeAirVelocity();
+  var straight_on = Math.cos(relative_air_velocity.angle) * relative_air_velocity.magnitude;
+  return straight_on;
+}
+
+
 function updateOrientation(){
+
+  var headwind_magnitude = getRelativeHeadwindMagnitude();
+
   if(input.pitch_up){
-    orientation-=dangle;
+    orientation -= dangle * headwind_magnitude;
   }
   if(input.pitch_down){
-    orientation+=dangle;
+    orientation += dangle * headwind_magnitude;
   }
 }
 
@@ -124,28 +139,45 @@ function updateVelocity(){
 }
 
 function getGravityForce(){
-  return {angle: -Math.PI/2, magnitude: gravity*mass};
+  return {
+    angle: Math.PI/2, 
+    magnitude: gravity*mass
+  };
+}
+
+function mod(base, num){
+  return ((base%num)+num)%num;
+}
+
+function getRelativeAirVelocity(){
+
+  var wind_velocity = getWindVelocity();
+  var relative_wind_velocity = subtractVectors(wind_velocity, velocity);
+
+  return {
+    angle: relative_wind_velocity.angle - orientation,
+    magnitude: relative_wind_velocity.magnitude
+  }
+}
+
+function sv(vector){
+  console.log('angle: ' +vector.angle * 180 / Math.PI, 'magnitude: ' + vector.magnitude);
 }
 
 function getLiftDragForce(){
 
-  var air_velocity = getAirVelocity();
-  var relative_air_velocity = subtractVectors(velocity, air_velocity);
-
-  var angle_of_attack = relative_air_velocity.angle - orientation;
+  var relative_air_velocity = getRelativeAirVelocity();
 
   var angle = orientation + Math.PI/2;
-  var magnitude = lift_drag_constant * relative_air_velocity.magnitude * Math.cos(angle_of_attack);
 
-  if((angle_of_attack % 2*Math.PI) > Math.PI/2){magnitude *= -1;}
+  var magnitude = Math.sin(relative_air_velocity.angle)
+                * relative_air_velocity.magnitude 
+                * lift_drag_constant;
   
-  return {
-    angle: angle,
-    magnitude: magnitude
-  };
+  return {angle: angle, magnitude: magnitude};
 }
 
-function getAirVelocity(){
+function getWindVelocity(){
   return {angle: 0, magnitude: 0};
 }
 
@@ -177,12 +209,15 @@ function sumVectors(vectors){
 }
 
 function getThrustForce(){
-  return {angle: orientation, magnitude: input.throttle ? thrust_magnitude : 0};
+  return {
+    angle: orientation,
+    magnitude: input.throttle ? thrust_magnitude : 0
+  };
 }
 
 function updatePosition(){
-  var dx = -velocity.magnitude * Math.cos(velocity.angle);
-  var dy = -velocity.magnitude * Math.sin(velocity.angle);
+  var dx = velocity.magnitude * Math.cos(velocity.angle);
+  var dy = velocity.magnitude * Math.sin(velocity.angle);
   x += dx;
   y += dy;
 
