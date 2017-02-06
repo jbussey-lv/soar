@@ -1,9 +1,19 @@
-var Vector = (function(){
+var Vector = (function(Angle){
 
     var create = function(a, m){
 
-        var angle = a;
-        var magnitude = m;
+        var angle = a || Angle.create();
+        var magnitude = m || 0;
+
+        var getPolar = function(){
+            return [angle, magnitude];
+        }
+
+        var setPolar = function(a,m){
+            angle = a;
+            magnitude = m;
+            return this;
+        }
 
         var getX = function(){
             return angle.cos() * magnitude;
@@ -51,6 +61,23 @@ var Vector = (function(){
             return this;
         }
 
+        var add = function(v2){
+            var combined = sum([this, v2]);
+            setPolar(combined.getAngle(), combined.getMagnitude());
+            return this;
+        }
+
+        var subtract = function(v2){
+            var combined = difference(this, v2);
+            setPolar(combined.getAngle(), combined.getMagnitude());
+            return this;
+        }
+
+        var reverse = function(){
+            magnitude *= -1;
+            return this;
+        }
+
         var log = function(){
             console.log('angle: ' + getAngleDegrees() + ', magnitude: ' + getMagnitude());
         }
@@ -60,41 +87,39 @@ var Vector = (function(){
             setX,
             getY,
             setY,
+            getPolar,
+            setPolar,
             getXY,
             setXY,
             getAngle,
             setAngle,
             getMagnitude,
             setMagnitude,
+            add,
+            subtract,
             log
         }
     }
 
     var sum = function(vectors){
-          var total_x = 0;
-          var total_y = 0;
-          var total_vector = {};
+        var total_x = 0;
+        var total_y = 0;
 
-          vectors.forEach(function(vector){
-            total_x += vector.magnitude * Math.cos(vector.angle);
-            total_y += vector.magnitude * Math.sin(vector.angle);
-          });
+        vectors.forEach(function(v){
+            total_x += v.getX()
+            total_y += v.getY();
+        });
 
-          total_vector.magnitude = Math.sqrt(total_x*total_x + total_y*total_y);
-          total_vector.angle = Math.atan2(total_y, total_x);
-
-          return total_vector;
+        return Vector.create().setXY(total_x, total_y);
     }
 
     var difference = function(v1, v2){
 
-        var v2_reversed = {
-            angle: v2.angle,
-            magnitude: (-1 * v2.magnitude)
-        };
+        var total_x = v1.getX() - v2.getX();
+        var total_y = v1.getY() - v2.getY();
 
-        return sumVectors([v1, v2_reversed]); 
+        return Vector.create().setXY(total_x, total_y);
     }
 
     return {create, sum, difference};
-}());
+}(Angle));
