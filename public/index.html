@@ -60,7 +60,7 @@ var velocity = {magnitude: 0, angle: 0}; // directon of tranvel compared to grou
 var orientation = 0; // direction plane is facing (may differ from angle of travel)
 var thrust_magnitude = 0.03;
 var mass = 1;
-var dangle = 0.5 * Math.PI/180;
+var dangle = 0.7 * Math.PI/180;
 var plane = document.getElementById('plane');
 var weight = document.getElementById('weight');
 var lift_drag = document.getElementById('lift-drag');
@@ -71,11 +71,17 @@ var stage = document.getElementById('stage');
 var stage_width = stage.getAttribute('width')/1;
 var stage_height = stage.getAttribute('height')/1;
 var lift_drag_constant = 0.1;
-var parasitic_drag_coeficient = -0.001;
-var gravity = -0.008;
+var parasitic_drag_coeficient = -0.0003;
+var gravity = -0.003;
 var interval = 20;
 var vector_scale = 1500;
 var go = true;
+
+// var plane = {
+//   'id': plane,
+//   'forces': {}
+// };
+
 
 var input = {
   'elevator_up': null,
@@ -192,7 +198,20 @@ function getParasiticDragForce(){
 }
 
 function getWindVelocity(){
-  return {angle: 0, magnitude: 0};
+
+  var floor = 250;
+  if(y>floor){
+    console.log('wind');
+    var mag = -0.6;
+  }else{
+    console.log('');
+    mag= 0;
+  }
+
+  return {
+    angle: 0, 
+    magnitude: mag
+  };
 }
 
 function subtractVectors(v1, v2){
