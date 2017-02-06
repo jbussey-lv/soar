@@ -2,7 +2,7 @@ var Angle = (function(){
 
     var create = function(rad){
 
-        var radians = rad;
+        var radians = rad || 0;
 
         var getRadians = function(){
             return radians();
@@ -45,6 +45,10 @@ var Angle = (function(){
             return Math.cos(radians);
         }
 
+        var tan = function(){
+            return Math.tan(radians);
+        }
+
         return {
             getRadians,
             setRadians,
@@ -54,7 +58,8 @@ var Angle = (function(){
             add,
             subtract,
             sin,
-            cos
+            cos,
+            tan
         }
     }
 
