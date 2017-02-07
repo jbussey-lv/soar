@@ -1,22 +1,22 @@
-var Vector = (function(Angle){
+var Vector = (function(){
 
-    var create = function(a, m){
+    var create = function(degrees, m){
 
-        var angle = a || Angle.create();
+        var angle = d2r(degrees);
         var magnitude = m || 0;
 
         var getPolar = function(){
-            return [angle, magnitude];
+            return [getAngle(), getMagnitude()];
         }
 
-        var setPolar = function(a,m){
-            angle = a;
-            magnitude = m;
+        var setPolar = function(degrees, m){
+            setAngle(degrees);
+            setMagnitude(m);
             return this;
         }
 
         var getX = function(){
-            return angle.cos() * magnitude;
+            return Math.cos(angle) * magnitude;
         }
 
         var setX = function(x){
@@ -25,7 +25,7 @@ var Vector = (function(Angle){
         }
 
         var getY = function(){
-            return angle.sin() * magnitude;
+            return Math.sin(angle) * magnitude;
         }
 
         var setY = function(y){
@@ -38,21 +38,21 @@ var Vector = (function(Angle){
         }
 
         var setXY = function(x, y){
-            angle.setXY(x, y);
+            angle = Math.atan2(y,x);
             magnitude = Math.sqrt(x * x + y * y);
             return this;
         }
 
         var getAngle = function(){
-            return angle;
+            return r2d(angle);
         }
 
         var getMagnitude = function(){
             return magnitude;
         }
 
-        var setAngle = function(a){
-            angle = a;
+        var setAngle = function(degrees){
+            angle = d2r(degrees);
             return this;
         }
 
@@ -61,15 +61,20 @@ var Vector = (function(Angle){
             return this;
         }
 
+        var addAngle = function(degrees){
+            angle += d2r(degrees);
+            return this;
+        }
+
         var add = function(v2){
-            var combined = sum([this, v2]);
-            setPolar(combined.getAngle(), combined.getMagnitude());
+            setX(getX() + v2.getX());
+            setY(getY() + v2.getY());
             return this;
         }
 
         var subtract = function(v2){
-            var combined = difference(this, v2);
-            setPolar(combined.getAngle(), combined.getMagnitude());
+            setX(getX() - v2.getX());
+            setY(getY() - v2.getY());
             return this;
         }
 
@@ -78,8 +83,28 @@ var Vector = (function(Angle){
             return this;
         }
 
+        var sin = function(){
+            return Math.sin(angle);
+        }
+
+        var cos = function(){
+            return Math.cos(angle);
+        }
+
+        var tan = function(){
+            return Math.tan(angle);
+        }
+
         var log = function(){
             console.log('angle: ' + getAngleDegrees() + ', magnitude: ' + getMagnitude());
+        }
+
+        function r2d(radians){
+            return radians * 180 / Math.PI;
+        }
+
+        function d2r(degrees){
+            return degrees * Math.PI / 180;
         }
 
         return {
@@ -93,6 +118,7 @@ var Vector = (function(Angle){
             setXY,
             getAngle,
             setAngle,
+            addAngle,
             getMagnitude,
             setMagnitude,
             add,
@@ -122,4 +148,4 @@ var Vector = (function(Angle){
     }
 
     return {create, sum, difference};
-}(Angle));
+}());
