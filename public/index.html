@@ -53,17 +53,18 @@ var mass = 1;
 
 var cog = Vector.create().setXY(75,20);
 
-var weight_value = Vector.create().setXY(0, 60);
+var weight_position = cog;
+var weight_value = Vector.create().setXY(0, 80);
 var weight = Force.create('weight',
                           'green',
-                          function(){return cog;},
+                          function(){return weight_position;},
                           function(){return weight_value;});
 
 var thrust_position = Vector.create().setXY(99, 20);
 var getThrustPosition = function(){return thrust_position;}
 var thrust_value = Vector.create().setXY(50, 0);
 var getThrustValue = function(){
-  thrust_value.setAngle(plane.getOrientation().getAngle());
+  thrust_value.setAngle(plane.getOrientation());
   return thrust_value;
 }
 var thrust = Force.create('thrust', 'blue', getThrustPosition, getThrustValue);
@@ -74,8 +75,8 @@ var plane = Character.create('plane',
                              100, // width
                              50, // height
                              cog, // CoG
-                             Vector.create().setXY(200, 25), // Position
-                             Vector.create(30,1), // orientation
+                             Vector.create().setXY(350, 200), // Position
+                             -50, // orientation
                              [weight, thrust], // forces
                              Vector.create(), // velocity
                              mass,
@@ -116,7 +117,7 @@ function renderCharacter(character){
 
   var x = screen_x - cog.getX();
   var y = screen_y - cog.getY();
-  var a = character.getOrientation().getAngle();
+  var a = character.getOrientation();
 
   node.setAttribute('x', x);
   node.setAttribute('y', y);
@@ -125,13 +126,11 @@ function renderCharacter(character){
   character.getForces().forEach(function(force){
 
     var node  = force.domNode;
-    var cog_offset = Vector.difference(force.getPosition(), cog);
+    var cog_offset = Vector.difference(force.getPosition(), cog)
+                           .addAngle(orientation);
 
-    cog_offset.addAngle(orientation.getAngle());
-    // spin_offset.addAngle(orientation);
-
-    var x1 = position.getX() + cog_offset.getX();// - spin_offset.getX();
-    var y1 = position.getY() + cog_offset.getY();// - spin_offset.getY();
+    var x1 = position.getX() + cog_offset.getX();
+    var y1 = position.getY() + cog_offset.getY();
     var x2 = x1 + force.getValue().getX();
     var y2 = y1 + force.getValue().getY();
 

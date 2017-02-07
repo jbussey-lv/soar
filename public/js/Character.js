@@ -13,6 +13,8 @@ var Character = (function(){
                           angular_velocity,
                           moment_of_intertia){
 
+        var orientation = orientation * Math.PI / 180;
+
         var getName = function(){
             return name;
         }
@@ -38,7 +40,7 @@ var Character = (function(){
         }
 
         var getOrientation = function(){
-            return orientation;
+            return orientation * 180 / Math.PI;
         }
 
         var getForces = function(){
