@@ -62,9 +62,9 @@ var plane = Character.create('plane',
                               'img/plane.png',
                               100,
                               50,
-                              Vector.create().setXY(50,25),
-                              Vector.create().setXY(300, 100),
-                              Angle.create().setDegrees(45),
+                              Vector.create().setXY(50, 25),
+                              Vector.create().setXY(700, 400),
+                              Angle.create().setDegrees(180),
                               [weight, thrust],
                               Vector.create(),
                               1,
@@ -75,13 +75,10 @@ var plane = Character.create('plane',
 
 function initializeCharacter(character){
 
-  var svgimg = document.createElementNS('http://www.w3.org/2000/svg','image');
+  var svgimg = document.createElementNS('http://www.w3.org/2000/svg','image')
   svgimg.setAttributeNS(null,'height', character.getHeight());
   svgimg.setAttributeNS(null,'width', character.getWidth());
   svgimg.setAttributeNS('http://www.w3.org/1999/xlink','href', plane.getImg());
-  svgimg.setAttributeNS(null,'x','');
-  svgimg.setAttributeNS(null,'y','');
-  svgimg.setAttributeNS(null, 'visibility', 'visible');
 
   character.domNode = svgimg;
 
@@ -90,17 +87,20 @@ function initializeCharacter(character){
 
 function renderCharacter(character){
 
-  var n = character.domNode;
+  var node     = character.domNode;
   var position = character.getPosition();
+  var cog      = character.getCenterOfGravity();
 
-  var x = position.getX();
-  var y = stage_height - position.getY();
+  var screen_x = position.getX();
+  var screen_y = stage_height - position.getY();
 
-  n.setAttribute('x', x);
-  n.setAttribute('y', y);
+  var x = screen_x - cog.getX();
+  var y = screen_y - cog.getY();
+  var a = -1 * character.getOrientation().getDegrees();
 
-
-
+  node.setAttribute('x', x);
+  node.setAttribute('y', y);
+  node.setAttribute('transform', 'rotate('+a+' '+screen_x+' '+screen_y+')')
 }
 
 initializeCharacter(plane);
