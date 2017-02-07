@@ -6,7 +6,7 @@
     <script src="/js/Angle.js"></script>
     <script src="/js/Vector.js"></script>
     <script src="/js/Force.js"></script>
-    <script src="/js/Plane.js"></script>
+    <script src="/js/Character.js"></script>
 </head>
 <body>
 <svg version="1.1"
@@ -17,19 +17,96 @@
      id="stage"
      style='background-color: #CCC;'>
 
-  <image xlink:href="img/plane.png" id="plane"/>
+<!--   <image xlink:href="img/plane.png" id="plane"/>
 
   <line id="weight" x1="100" y1="200" x2="250" y2="50" stroke="red" stroke-width="2" />
   <line id="thrust" x1="120" y1="200" x2="250" y2="50" stroke="green" stroke-width="2" />
   <line id="lift-drag" x1="130" y1="200" x2="250" y2="50" stroke="blue" stroke-width="2" />
   <line id="parasitic-drag" x1="130" y1="200" x2="250" y2="50" stroke="yellow" stroke-width="2" />
-  <line id="wind" x1="0" y1="200" x2="700" y2="200" stroke="black" stroke-width="2" />
+  <line id="wind" x1="0" y1="200" x2="700" y2="200" stroke="black" stroke-width="2" /> -->
 
 </svg>
 
 <button onClick="toggleGo()" id="toggle-go">Go/Stop</button>
 
 <script>
+
+
+var frame = 0;
+var x = 200;
+var y = 100;
+var velocity = Vector.create(0, 0); // directon of tranvel compared to groun
+var orientation = 0; // direction plane is facing (may differ from angle of travel)
+var thrust_magnitude = 0.015;
+var mass = 1;
+var dangle = 0.7 * Math.PI/180;
+var plane = document.getElementById('plane');
+var weight = document.getElementById('weight');
+var lift_drag = document.getElementById('lift-drag');
+var parasitic_drag = document.getElementById('parasitic-drag');
+var stage = document.getElementById('stage');
+var stage_width = stage.getAttribute('width')/1;
+var stage_height = stage.getAttribute('height')/1;
+var lift_drag_constant = 0.1;
+var parasitic_drag_coeficient = -0.00001;
+var gravity = -0.002;
+var interval = 20;
+var vector_scale = 3500;
+var go = false;//true;
+
+var weight = Force.create();
+
+var thrust = Force.create();
+
+var plane = Character.create('plane',
+                              'img/plane.png',
+                              100,
+                              50,
+                              Vector.create().setXY(50,25),
+                              Vector.create().setXY(300, 100),
+                              Angle.create().setDegrees(45),
+                              [weight, thrust],
+                              Vector.create(),
+                              1,
+                              Angle.create().setDegrees(0),
+                              1);
+
+// initialize plane
+
+function initializeCharacter(character){
+
+  var svgimg = document.createElementNS('http://www.w3.org/2000/svg','image');
+  svgimg.setAttributeNS(null,'height', character.getHeight());
+  svgimg.setAttributeNS(null,'width', character.getWidth());
+  svgimg.setAttributeNS('http://www.w3.org/1999/xlink','href', plane.getImg());
+  svgimg.setAttributeNS(null,'x','');
+  svgimg.setAttributeNS(null,'y','');
+  svgimg.setAttributeNS(null, 'visibility', 'visible');
+
+  character.domNode = svgimg;
+
+  document.getElementById('stage').appendChild(svgimg);
+}
+
+function renderCharacter(character){
+
+  var n = character.domNode;
+  var position = character.getPosition();
+
+  var x = position.getX();
+  var y = stage_height - position.getY();
+
+  n.setAttribute('x', x);
+  n.setAttribute('y', y);
+
+
+
+}
+
+initializeCharacter(plane);
+
+renderCharacter(plane);
+
 
 
 
@@ -58,29 +135,6 @@ var keys = [
   {code: 40, name: 'brake'}
 ];
 
-var frame = 0;
-var x = 200;
-var y = 100;
-var velocity = Vector.create(0, 0); // directon of tranvel compared to groun
-var orientation = 0; // direction plane is facing (may differ from angle of travel)
-var thrust_magnitude = 0.015;
-var mass = 1;
-var dangle = 0.7 * Math.PI/180;
-var plane = document.getElementById('plane');
-var weight = document.getElementById('weight');
-var lift_drag = document.getElementById('lift-drag');
-var parasitic_drag = document.getElementById('parasitic-drag');
-var width = plane.getBoundingClientRect().width;
-var height = plane.getBoundingClientRect().height;
-var stage = document.getElementById('stage');
-var stage_width = stage.getAttribute('width')/1;
-var stage_height = stage.getAttribute('height')/1;
-var lift_drag_constant = 0.1;
-var parasitic_drag_coeficient = -0.00001;
-var gravity = -0.002;
-var interval = 20;
-var vector_scale = 3500;
-var go = false;//true;
 
 // var plane = {
 //   'id': plane,
