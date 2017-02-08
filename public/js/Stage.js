@@ -1,20 +1,22 @@
 class Stage {
 
-    constructor(id, world, pixel_width, pixel_height, background_color, pixels_per_meter) {
-        this.dom_node    = document.getElementById(id);
-        this.world       = world;
-        this.width       = width;
-        this.height      = height;
-        this.pixels_per_meter = pixels_per_meter;
+    constructor(id, world, pixel_width, pixel_height, pixels_per_meter, background_color) {
+        this.id               = id;
+        this.world            = world;
+        this.pixel_width      = pixel_width || 600;
+        this.pixel_height     = pixel_height || 400;
+        this.pixels_per_meter = pixels_per_meter || 50;
+        this.background_color = background_color || '#CCC';
 
         this.initializeContainer();
-        this.initializeWorld();
+        //this.initializeWorld();
     }
 
     initializeContainer(){
-        this.dom_node.setAttribute('width', pixel_width);
-        this.dom_node.setAttribute('height', pixel_height);
-        this.dom_node.setAttribute('style', 'background-color: #CCC');
+        this.dom_node = document.getElementById(this.id);
+        this.dom_node.setAttribute('width', this.pixel_width);
+        this.dom_node.setAttribute('height', this.pixel_height);
+        this.dom_node.setAttribute('style', 'background-color: '+this.background_color);
     }
 
     initializeWorld(){
