@@ -9,11 +9,11 @@ class Character {
     this.height = height;
     this.cog = cog;
     this.position = position;
-    this._orientation = orientation * Math.PI / 180;
     this.velocity = velocity;
-    this.mass = mass;
-    this.angular_velocity = angular_velocity
-    this.moment_of_intertia = moment_of_inertia;
+    this._orientation = orientation * Math.PI / 180;
+    this.mass = mass || 1;
+    this.angular_velocity = angular_velocity || 0;
+    this.moment_of_intertia = moment_of_inertia || 1;
     this.forces = [];
     this.setForces(forces);
   }

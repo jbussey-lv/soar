@@ -11,8 +11,7 @@ class Force {
 
     getCogOffset(){
 
-        var cogOffset = Vector.difference(this.getPosition(), 
-                                          this.character.cog)
+        var cogOffset = Vector.difference(this.getPosition(), this.character.cog)
                               .addAngle(this.character.orientation);
 
         return cogOffset;

@@ -5,21 +5,40 @@
     <title>Document</title>
 </head>
 <body>
-    <p>test</p>
     <svg id="stage" version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg"></svg>
 
-<script src="/js/stage.js"></script>
-<script src="/js/world.js"></script>
+    <script src="/js/stage.js"></script>
+    <script src="/js/world.js"></script>
+    <script src="/js/character.js"></script>
+    <script src="/js/vector.js"></script>
+    <script src="/js/force.js"></script>
 
-<script>
-var char1 = {"name": "char1", update: function(){console.log('1')}};
-var char2 = {"name": "char2", update: function(){console.log('2')}};
+    <script>
+        var weight = new Force('weight',
+                               'red',
+                               function(){return Vector.create().setXY(150, 35)},
+                               function(){return Vector.create().setXY(0, 20)} );
 
-var earth = new World([char1, char2]);
+        var plane = new Character('plane',
+                             '/img/plane.png',
+                             4, // width
+                             2, // height
+                             Vector.create().setXY(3, 1), // CoG
+                             Vector.create().setXY(2, 1), // Position
+                             30, // orientation
+                             [weight], // forces
+                             Vector.create(), // velocity
+                             1, // mass 
+                             0, // angular velocity
+                             1); // moment of inertia
 
-var stage = new Stage('stage', earth);
+        var earth = new World([plane]);
 
-</script>
+        var stage = new Stage('stage', earth);
+
+        stage.render();
+
+    </script>
     
 </body>
 </html>
