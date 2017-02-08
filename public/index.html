@@ -44,10 +44,10 @@ var cog = Vector.create().setXY(75,20);
 
 var weight_position = cog;
 var weight_value = Vector.create().setPolar(90, mass * world.gravity);
-var weight = Force.create('weight',
-                          'green',
-                          function(){return weight_position;},
-                          function(){return weight_value;});
+var weight = new Force('weight',
+                       'green',
+                       function(){return weight_position;},
+                       function(){return weight_value;});
 
 var thrust_position = Vector.create().setXY(99, 20);
 var getThrustPosition = function(){return thrust_position;}
@@ -56,7 +56,7 @@ var getThrustValue = function(){
   thrust_value.setAngle(plane.getOrientation());
   return thrust_value;
 }
-var thrust = Force.create('thrust', 'blue', getThrustPosition, getThrustValue);
+var thrust = new Force('thrust', 'blue', getThrustPosition, getThrustValue);
 
 
 var lift_position = Vector.create().setXY(67, 10);
