@@ -66,6 +66,11 @@ var Vector = (function(){
             return this;
         }
 
+        var subtractAngle = function(degrees){
+            angle -= d2r(degrees);
+            return this;
+        }
+
         var add = function(v2){
             setX(getX() + v2.getX());
             setY(getY() + v2.getY());
@@ -119,6 +124,7 @@ var Vector = (function(){
             getAngle,
             setAngle,
             addAngle,
+            subtractAngle,
             getMagnitude,
             setMagnitude,
             add,
