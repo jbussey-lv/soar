@@ -136,24 +136,6 @@ renderCharacter(plane);
 
 
 
-function placeElement(element, x, y, angle){
-  var angle_degrees = -1 * angle  * 180/Math.PI;
-  element.setAttribute('x', x-width/2);
-  element.setAttribute('y', stage_height - y - height/2);
-  element.setAttribute('transform', 'rotate('+angle_degrees+' '+x+' '+(stage_height - y)+')')
-}
-
-function placeVector(element, x1, y1, vector){
-
-  var x2 = x1 + vector_scale * vector.magnitude * Math.cos(-1*vector.angle);
-  var y2 = y1 - vector_scale * vector.magnitude * Math.sin(-1*vector.angle);
-
-  element.setAttribute('x1', x1);
-  element.setAttribute('y1', stage_height - y1);
-  element.setAttribute('x2', x2);
-  element.setAttribute('y2', stage_height - y2);
-}
-
 var keys = [
   {code: 37, name: 'pitch_up'},
   {code: 39, name: 'pitch_down'},
@@ -233,12 +215,6 @@ function updateVelocity(){
   velocity = sumVectors([velocity, acceleration]);
 }
 
-function getGravityForce(){
-  return {
-    angle: Math.PI/2, 
-    magnitude: gravity*mass
-  };
-}
 
 function mod(base, num){
   return ((base%num)+num)%num;
@@ -286,7 +262,6 @@ function getWindVelocity(){
 
   var floor = 200;
   if(y>floor){
-    console.log('wind');
     var mag = -0.4;
   }else{
     mag= 0;
@@ -298,32 +273,6 @@ function getWindVelocity(){
   };
 }
 
-function subtractVectors(v1, v2){
-
-  var v2_reversed = {
-    angle: v2.angle,
-    magnitude: (-1 * v2.magnitude)
-  };
-
-  return sumVectors([v1, v2_reversed]); 
-}
-
-function sumVectors(vectors){
-
-  var total_x = 0;
-  var total_y = 0;
-  var total_vector = {};
-
-  vectors.forEach(function(vector){
-    total_x += vector.magnitude * Math.cos(vector.angle);
-    total_y += vector.magnitude * Math.sin(vector.angle);
-  });
-
-  total_vector.magnitude = Math.sqrt(total_x*total_x + total_y*total_y);
-  total_vector.angle = Math.atan2(total_y, total_x);
-
-  return total_vector;
-}
 
 function getThrustForce(){
   return {
@@ -344,14 +293,6 @@ function updatePosition(){
 
   if(x<0){x = stage_width+x;}
   if(x>stage_width){x = x-stage_width;}
-}
-
-function render(){
-  placeElement(plane, x, y, orientation );
-  placeVector(weight, x, y, getGravityForce());
-  placeVector(thrust, x, y, getThrustForce());
-  placeVector(lift_drag, x, y, getLiftDragForce());
-  placeVector(parasitic_drag, x, y, getParasiticDragForce());
 }
 
 document.addEventListener('keydown', function(event) {

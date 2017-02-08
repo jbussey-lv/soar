@@ -26,6 +26,13 @@ class Character {
     });
   }
 
+  getNetForce(){
+
+  }
+
+  getNetTorque(){
+  }
+
   get orientation(){
     return this._orientation * 180 / Math.PI;
   }
