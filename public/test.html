@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    test
+
+<script src="/js/world.js"></script>
+
+<script>
+var char1 = {"name": "char1", update: function(){console.log('1')}};
+var char2 = {"name": "char2", update: function(){console.log('2')}};
+
+var earth = new World([char1, char2]);
+
+earth.addCharacter({name: "char3", update: function(){console.log('3')}});
+
+</script>
+    
+</body>
+</html>

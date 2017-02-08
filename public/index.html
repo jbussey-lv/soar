@@ -42,7 +42,7 @@ var mass = 10;
 
 var cog = Vector.create().setXY(75,20);
 
-var weight_position = cog;
+var weight_position = Vector.create().setXY(30,40); //cog;
 var weight_value = Vector.create().setPolar(90, mass * world.gravity);
 var weight = new Force('weight',
                        'green',
@@ -69,7 +69,7 @@ var plane = new Character('plane',
                              50, // height
                              cog, // CoG
                              Vector.create().setXY(400, 100), // Position
-                             -50, // orientation
+                             0, // orientation
                              [weight, thrust], // forces
                              Vector.create(), // velocity
                              mass, // mass 
@@ -120,6 +120,10 @@ function renderCharacter(character){
     var y1 = character.position.getY() + cog_offset.getY();
     var x2 = x1 + force.getValue().getX();
     var y2 = y1 + force.getValue().getY();
+
+    var translation_component = force.getTranslationComponent();
+
+    console.log(force.name, ' -- underlying force magnitude: '+ force.getValue().getMagnitude(), ' -- torque: '+force.getTorque(), ' -- force translation: ('+translation_component.getX(), ', ', translation_component.getY(), ')');
 
     node.setAttribute('x1', x1);
     node.setAttribute('y1', y1);

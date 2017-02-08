@@ -18,25 +18,28 @@ class Force {
         return cogOffset;
     }
 
-    getRealTorque(){
+    getTorque(){
+
         var value = this.getValue();
 
         var cog_offset = this.getCogOffset();
 
-        var force_perp = value.subtractAngle(cog_offset.getAngle()).getY();
+        var force_perp_mag = value.subtractAngle(cog_offset.getAngle()).getY();
 
         var lever_length = cog_offset.getMagnitude();
 
-        return force_perp * lever_length;
+        return force_perp_mag * lever_length;
     }
 
-    getRealForce(){
+    getTranslationComponent(){
 
         var value = this.getValue();
 
         var cog_offset = this.getCogOffset();
 
-        return value.subtractAngle(cog_offset.getAngle()).getX();
+        var force_par_mag = value.subtractAngle(cog_offset.getAngle()).getX();
+
+        return Vector.create().setPolar(cog_offset.getAngle(), force_par_mag);
     }
 
 }
