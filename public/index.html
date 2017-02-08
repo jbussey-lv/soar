@@ -53,7 +53,7 @@ var thrust_position = Vector.create().setXY(99, 20);
 var getThrustPosition = function(){return thrust_position;}
 var thrust_value = Vector.create().setXY(50, 0);
 var getThrustValue = function(){
-  thrust_value.setAngle(plane.getOrientation());
+  thrust_value.setAngle(plane.orientation);
   return thrust_value;
 }
 var thrust = new Force('thrust', 'blue', getThrustPosition, getThrustValue);
@@ -63,7 +63,7 @@ var lift_position = Vector.create().setXY(67, 10);
 // var lifgt_value = Vector.create().setXY();
 
 
-var plane = Character.create('plane',
+var plane = new Character('plane',
                              'img/plane.png',
                              100, // width
                              50, // height
@@ -83,16 +83,16 @@ function initializeCharacter(character){
   var stage = document.getElementById('stage');
 
   var svgimg = document.createElementNS('http://www.w3.org/2000/svg', 'image')
-  svgimg.setAttributeNS(null, 'height', character.getHeight());
-  svgimg.setAttributeNS(null, 'width', character.getWidth());
-  svgimg.setAttributeNS('http://www.w3.org/1999/xlink','href', plane.getImg());
+  svgimg.setAttributeNS(null, 'height', character.height);
+  svgimg.setAttributeNS(null, 'width', character.width);
+  svgimg.setAttributeNS('http://www.w3.org/1999/xlink','href', character.img);
   stage.appendChild(svgimg);
   character.domNode = svgimg;
 
-  character.getForces().forEach(function(force){
+  character.forces.forEach(function(force){
     var svg_line = document.createElementNS('http://www.w3.org/2000/svg', 'line')
     svg_line.setAttributeNS(null, 'stroke-width', 2);
-    svg_line.setAttributeNS(null, 'stroke', force.getColor());
+    svg_line.setAttributeNS(null, 'stroke', force.color);
     stage.appendChild(svg_line);
     force.domNode = svg_line;
   });
@@ -100,30 +100,25 @@ function initializeCharacter(character){
 
 function renderCharacter(character){
 
-  var node     = character.domNode;
-  var position = character.getPosition();
-  var cog      = character.getCenterOfGravity();
-  var orientation = character.getOrientation();
-
-  var screen_x = position.getX();
-  var screen_y = position.getY();
+  var screen_x = character.position.getX();
+  var screen_y = character.position.getY();
 
   var x = screen_x - cog.getX();
   var y = screen_y - cog.getY();
-  var a = character.getOrientation();
+  var a = character.orientation;
 
-  node.setAttribute('x', x);
-  node.setAttribute('y', y);
-  node.setAttribute('transform', 'rotate('+a+' '+screen_x+' '+screen_y+')');
+  character.domNode.setAttribute('x', x);
+  character.domNode.setAttribute('y', y);
+  character.domNode.setAttribute('transform', 'rotate('+a+' '+screen_x+' '+screen_y+')');
 
-  character.getForces().forEach(function(force){
+  character.forces.forEach(function(force){
 
     var node       = force.domNode;
     var cog_offset = Vector.difference(force.getPosition(), cog)
-                           .addAngle(orientation);
+                           .addAngle(a);
 
-    var x1 = position.getX() + cog_offset.getX();
-    var y1 = position.getY() + cog_offset.getY();
+    var x1 = character.position.getX() + cog_offset.getX();
+    var y1 = character.position.getY() + cog_offset.getY();
     var x2 = x1 + force.getValue().getX();
     var y2 = y1 + force.getValue().getY();
 

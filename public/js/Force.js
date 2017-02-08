@@ -7,12 +7,5 @@ class Force {
         this.getValue    = getValue || function(){return Vector.create();}
     }
 
-    getName(){
-        return this.name;
-    }
-
-    getColor(){
-        return this.color;
-    }
 
 }
