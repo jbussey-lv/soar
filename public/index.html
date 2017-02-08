@@ -118,7 +118,7 @@ function renderCharacter(character){
 
   character.getForces().forEach(function(force){
 
-    var node  = force.domNode;
+    var node       = force.domNode;
     var cog_offset = Vector.difference(force.getPosition(), cog)
                            .addAngle(orientation);
 
