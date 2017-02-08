@@ -68,7 +68,7 @@ var plane = new Character('plane',
                              100, // width
                              50, // height
                              cog, // CoG
-                             Vector.create().setXY(350, 200), // Position
+                             Vector.create().setXY(400, 100), // Position
                              -50, // orientation
                              [weight, thrust], // forces
                              Vector.create(), // velocity
@@ -114,8 +114,7 @@ function renderCharacter(character){
   character.forces.forEach(function(force){
 
     var node       = force.domNode;
-    var cog_offset = Vector.difference(force.getPosition(), cog)
-                           .addAngle(a);
+    var cog_offset = force.getCogOffset();
 
     var x1 = character.position.getX() + cog_offset.getX();
     var y1 = character.position.getY() + cog_offset.getY();
