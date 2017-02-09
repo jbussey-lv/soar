@@ -38,7 +38,7 @@ class Character {
   updateNetForce(){
     var net_force = this.net_force;
     net_force.setXY(0,0);
-    this.forces.forEach(force){
+    this.forces.forEach(function(force){
       net_force.add(force.translation_component);
     });
   }
@@ -53,7 +53,7 @@ class Character {
 
   update(interval){
     // update all forces
-    this.forces.foreach(function(force){
+    this.forces.forEach(function(force){
       force.update();
     });
 
