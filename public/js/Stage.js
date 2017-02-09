@@ -13,32 +13,6 @@ class Stage {
         this.drawGuide();
     }
 
-    drawGuide(){
-
-        var interval = 100;
-
-        // verticals
-        for(var i=interval; i<this.pixel_width; i+=interval){
-            this.addLine(i, 0, i, this.pixel_height);
-        }
-
-        // horizontals
-        for(var i=interval; i<this.pixel_height; i+=interval){
-            this.addLine(0, i, this.pixel_width, i);
-        }
-    }
-
-    addLine(x1, y1, x2, y2){
-        var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
-        newLine.setAttribute('x1', x1);
-        newLine.setAttribute('y1', y1);
-        newLine.setAttribute('x2', x2);
-        newLine.setAttribute('y2', y2);
-        newLine.setAttributeNS(null, 'stroke-width', 1);
-        newLine.setAttributeNS(null, 'stroke', 'red');
-        this.dom_node.appendChild(newLine);
-    }
-
     initializeContainer(){
         this.dom_node = document.getElementById(this.id);
         this.dom_node.setAttribute('width', this.pixel_width);
@@ -130,6 +104,34 @@ class Stage {
         force.dom_node.setAttribute('y1', y1);
         force.dom_node.setAttribute('x2', x2);
         force.dom_node.setAttribute('y2', y2);
+    }
+
+
+
+    drawGuide(){
+
+        var interval = 100;
+
+        // verticals
+        for(var i=interval; i<this.pixel_width; i+=interval){
+            this.addLine(i, 0, i, this.pixel_height);
+        }
+
+        // horizontals
+        for(var i=interval; i<this.pixel_height; i+=interval){
+            this.addLine(0, i, this.pixel_width, i);
+        }
+    }
+
+    addLine(x1, y1, x2, y2){
+        var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
+        newLine.setAttribute('x1', x1);
+        newLine.setAttribute('y1', y1);
+        newLine.setAttribute('x2', x2);
+        newLine.setAttribute('y2', y2);
+        newLine.setAttributeNS(null, 'stroke-width', 1);
+        newLine.setAttributeNS(null, 'stroke', 'red');
+        this.dom_node.appendChild(newLine);
     }
 
 }

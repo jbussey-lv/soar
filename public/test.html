@@ -16,8 +16,13 @@
     <script>
         var weight = new Force('weight',
                                'green',
-                               function(){return Vector.create().setXY(7.5, 1.3)},
+                               function(){return this.character.cog},
                                function(){return Vector.create().setXY(0, 6)} );
+
+        var thrust = new Force('thrust',
+                               'blue',
+                               function(){return Vector.create().setXY(10, 2.3)},
+                               function(){return Vector.create(this.character.orientation, 7)} );
 
         var plane = new Character('plane',
                              '/img/plane.png',
@@ -26,7 +31,7 @@
                              Vector.create().setXY(7.5, 1.3), // CoG
                              Vector.create().setXY(20, 10), // Position
                              60, // orientation
-                             [weight], // forces
+                             [weight, thrust], // forces
                              Vector.create(), // velocity
                              1, // mass 
                              0, // angular velocity
