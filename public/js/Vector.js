@@ -71,9 +71,10 @@ var Vector = (function(){
             return this;
         }
 
-        var add = function(v2){
-            setX(getX() + v2.getX());
-            setY(getY() + v2.getY());
+        var add = function(v2, scale){
+            var scale = scale || 1;
+            setX(getX() + v2.getX() * scale);
+            setY(getY() + v2.getY() * scale);
             return this;
         }
 

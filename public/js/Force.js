@@ -9,6 +9,15 @@ class Force {
         this.character;
     }
 
+    update(){
+        // updatePosition();
+        // updateValue();
+        // updateTorque();
+        // updateTranslationComponent();
+        // updateAbsolutePosition();
+        // updateCogOffset();
+    }
+
     getCogOffset(){
 
         var cogOffset = Vector.difference(this.getPosition(), this.character.cog)

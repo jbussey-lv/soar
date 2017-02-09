@@ -26,21 +26,42 @@ class Character {
     });
   }
 
-  getNetForce(){
-
+  updateNetTorque(){
   }
 
-  getNetTorque(){
+  updateAngularVelocity(interval){
+  }
+
+  updateOrientation(interval){
+  }
+
+  updateNetForce(){
+    var net_force = this.net_force;
+    net_force.setXY(0,0);
+    this.forces.forEach(force){
+      net_force.add(force.translation_component);
+    });
+  }
+
+  updateVelocity(interval){
+    this.velocity.add(this.net_force, interval / this.mass);
+  }
+
+  updatePosition(interval){
+    this.position.add(this.velocity, interval);
   }
 
   update(interval){
     // update all forces
+    this.forces.foreach(function(force){
+      force.update();
+    });
 
-    // get new torque
+    // update net torque
     // update anguler velocity (interval)
     // update orientation (interval)
 
-    // get net force
+    // update net force
     // update linear velocity (interval)
     // update position (interval)
   }
