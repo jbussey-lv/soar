@@ -52,6 +52,8 @@ class Stage {
             character.dom_node = document.createElementNS('http://www.w3.org/2000/svg', 'image')
             character.dom_node.setAttributeNS('http://www.w3.org/1999/xlink','href', character.img);
             character.dom_node.setAttribute('preserveAspectRatio', 'none');
+            character.dom_node.setAttribute('width', stage.metersToPixels(character.width));
+            character.dom_node.setAttribute('height', stage.metersToPixels(character.height));
             stage.dom_node.appendChild(character.dom_node);
 
             character.forces.forEach(function(force){
@@ -62,7 +64,7 @@ class Stage {
 
     initializeForce(force){
         force.dom_node = document.createElementNS('http://www.w3.org/2000/svg', 'line')
-        force.dom_node.setAttributeNS(null, 'stroke-width', 2);
+        force.dom_node.setAttributeNS(null, 'stroke-width', 4);
         force.dom_node.setAttributeNS(null, 'stroke', force.color);
         this.dom_node.appendChild(force.dom_node);
     }
@@ -81,24 +83,7 @@ class Stage {
     }
 
     renderCharacter(character) {
-        var stage = this;
-        stage.setSize(character);
-        stage.setPosition(character);
-        stage.setOrientation(character);
-        character.forces.forEach(function(force){
-            stage.renderForce(force);
-        });
-    }
-
-    setSize(character){
-        var pixel_width = this.metersToPixels(character.width);
-        var pixel_height = this.metersToPixels(character.height);
-        character.dom_node.setAttributeNS(null, 'width', pixel_width);
-        character.dom_node.setAttributeNS(null, 'height', pixel_height);
-    }
-
-    setPosition(character){
-
+        var stage       = this;
         var position    = character.position;
         var angle       = character.orientation;
         var cog         = character.cog;
@@ -116,11 +101,11 @@ class Stage {
         character.dom_node.setAttribute('y', screen_adjusted_y);
         character.dom_node.setAttribute('transform', 'rotate('+angle+' '+screen_x+' '+screen_y+')');
 
+        character.forces.forEach(function(force){
+            stage.renderForce(force);
+        });
     }
-
-    setOrientation(character){
-
-    }
+   
 
     metersToPixels(meters){
         return meters * this.pixels_per_meter;
@@ -128,10 +113,23 @@ class Stage {
 
     renderForce(force) {
 
-        var x1 = 4;
-        var y1 = 4;
-        var x2 = 4;
-        var y2 = 4;
+        var cog_offset = force.getCogOffset();
+        var character_pos = force.character.position;
+        var value = force.getValue();
+
+        var x1 = character_pos.getX() + cog_offset.getX();
+        var y1 = character_pos.getY() + cog_offset.getY();
+        var x2 = x1 + value.getX();
+        var y2 = y1 + value.getY();
+
+        var x1 = this.metersToPixels(x1);
+        var y1 = this.metersToPixels(y1);
+        var x2 = this.metersToPixels(x2);
+        var y2 = this.metersToPixels(y2);
+        force.dom_node.setAttribute('x1', x1);
+        force.dom_node.setAttribute('y1', y1);
+        force.dom_node.setAttribute('x2', x2);
+        force.dom_node.setAttribute('y2', y2);
     }
 
 }
