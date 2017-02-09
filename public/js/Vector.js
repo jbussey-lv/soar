@@ -83,6 +83,11 @@ var Vector = (function(){
             return this;
         }
 
+        var multiply = function(scale){
+            magnitude *= scale;
+            return this;
+        }
+
         var reverse = function(){
             magnitude *= -1;
             return this;
@@ -129,6 +134,7 @@ var Vector = (function(){
             setMagnitude,
             add,
             subtract,
+            multiply,
             log
         }
     }

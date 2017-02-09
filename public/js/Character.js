@@ -33,6 +33,18 @@ class Character {
   getNetTorque(){
   }
 
+  update(interval){
+    // update all forces
+
+    // get new torque
+    // update anguler velocity (interval)
+    // update orientation (interval)
+
+    // get net force
+    // update linear velocity (interval)
+    // update position (interval)
+  }
+
   get orientation(){
     return this._orientation * 180 / Math.PI;
   }

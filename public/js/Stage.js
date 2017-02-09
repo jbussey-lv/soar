@@ -1,12 +1,13 @@
 class Stage {
 
-    constructor(id, world, pixel_width, pixel_height, pixels_per_meter, background_color) {
+    constructor(id, world, pixel_width, pixel_height, background_color, pixels_per_meter, meters_per_newton) {
         this.id               = id;
         this.world            = world;
         this.pixel_width      = pixel_width || 600;
         this.pixel_height     = pixel_height || 400;
-        this.pixels_per_meter = pixels_per_meter || 10;
         this.background_color = background_color || '#CCC';
+        this.pixels_per_meter = pixels_per_meter || 3;
+        this.meters_per_newton = meters_per_newton || 0.003;
 
         this.initializeContainer();
         this.initializeWorld();
@@ -38,7 +39,7 @@ class Stage {
 
     initializeForce(force){
         force.dom_node = document.createElementNS('http://www.w3.org/2000/svg', 'line')
-        force.dom_node.setAttributeNS(null, 'stroke-width', 4);
+        force.dom_node.setAttributeNS(null, 'stroke-width', 2);
         force.dom_node.setAttributeNS(null, 'stroke', force.color);
         this.dom_node.appendChild(force.dom_node);
     }
@@ -89,7 +90,8 @@ class Stage {
 
         var cog_offset = force.getCogOffset();
         var character_pos = force.character.position;
-        var value = force.getValue();
+        var value = force.getValue().multiply(this.meters_per_newton);
+
 
         var x1 = character_pos.getX() + cog_offset.getX();
         var y1 = character_pos.getY() + cog_offset.getY();
@@ -105,8 +107,6 @@ class Stage {
         force.dom_node.setAttribute('x2', x2);
         force.dom_node.setAttribute('y2', y2);
     }
-
-
 
     drawGuide(){
 
