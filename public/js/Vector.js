@@ -110,6 +110,12 @@ var Vector = (function(){
             console.log('angle: ' + getAngleDegrees() + ', magnitude: ' + getMagnitude());
         }
 
+        var equate(v2){
+            var angle2 = v2.getAngle();
+            var magnitude = v2.getMagnitude();
+            this.setPolar(angle2, magnitude2);
+        }
+
         function r2d(radians){
             return radians * 180 / Math.PI;
         }

@@ -1,7 +1,7 @@
 class Character {
 
   constructor(name, img, width, height, cog, position, orientation, 
-              forces, velocity, mass, angular_velocity, moment_of_inertia){
+              forces, velocity, mass, angular_velocity){
 
     this.name = name;
     this.img = img;
@@ -13,7 +13,7 @@ class Character {
     this._orientation = orientation * Math.PI / 180;
     this.mass = mass || 1;
     this.angular_velocity = angular_velocity || 0;
-    this.moment_of_intertia = moment_of_inertia || 1;
+    this.moment_of_intertia = 0.4 * mass * (width/2) * (width/2)
     this.forces = [];
     this.setForces(forces);
   }
@@ -26,10 +26,26 @@ class Character {
     });
   }
 
+  update(interval){
+    // update all forces
+    this.forces.forEach(function(force){
+      force.update();
+    });
+
+    // update net torque
+    // update anguler velocity (interval)
+    // update orientation (interval)
+
+    // update net force
+    // update linear velocity (interval)
+    // update position (interval)
+  }
+
   updateNetTorque(){
   }
 
   updateAngularVelocity(interval){
+    this.angular_velocity += this.net_torque / this.mass 
   }
 
   updateOrientation(interval){
@@ -49,21 +65,6 @@ class Character {
 
   updatePosition(interval){
     this.position.add(this.velocity, interval);
-  }
-
-  update(interval){
-    // update all forces
-    this.forces.forEach(function(force){
-      force.update();
-    });
-
-    // update net torque
-    // update anguler velocity (interval)
-    // update orientation (interval)
-
-    // update net force
-    // update linear velocity (interval)
-    // update position (interval)
   }
 
   get orientation(){

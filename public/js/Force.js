@@ -1,22 +1,35 @@
 class Force {
 
-    constructor(name, color, getPosition, getValue) {
-        this.name        = name || '';
-        this.color       = color || '#CCC';
-        this.getPosition = getPosition || function(){return Vector.create();}
-        this.getValue    = getValue || function(){return Vector.create();}
-        this.net_force   = Vector.create();
-        this.character;
+    constructor(getRelativePosition, updateValue, name, color) {
+
+        this.updateValue            = updateValue;
+        this.name                   = name || '';
+        this.color                  = color || '#CCC';
+
+        this.relative_position      = getRelativePosition();
+        this.relative_cog_offset    = this.getRelativeCogOffset();
+        this.absolute_cog_offset    = Vector.create();
+        this.absolute_position      = Vector.create();
+        this.value                  = Vector.create();
+        this.translation_component  = Vector.create();
+        this.torque                 = 0; // N/m
+    }
+
+    getRelativeCogOffset(){
+        return Vector.difference(this.relative_position,
+                               this.character.cog);
     }
 
     update(){
-        // updatePosition();
-        // updateValue();
-        // updateTorque();
-        // updateTranslationComponent();
-        // updateAbsolutePosition();
-        // updateCogOffset();
+        updateAbsoluteCogOffset();
+        updateAbsolutePosition();
+        updateValue();
+        updateTranslationComponent();
+        updateTorque();
     }
+
+    updateRelativeCogOffset(){
+        this.relative_position = this.
 
     getCogOffset(){
 

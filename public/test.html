@@ -14,16 +14,15 @@
     <script src="/js/force.js"></script>
 
     <script>
-        var weight = new Force('weight',
-                               'green',
-                               function(){return this.character.cog},
-                               function(){return Vector.create(90, this.character.mass * this.character.world.gravity)}
-                    );
+        var weight = new Force(function(){return this.character.cog},
+                               function(){this.value.setPolar(90, this.character.mass * this.character.world.gravity)},
+                               'weight',
+                               'green');
 
-        var thrust = new Force('thrust',
-                               'blue',
-                               function(){return Vector.create().setXY(10, 2.3)},
-                               function(){return Vector.create(this.character.orientation, 2000)} );
+        var thrust = new Force(function(){return Vector.create.setXY(10, 2.3)},
+                               function(){this.value.setPolar(this.character.orientation, 2000)},
+                               'thrust',
+                               'blue');
 
         var plane = new Character('plane',
                              '/img/plane.png',
@@ -43,7 +42,7 @@
         var stage = new Stage('stage', world);
 
         var go = 1;
-        var interval = 25;
+        var interval = 0.025;
 
         setInterval(
             function(){
