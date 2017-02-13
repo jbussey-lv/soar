@@ -122,6 +122,7 @@ var Vector = (function(){
         }
 
         function d2r(degrees){
+            degrees = degrees || 0;
             return degrees * Math.PI / 180;
         }
 

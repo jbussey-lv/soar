@@ -1,7 +1,7 @@
 class Character {
 
   constructor(name, img, width, height, cog, position, orientation, 
-              forces, velocity, mass, angular_velocity){
+              forces, velocity, mass, angular_velocity, key_listener){
 
     this.name = name;
     this.img = img;
@@ -13,8 +13,11 @@ class Character {
     this._orientation = orientation * Math.PI / 180;
     this.mass = mass || 1;
     this.angular_velocity = angular_velocity || 0;
+    this.key_listener = key_listener;
     this.moment_of_intertia = 0.4 * mass * (width/2) * (width/2)
     this.forces = [];
+    this.net_force = Vector.create();
+    this.netTorque = 0;
     this.setForces(forces);
   }
 
@@ -39,6 +42,9 @@ class Character {
     // update net force
     // update linear velocity (interval)
     // update position (interval)
+    this.updateNetForce();
+    this.updateVelocity(interval);
+    this.updatePosition(interval);
   }
 
   updateNetTorque(){

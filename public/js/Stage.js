@@ -6,8 +6,8 @@ class Stage {
         this.pixel_width      = pixel_width || 600;
         this.pixel_height     = pixel_height || 400;
         this.background_color = background_color || '#CCC';
-        this.pixels_per_meter = pixels_per_meter || 10;
-        this.pixels_per_newton = pixels_per_newton || 0.024;
+        this.pixels_per_meter = pixels_per_meter || 3;
+        this.pixels_per_newton = pixels_per_newton || 0.018;
 
         this.initializeContainer();
         this.initializeWorld();

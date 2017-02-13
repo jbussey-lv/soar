@@ -10,8 +10,9 @@
 
     <script src="/js/stage.js"></script>
     <script src="/js/world.js"></script>
-    <script src="/js/character.js"></script>
+    <script src="/js/key-listener.js"></script>
     <script src="/js/vector.js"></script>
+    <script src="/js/character.js"></script>
     <script src="/js/force.js"></script>
     <script src="/js/wing-force.js"></script>
 
@@ -24,42 +25,43 @@
         var thrust = new Force(function(){this.relative_position.setXY(10, 2.3)},
                                function(){
                                     var angle = this.character.orientation;
-                                    var magnitude = p ? 2000 : 0;
+                                    var magnitude = this.character.key_listener.isPushed('thrust') ? 7000 : 0;
                                     this.value.setPolar(angle, magnitude)},
                                'thrust',
                                'blue');
 
         var lift   = new WingForce();
 
+        var key_listener = new KeyListener({'thrust': 'k'});
+
         var plane = new Character('plane',
-                             '/img/plane.png',
-                             10, // width
-                             5, // height
-                             Vector.create().setXY(7.3, 2.3), // CoG
-                             Vector.create().setXY(25, 15), // Position
-                             -90, // orientation
-                             [weight, thrust], // forces
-                             Vector.create(), // velocity
-                             350, // mass in kg
-                             0, // angular velocity
-                             1); // moment of inertia
+                                  '/img/plane.png',
+                                  10, // width
+                                  5, // height
+                                  Vector.create().setXY(7.3, 2.3), // CoG
+                                  Vector.create().setXY(25, 15), // Position
+                                  0,//-90, // orientation
+                                  [weight, thrust], // forces
+                                  Vector.create(), // velocity
+                                  350, // mass in kg
+                                  0, // angular velocity
+                                  key_listener); // moment of inertia
 
         var world = new World([plane]);
 
         var stage = new Stage('stage', world);
 
         var go = 1;
-        var interval = 0.025;
+        var interval = 0.025;// in seconds
 
-        world.update(interval/1000);
-        stage.render();
-        // setInterval(
-        //     function(){
-        //         if(go){
-        //         }
-        //     },
-        //     interval
-        // );
+
+        setInterval(
+            function(){
+                world.update(interval);
+                stage.render();
+            },
+            interval * 1000
+        );
 
     </script>
     

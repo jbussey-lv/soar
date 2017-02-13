@@ -22,8 +22,7 @@ class Force {
         this.updateAbsoluteCogOffset();
         this.updateAbsolutePosition();
         this.updateValue();
-        this.updateTranslationComponent();
-        this.updateTorque();
+        this.updateTranslationComponentAndTorque();
     }
 
     updateRelativePosition(){
@@ -49,23 +48,17 @@ class Force {
         return this;
     }
 
-    updateTranslationComponent(){
+    updateTranslationComponentAndTorque(){
 
-        var angle = this.absolute_cog_offset.getAngle();
+        this.translation_component.equate(this.value)
+                                  .subtractAngle(this.absolute_cog_offset.getAngle());
 
-        var magnitude = this.relative_cog_offset.getX();
+        var x = this.translation_component.getX();
+        var y = this.translation_component.getY();
 
-        this.translation_component.setPolar(angle, magnitude);
-    }
+        this.translation_component.setPolar(this.absolute_cog_offset.getAngle(), x);
 
-
-    updateTorque(){
-
-        var magnitude = this.relative_cog_offset.getY();
-
-        var lever_length = this.relative_cog_offset.getMagnitude();
-
-        return magnitude * lever_length;
+        this.torque = y * this.relative_cog_offset.getMagnitude();
     }
 
 }
