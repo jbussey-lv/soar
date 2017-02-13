@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/gif" href="data:image/gif;base64,R0lGODlhEAAQAIAAAAAAAAAAACH5BAkAAAEALAAAAAAQABAAAAIgjI+py+0PEQiT1lkNpppnz4HfdoEH2W1nCJRfBMfyfBQAOw==" />
     <title>Document</title>
 </head>
 <body>
@@ -21,7 +22,10 @@
                                'green');
 
         var thrust = new Force(function(){this.relative_position.setXY(10, 2.3)},
-                               function(){this.value.setPolar(this.character.orientation, 2000)},
+                               function(){
+                                    var angle = this.character.orientation;
+                                    var magnitude = p ? 2000 : 0;
+                                    this.value.setPolar(angle, magnitude)},
                                'thrust',
                                'blue');
 
@@ -32,8 +36,8 @@
                              10, // width
                              5, // height
                              Vector.create().setXY(7.3, 2.3), // CoG
-                             Vector.create().setXY(20, 10), // Position
-                             60, // orientation
+                             Vector.create().setXY(25, 15), // Position
+                             -90, // orientation
                              [weight, thrust], // forces
                              Vector.create(), // velocity
                              350, // mass in kg

@@ -1,13 +1,13 @@
 class Stage {
 
-    constructor(id, world, pixel_width, pixel_height, background_color, pixels_per_meter, meters_per_newton) {
+    constructor(id, world, pixel_width, pixel_height, background_color, pixels_per_meter, pixels_per_newton) {
         this.id               = id;
         this.world            = world;
         this.pixel_width      = pixel_width || 600;
         this.pixel_height     = pixel_height || 400;
         this.background_color = background_color || '#CCC';
         this.pixels_per_meter = pixels_per_meter || 10;
-        this.meters_per_newton = meters_per_newton || 0.003;
+        this.pixels_per_newton = pixels_per_newton || 0.024;
 
         this.initializeContainer();
         this.initializeWorld();
@@ -80,28 +80,26 @@ class Stage {
             stage.renderForce(force);
         });
     }
-   
+
+    renderForce(force) {
+
+        var x1 = this.metersToPixels(force.absolute_position.getX());
+        var y1 = this.metersToPixels(force.absolute_position.getY());
+        var x2 = x1 + this.newtonsToPixels(force.value.getX());
+        var y2 = y1 + this.newtonsToPixels(force.value.getY());
+
+        force.dom_node.setAttribute('x1', x1);
+        force.dom_node.setAttribute('y1', y1);
+        force.dom_node.setAttribute('x2', x2);
+        force.dom_node.setAttribute('y2', y2);
+    }
 
     metersToPixels(meters){
         return meters * this.pixels_per_meter;
     }
 
-    renderForce(force) {
-
-        var x1 = force.absolute_position.getX();
-        var y1 = force.absolute_position.getX();
-        var x2 = x1 + force.value.getX();
-        var y2 = y1 + force.value.getY();
-
-        var x1 = this.metersToPixels(x1);
-        var y1 = this.metersToPixels(y1);
-        var x2 = this.metersToPixels(x2);
-        var y2 = this.metersToPixels(y2);
-        
-        force.dom_node.setAttribute('x1', x1);
-        force.dom_node.setAttribute('y1', y1);
-        force.dom_node.setAttribute('x2', x2);
-        force.dom_node.setAttribute('y2', y2);
+    newtonsToPixels(newtons){
+        return newtons * this.pixels_per_newton;
     }
 
     drawGuide(){

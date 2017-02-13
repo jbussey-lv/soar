@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script src="/js/key-listener.js"></script>
+    <script>
+
+        var l = new KeyListener({'thrust': 'l', 'break': 'k'});
+
+        setInterval(
+            function(){
+                console.log('thrust: ' + l.isPushed('thrust'), 'break: ' + l.isPushed('break'))
+            },
+            100
+        );
+        //     function(){
+        //         if(go){
+        //         }
+        //     },
+        //     interval
+        // );
+
+
+    </script>
+</body>
+</html>

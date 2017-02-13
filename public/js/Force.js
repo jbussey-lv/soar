@@ -28,23 +28,25 @@ class Force {
 
     updateRelativePosition(){
         this.relative_position.equate(getRelativePosition());
+        return this;
     }
 
     updateRelativeCogOffset(){
         this.relative_cog_offset.equate(this.relative_position)
                                 .subtract(this.character.cog);
+        return this;
     }
 
     updateAbsoluteCogOffset(){
-        this.absolute_cog_offset.setPolar(
-            this.relative_cog_offset.angle + this.character.orientation,
-            this.relative_cog_offset.magnitude
-        );
+        this.absolute_cog_offset.equate(this.relative_cog_offset)
+                                .addAngle(this.character.orientation);
+        return this;
     }
 
     updateAbsolutePosition(){
-        this.absolute_position.equate(this.character.cog);
-        this.absolute_position.add(this.absolute_cog_offset);
+        this.absolute_position.equate(this.character.position)
+                              .add(this.absolute_cog_offset);
+        return this;
     }
 
     updateTranslationComponent(){
