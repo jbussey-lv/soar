@@ -12,17 +12,20 @@
     <script src="/js/character.js"></script>
     <script src="/js/vector.js"></script>
     <script src="/js/force.js"></script>
+    <script src="/js/wing-force.js"></script>
 
     <script>
-        var weight = new Force(function(){return this.character.cog},
+        var weight = new Force(function(){this.relative_position.equate(this.character.cog)},
                                function(){this.value.setPolar(90, this.character.mass * this.character.world.gravity)},
                                'weight',
                                'green');
 
-        var thrust = new Force(function(){return Vector.create.setXY(10, 2.3)},
+        var thrust = new Force(function(){this.relative_position.setXY(10, 2.3)},
                                function(){this.value.setPolar(this.character.orientation, 2000)},
                                'thrust',
                                'blue');
+
+        var lift   = new WingForce();
 
         var plane = new Character('plane',
                              '/img/plane.png',
@@ -44,15 +47,15 @@
         var go = 1;
         var interval = 0.025;
 
-        setInterval(
-            function(){
-                if(go){
-                    world.update(interval/1000);
-                    stage.render();
-                }
-            },
-            interval
-        );
+        world.update(interval/1000);
+        stage.render();
+        // setInterval(
+        //     function(){
+        //         if(go){
+        //         }
+        //     },
+        //     interval
+        // );
 
     </script>
     

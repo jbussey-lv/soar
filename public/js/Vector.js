@@ -110,10 +110,11 @@ var Vector = (function(){
             console.log('angle: ' + getAngleDegrees() + ', magnitude: ' + getMagnitude());
         }
 
-        var equate(v2){
+        var equate = function(v2){
             var angle2 = v2.getAngle();
-            var magnitude = v2.getMagnitude();
+            var magnitude2 = v2.getMagnitude();
             this.setPolar(angle2, magnitude2);
+            return this;
         }
 
         function r2d(radians){
@@ -142,6 +143,7 @@ var Vector = (function(){
             add,
             subtract,
             multiply,
+            equate,
             log
         }
     }

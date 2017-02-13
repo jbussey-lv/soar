@@ -6,7 +6,7 @@ class Stage {
         this.pixel_width      = pixel_width || 600;
         this.pixel_height     = pixel_height || 400;
         this.background_color = background_color || '#CCC';
-        this.pixels_per_meter = pixels_per_meter || 3;
+        this.pixels_per_meter = pixels_per_meter || 10;
         this.meters_per_newton = meters_per_newton || 0.003;
 
         this.initializeContainer();
@@ -88,20 +88,16 @@ class Stage {
 
     renderForce(force) {
 
-        var cog_offset = force.getCogOffset();
-        var character_pos = force.character.position;
-        var value = force.getValue().multiply(this.meters_per_newton);
-
-
-        var x1 = character_pos.getX() + cog_offset.getX();
-        var y1 = character_pos.getY() + cog_offset.getY();
-        var x2 = x1 + value.getX();
-        var y2 = y1 + value.getY();
+        var x1 = force.absolute_position.getX();
+        var y1 = force.absolute_position.getX();
+        var x2 = x1 + force.value.getX();
+        var y2 = y1 + force.value.getY();
 
         var x1 = this.metersToPixels(x1);
         var y1 = this.metersToPixels(y1);
         var x2 = this.metersToPixels(x2);
         var y2 = this.metersToPixels(y2);
+        
         force.dom_node.setAttribute('x1', x1);
         force.dom_node.setAttribute('y1', y1);
         force.dom_node.setAttribute('x2', x2);

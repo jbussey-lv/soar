@@ -1,13 +1,14 @@
 class Force {
 
-    constructor(getRelativePosition, updateValue, name, color) {
+    constructor(updateRelativePosition, updateValue, name, color) {
 
+        this.updateRelativePosition = updateRelativePosition;
         this.updateValue            = updateValue;
         this.name                   = name || '';
         this.color                  = color || '#CCC';
 
-        this.relative_position      = getRelativePosition();
-        this.relative_cog_offset    = this.getRelativeCogOffset();
+        this.relative_position      = Vector.create();
+        this.relative_cog_offset    = Vector.create();
         this.absolute_cog_offset    = Vector.create();
         this.absolute_position      = Vector.create();
         this.value                  = Vector.create();
@@ -15,52 +16,54 @@ class Force {
         this.torque                 = 0; // N/m
     }
 
-    getRelativeCogOffset(){
-        return Vector.difference(this.relative_position,
-                               this.character.cog);
+    update(){
+        this.updateRelativePosition();
+        this.updateRelativeCogOffset();
+        this.updateAbsoluteCogOffset();
+        this.updateAbsolutePosition();
+        this.updateValue();
+        this.updateTranslationComponent();
+        this.updateTorque();
     }
 
-    update(){
-        updateAbsoluteCogOffset();
-        updateAbsolutePosition();
-        updateValue();
-        updateTranslationComponent();
-        updateTorque();
+    updateRelativePosition(){
+        this.relative_position.equate(getRelativePosition());
     }
 
     updateRelativeCogOffset(){
-        this.relative_position = this.
-
-    getCogOffset(){
-
-        var cogOffset = Vector.difference(this.getPosition(), this.character.cog)
-                              .addAngle(this.character.orientation);
-
-        return cogOffset;
+        this.relative_cog_offset.equate(this.relative_position)
+                                .subtract(this.character.cog);
     }
 
-    getTorque(){
-
-        var value = this.getValue();
-
-        var cog_offset = this.getCogOffset();
-
-        var force_perp_mag = value.subtractAngle(cog_offset.getAngle()).getY();
-
-        var lever_length = cog_offset.getMagnitude();
-
-        return force_perp_mag * lever_length;
+    updateAbsoluteCogOffset(){
+        this.absolute_cog_offset.setPolar(
+            this.relative_cog_offset.angle + this.character.orientation,
+            this.relative_cog_offset.magnitude
+        );
     }
 
-    getTranslationComponent(){
+    updateAbsolutePosition(){
+        this.absolute_position.equate(this.character.cog);
+        this.absolute_position.add(this.absolute_cog_offset);
+    }
 
-        var value = this.getValue();
+    updateTranslationComponent(){
 
-        var cog_offset = this.getCogOffset();
+        var angle = this.absolute_cog_offset.getAngle();
 
-        var force_par_mag = value.subtractAngle(cog_offset.getAngle()).getX();
+        var magnitude = this.relative_cog_offset.getX();
 
-        return Vector.create().setPolar(cog_offset.getAngle(), force_par_mag);
+        this.translation_component.setPolar(angle, magnitude);
+    }
+
+
+    updateTorque(){
+
+        var magnitude = this.relative_cog_offset.getY();
+
+        var lever_length = this.relative_cog_offset.getMagnitude();
+
+        return magnitude * lever_length;
     }
 
 }
