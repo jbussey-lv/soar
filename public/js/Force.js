@@ -50,15 +50,22 @@ class Force {
 
     updateTranslationComponentAndTorque(){
 
-        this.translation_component.equate(this.value)
-                                  .subtractAngle(this.absolute_cog_offset.getAngle());
+        this.translation_component.equate(this.value);
 
-        var x = this.translation_component.getX();
-        var y = this.translation_component.getY();
+        if(this.absolute_cog_offset.getMagnitude() > 0.00000000000001){
+            this.translation_component.subtractAngle(this.absolute_cog_offset.getAngle());
 
-        this.translation_component.setPolar(this.absolute_cog_offset.getAngle(), x);
+            var x = this.translation_component.getX();
+            var y = this.translation_component.getY();
 
-        this.torque = y * this.relative_cog_offset.getMagnitude();
+            this.translation_component.setPolar(this.absolute_cog_offset.getAngle(), x);
+
+            this.torque = y * this.relative_cog_offset.getMagnitude();
+        }else{
+            this.torque = 0;
+        }
+
+        console.log(this.name, this.translation_component.getXY(), this.torque);
     }
 
 }
