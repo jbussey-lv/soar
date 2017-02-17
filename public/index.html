@@ -2,320 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/gif" href="data:image/gif;base64,R0lGODlhEAAQAIAAAAAAAAAAACH5BAkAAAEALAAAAAAQABAAAAIgjI+py+0PEQiT1lkNpppnz4HfdoEH2W1nCJRfBMfyfBQAOw==" />
     <title>Document</title>
-    <script src="/js/Vector.js"></script>
-    <script src="/js/Force.js"></script>
-    <script src="/js/Character.js"></script>
 </head>
 <body>
-<svg version="1.1"
-     baseProfile="full"
-     width="700"
-     height="400"
-     xmlns="http://www.w3.org/2000/svg"
-     id="stage"
-     style='background-color: #CCC;'>
-</svg>
-
-<button onClick="toggleGo()" id="toggle-go">Go/Stop</button>
-
-<script>
-
-var world = {
-  gravity: 9.8, // m/s^2
-  air_density: 1.225 // kg/ms^3
-};
-
-
-var frame = 0;
-var thrust_magnitude = 0.015;
-var stage = document.getElementById('stage');
-var stage_width = stage.getAttribute('width')/1;
-var stage_height = stage.getAttribute('height')/1;
-var lift_drag_constant = 0.1;
-var parasitic_drag_coeficient = -0.00001;
-var interval = 20;
-var vector_scale = 3500;
-var go = false;//true;
-
-var mass = 10;
-
-var cog = Vector.create().setXY(75,20);
-
-var weight_position = Vector.create().setXY(30,40); //cog;
-var weight_value = Vector.create().setPolar(90, mass * world.gravity);
-var weight = new Force('weight',
-                       'green',
-                       function(){return weight_position;},
-                       function(){return weight_value;});
-
-var thrust_position = Vector.create().setXY(99, 20);
-var getThrustPosition = function(){return thrust_position;}
-var thrust_value = Vector.create().setXY(50, 0);
-var getThrustValue = function(){
-  thrust_value.setAngle(plane.orientation);
-  return thrust_value;
-}
-var thrust = new Force('thrust', 'blue', getThrustPosition, getThrustValue);
-
-
-var lift_position = Vector.create().setXY(67, 10);
-// var lifgt_value = Vector.create().setXY();
-
-
-var plane = new Character('plane',
-                             '/img/plane.png',
-                             100, // width
-                             50, // height
-                             cog, // CoG
-                             Vector.create().setXY(400, 100), // Position
-                             0, // orientation
-                             [weight, thrust], // forces
-                             Vector.create(), // velocity
-                             mass, // mass 
-                             0, // angular velocity
-                             1); // moment of inertia
-
-// initialize plane
-
-function initializeCharacter(character){
-
-  var stage = document.getElementById('stage');
-
-  var svgimg = document.createElementNS('http://www.w3.org/2000/svg', 'image')
-  svgimg.setAttributeNS(null, 'height', character.height);
-  svgimg.setAttributeNS(null, 'width', character.width);
-  svgimg.setAttributeNS('http://www.w3.org/1999/xlink','href', character.img);
-  stage.appendChild(svgimg);
-  character.domNode = svgimg;
-
-  character.forces.forEach(function(force){
-    var svg_line = document.createElementNS('http://www.w3.org/2000/svg', 'line')
-    svg_line.setAttributeNS(null, 'stroke-width', 2);
-    svg_line.setAttributeNS(null, 'stroke', force.color);
-    stage.appendChild(svg_line);
-    force.domNode = svg_line;
-  });
-}
-
-function renderCharacter(character){
-
-  var screen_x = character.position.getX();
-  var screen_y = character.position.getY();
-
-  var x = screen_x - cog.getX();
-  var y = screen_y - cog.getY();
-  var a = character.orientation;
-
-  character.domNode.setAttribute('x', x);
-  character.domNode.setAttribute('y', y);
-  character.domNode.setAttribute('transform', 'rotate('+a+' '+screen_x+' '+screen_y+')');
-
-  character.forces.forEach(function(force){
-
-    var node       = force.domNode;
-    var cog_offset = force.getCogOffset();
-
-    var x1 = character.position.getX() + cog_offset.getX();
-    var y1 = character.position.getY() + cog_offset.getY();
-    var x2 = x1 + force.getValue().getX();
-    var y2 = y1 + force.getValue().getY();
-
-    var translation_component = force.getTranslationComponent();
-
-    console.log(force.name, ' -- underlying force magnitude: '+ force.getValue().getMagnitude(), ' -- torque: '+force.getTorque(), ' -- force translation: ('+translation_component.getX(), ', ', translation_component.getY(), ')');
-
-    node.setAttribute('x1', x1);
-    node.setAttribute('y1', y1);
-    node.setAttribute('x2', x2);
-    node.setAttribute('y2', y2);
-
-  });
-}
-
-initializeCharacter(plane);
-
-renderCharacter(plane);
-
-
-
-
-var keys = [
-  {code: 37, name: 'pitch_up'},
-  {code: 39, name: 'pitch_down'},
-  {code: 38, name: 'throttle'},
-  {code: 40, name: 'brake'}
-];
-
-
-// var plane = {
-//   'id': plane,
-//   'forces': {}
-// };
-
-
-var input = {
-  'elevator_up': null,
-  'elevator_down': null,
-  'throttle': null
-};
-
-function toggleGo(){
-  go = go == 1 ? 0 : 1;
-}
-
-setInterval(function(){
-  if(go){
-    update();
-    render();
-  }
-}, interval);
-
-function clearInput(){
-  input.elevator_up = null;
-  input.elevator_down = null;
-}
-
-function update(){
-  frame++;
-  updateOrientation();
-  updateVelocity();
-  updatePosition();
-}
-
-function getRelativeHeadwindMagnitude(){
-  var relative_air_velocity = getRelativeAirVelocity();
-  var straight_on = Math.cos(relative_air_velocity.angle) * relative_air_velocity.magnitude;
-  return straight_on;
-}
-
-
-function updateOrientation(){
-
-  var headwind_magnitude = getRelativeHeadwindMagnitude();
-
-  if(input.pitch_up){
-    orientation -= dangle * headwind_magnitude;
-  }
-  if(input.pitch_down){
-    orientation += dangle * headwind_magnitude;
-  }
-}
-
-function updateVelocity(){
-
-  var forces_total = sumVectors([
-    getThrustForce(),
-    getGravityForce(),
-    getLiftDragForce(),
-    getParasiticDragForce()
-  ]);
-
-  var acceleration = {
-    angle: forces_total.angle,
-    magnitude: forces_total.magnitude / mass
-  };
-
-  velocity = sumVectors([velocity, acceleration]);
-}
-
-
-function mod(base, num){
-  return ((base%num)+num)%num;
-}
-
-function getRelativeAirVelocity(){
-
-  var wind_velocity = getWindVelocity();
-  var relative_wind_velocity = subtractVectors(wind_velocity, velocity);
-
-  return {
-    angle: relative_wind_velocity.angle - orientation,
-    magnitude: relative_wind_velocity.magnitude
-  }
-}
-
-function sv(vector){
-  console.log('angle: ' +vector.angle * 180 / Math.PI, 'magnitude: ' + vector.magnitude);
-}
-
-function getLiftDragForce(){
-
-  var relative_air_velocity = getRelativeAirVelocity();
-
-  var angle = orientation + Math.PI/2;
-
-  var magnitude = Math.sin(relative_air_velocity.angle)
-                * relative_air_velocity.magnitude 
-                * lift_drag_constant;
-  
-  return {angle: angle, magnitude: magnitude};
-}
-
-function getParasiticDragForce(){
-
-  var headwind_magnitude = getRelativeHeadwindMagnitude();
-
-  return {
-    magnitude: headwind_magnitude * parasitic_drag_coeficient,
-    angle: orientation + Math.PI
-  };
-}
-
-function getWindVelocity(){
-
-  var floor = 200;
-  if(y>floor){
-    var mag = -0.4;
-  }else{
-    mag= 0;
-  }
-
-  return {
-    angle: 0, 
-    magnitude: mag
-  };
-}
-
-
-function getThrustForce(){
-  return {
-    angle: orientation,
-    magnitude: input.throttle ? thrust_magnitude : 0
-  };
-}
-
-function updatePosition(){
-  var dx = velocity.magnitude * Math.cos(velocity.angle);
-  var dy = velocity.magnitude * Math.sin(velocity.angle);
-  x += dx;
-  y += dy;
-
-  // bound to box
-  if(y > stage_height){y = stage_height;}
-  if(y < 0){y = 0;}
-
-  if(x<0){x = stage_width+x;}
-  if(x>stage_width){x = x-stage_width;}
-}
-
-document.addEventListener('keydown', function(event) {
-  keys.forEach(function(key){
-    if(event.keyCode == key.code) {
-        input[key.name] = true;
-    }
-  });
-});
-
-document.addEventListener('keyup', function(event) {
-  keys.forEach(function(key){
-    if(event.keyCode == key.code) {
-        input[key.name] = false;
-    }
-  });
-});
-
-
-</script>
+    <svg id="stage" version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg"></svg>
+
+    <script src="/js/helpers.js"></script>
+    <script src="/js/stage.js"></script>
+    <script src="/js/world.js"></script>
+    <script src="/js/key-listener.js"></script>
+    <script src="/js/vector.js"></script>
+    <script src="/js/character.js"></script>
+    <script src="/js/force.js"></script>
+    <script src="/js/wing-force.js"></script>
+
+    <script>
+
+
+        var weight = new Force(function(){this.relative_position.equate(this.character.cog)},
+                               function(){this.value.setPolar(90, this.character.mass * this.character.world.gravity)},
+                               'weight',
+                               'green');
+
+        var thrust = new Force(function(){this.relative_position.setXY(10, 2.3)},
+                               function(){
+                                    var angle = this.character.orientation;
+                                    var magnitude = this.character.key_listener.isPushed('thrust') ? 7000 : 0;
+                                    this.value.setPolar(angle, magnitude)},
+                               'thrust',
+                               'blue');
+
+        var lift   = new WingForce();
+
+        var key_listener = new KeyListener({'thrust': 'k'});
+
+        var plane = new Character('plane',
+                                  '/img/plane.png',
+                                  10, // width
+                                  5, // height
+                                  Vector.create().setXY(7.3, 2.3), // CoG
+                                  Vector.create().setXY(25, 15), // Position
+                                  -80, // orientation
+                                  [weight, thrust], // forces
+                                  Vector.create(), // velocity
+                                  350, // mass in kg
+                                  0, // angular velocity
+                                  key_listener); // moment of inertia
+
+        var world = new World([plane]);
+
+        var stage = new Stage('stage', world);
+
+        var go = 1;
+        var interval = 0.025;// in seconds
+
+
+        setInterval(
+            function(){
+                world.update(interval);
+                stage.render();
+            },
+            interval * 1000
+        );
+
+    </script>
+    
 </body>
 </html>
