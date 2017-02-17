@@ -35,13 +35,10 @@ class Character {
       force.update();
     });
 
-    // update net torque
-    // update anguler velocity (interval)
-    // update orientation (interval)
+    this.updateNetTorque();
+    this.updateAngularVelocity();
+    this.updateOrientation();
 
-    // update net force
-    // update linear velocity (interval)
-    // update position (interval)
     this.updateNetForce();
     this.updateVelocity(interval);
     this.updatePosition(interval);

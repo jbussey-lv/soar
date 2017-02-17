@@ -3,8 +3,8 @@ class Stage {
     constructor(id, world, pixel_width, pixel_height, background_color, pixels_per_meter, pixels_per_newton) {
         this.id               = id;
         this.world            = world;
-        this.pixel_width      = pixel_width || 600;
-        this.pixel_height     = pixel_height || 400;
+        this.pixel_width      = pixel_width || 900;
+        this.pixel_height     = pixel_height || 600;
         this.background_color = background_color || '#CCC';
         this.pixels_per_meter = pixels_per_meter || 3;
         this.pixels_per_newton = pixels_per_newton || 0.018;
@@ -69,6 +69,7 @@ class Stage {
 
         var screen_x = this.metersToPixels(x);
         var screen_y = this.metersToPixels(y);
+
         var screen_adjusted_x = this.metersToPixels(adjusted_x);
         var screen_adjusted_y = this.metersToPixels(adjusted_y);
 
