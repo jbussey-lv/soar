@@ -70,10 +70,12 @@ class Stage {
         var screen_x = this.metersToPixels(x);
         var screen_y = this.metersToPixels(y);
         screen_x = helpers.mod(screen_x, this.pixel_width);
+        screen_y = helpers.mod(screen_y, this.pixel_height);
 
         var screen_adjusted_x = this.metersToPixels(adjusted_x);
         var screen_adjusted_y = this.metersToPixels(adjusted_y);
         screen_adjusted_x = helpers.mod(screen_adjusted_x, this.pixel_width);
+        screen_adjusted_y = helpers.mod(screen_adjusted_y, this.pixel_height);
 
         character.dom_node.setAttribute('x', screen_adjusted_x);
         character.dom_node.setAttribute('y', screen_adjusted_y);
@@ -89,6 +91,7 @@ class Stage {
         var x1 = this.metersToPixels(force.absolute_position.getX());
         var y1 = this.metersToPixels(force.absolute_position.getY());
         x1 = helpers.mod(x1, this.pixel_width);
+        y1 = helpers.mod(y1, this.pixel_height);
         var x2 = x1 + this.newtonsToPixels(force.value.getX());
         var y2 = y1 + this.newtonsToPixels(force.value.getY());
 
