@@ -36,8 +36,8 @@ class Character {
     });
 
     this.updateNetTorque();
-    this.updateAngularVelocity();
-    this.updateOrientation();
+    this.updateAngularVelocity(interval);
+    this.updateOrientation(interval);
 
     this.updateNetForce();
     this.updateVelocity(interval);
@@ -45,13 +45,19 @@ class Character {
   }
 
   updateNetTorque(){
+    var net_torque = 0;
+    this.forces.forEach(function(force){
+      net_torque += force.torque;
+    });
+    this.net_torque = net_torque;
   }
 
   updateAngularVelocity(interval){
-    this.angular_velocity += this.net_torque / this.mass 
+    this.angular_velocity += interval * this.net_torque / this.moment_of_intertia; 
   }
 
   updateOrientation(interval){
+    this.orientation += interval * this.angular_velocity;
   }
 
   updateNetForce(){

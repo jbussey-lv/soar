@@ -25,7 +25,7 @@
                                'weight',
                                'green');
 
-        var thrust = new Force(function(){this.relative_position.setXY(10, 2.3)},
+        var thrust = new Force(function(){this.relative_position.setXY(10, 2.0)},
                                function(){
                                     var angle = this.character.orientation;
                                     var magnitude = this.character.key_listener.isPushed('thrust') ? 7000 : 0;
