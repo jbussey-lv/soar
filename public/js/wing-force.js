@@ -3,8 +3,10 @@ class WingForce extends Force{
     constructor(updateRelativePosition, getAngle, area, name, color) {
 
         super(updateRelativePosition, null, name, color);
+
+        this.getAngle   = getAngle;
         this.area       = area;
-        this.getAngle   = getAngle;    }
+    }
 
     getWingValue() {
         var v    = this.character.velocity.getMagnitude();
