@@ -64,8 +64,6 @@ class Force {
         }else{
             this.torque = 0;
         }
-
-        console.log(this.name, this.translation_component.getXY(), this.torque);
     }
 
 }
