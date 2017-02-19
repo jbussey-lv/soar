@@ -33,7 +33,11 @@
                                'thrust',
                                'blue');
 
-        var lift   = new WingForce();
+        var lift   = new WingForce(function(){this.relative_position.equate(this.character.cog);},
+                                   function(){return -3;},
+                                   16.2,
+                                   'left',
+                                   'orange');
 
         var key_listener = new KeyListener({'thrust': 'k'});
 
@@ -44,7 +48,7 @@
                                   Vector.create().setXY(7.3, 2.3), // CoG
                                   Vector.create().setXY(25, 15), // Position
                                   -80, // orientation
-                                  [weight, thrust], // forces
+                                  [weight, thrust, lift], // forces
                                   Vector.create(), // velocity
                                   350, // mass in kg
                                   0, // angular velocity

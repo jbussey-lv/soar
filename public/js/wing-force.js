@@ -6,29 +6,40 @@ class WingForce extends Force{
 
         this.getAngle   = getAngle;
         this.area       = area;
+        this.updateValue = this.updateValueSuper
     }
 
-    getWingValue() {
-        var v    = this.character.velocity.getMagnitude();
-        var AoA  = this.getAoA();
-        var x    = v * Math.sin(AoA);
-        var area = this.area;
+    updateValueSuper(){
+        this.value.setPolar(
+            this.getWingForceAngle(),
+            this.getWingForceMagnitude()
+        );
+    }
 
-        return 2 * area * x * x;
+    getWingForceMagnitude() {
+        var m = -80 * this.character.velocity.getMagnitude();
+
+        return m;
+
+        // var v    = this.character.velocity.getMagnitude();
+        // var AoA  = this.getAoA();
+        // var x    = v * Math.sin(AoA);
+        // var area = this.area;
+
+        // return 2 * area * x * x;
+    }
+
+    getWingForceAngle(){
+        return this.getAbsoluteAngle() + 90;
+    }
+
+    getAbsoluteAngle(){
+        return this.getAngle() + 
+               this.character.orientation;
     }
 
     getAoA() {
-
-        var AoA = this.getAngle() +
-                  this.character.orientation - 
-                  this.character.velocity.getAngle();
-
-        return AoA;
-    }
-
-    getForceMagnitude() {
-
-
-
+        return this.getAbsoluteAngle - 
+               this.character.velocity.getAngle();
     }
 }
