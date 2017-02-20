@@ -17,13 +17,19 @@ class WingForce extends Force{
     }
 
     getWingForceMagnitude() {
+
         var v    = this.character.velocity.getMagnitude();
         var AoA  = this.getAoA();
         var area = this.area;
 
-        var x    = v * Math.sin(AoA);
+        var sin_aoa = Math.sin(AoA * Math.PI / 180)
 
-        return 2 * area * x * x;
+        var mass_of_air = this.character.world.air_density * this.area * sin_aoa * v;
+        var acceleration = 2 * v * sin_aoa;
+
+        var force = mass_of_air * acceleration;
+
+        return force;
     }
 
     getWingForceAngle(){
@@ -36,7 +42,8 @@ class WingForce extends Force{
     }
 
     getAoA() {
-        return this.getAbsoluteAngle() - 
-               this.character.velocity.getAngle();
+        var AoA = this.getAbsoluteAngle() - 
+                    this.character.velocity.getAngle();
+        return AoA;
     }
 }

@@ -19,13 +19,14 @@
 
     <script>
 
+        var key_listener = new KeyListener({'thrust': 'k'});
 
         var weight = new Force(function(){this.relative_position.equate(this.character.cog)},
                                function(){this.value.setPolar(90, this.character.mass * this.character.world.gravity)},
                                'weight',
                                'green');
 
-        var thrust = new Force(function(){this.relative_position.setXY(10, 2.0)},
+        var thrust = new Force(function(){this.relative_position.setXY(10, 2.3)},
                                function(){
                                     var angle = this.character.orientation;
                                     var magnitude = this.character.key_listener.isPushed('thrust') ? 7000 : 0;
@@ -33,13 +34,24 @@
                                'thrust',
                                'blue');
 
-        var lift   = new WingForce(function(){this.relative_position.equate(this.character.cog);},
+        var wing   = new WingForce(function(){
+                                      this.relative_position.setXY(
+                                        this.character.cog.getX() - 0.5,
+                                        this.character.cog.getY() - 0.1
+                                      );
+                                   },
                                    function(){return -3;},
                                    16.2,
-                                   'left',
+                                   'wing',
                                    'orange');
 
-        var key_listener = new KeyListener({'thrust': 'k'});
+        var tail   = new WingForce(function(){
+                                      this.relative_position.setXY(0.2, 2.3);
+                                   },
+                                   function(){return 4;},
+                                   3.5,
+                                   'left',
+                                   'orange');
 
         var plane = new Character('plane',
                                   '/img/plane.png',
@@ -47,9 +59,9 @@
                                   5, // height
                                   Vector.create().setXY(7.3, 2.3), // CoG
                                   Vector.create().setXY(25, 15), // Position
-                                  -80, // orientation
-                                  [weight, thrust, lift], // forces
-                                  Vector.create(), // velocity
+                                  -1, // orientation
+                                  [weight, thrust, wing, tail], // forces
+                                  Vector.create(-3, 5), // velocity
                                   350, // mass in kg
                                   0, // angular velocity
                                   key_listener); // moment of inertia

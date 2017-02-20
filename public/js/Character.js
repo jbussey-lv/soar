@@ -26,6 +26,8 @@ class Character {
     forces.forEach(function(force){
       obj.forces.push(force);
       force.character = obj;
+      force.updateRelativePosition();
+      force.updateRelativeCogOffset();
     });
   }
 

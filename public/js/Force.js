@@ -17,17 +17,10 @@ class Force {
     }
 
     update(){
-        this.updateRelativePosition();
-        this.updateRelativeCogOffset();
         this.updateAbsoluteCogOffset();
         this.updateAbsolutePosition();
         this.updateValue();
         this.updateTranslationComponentAndTorque();
-    }
-
-    updateRelativePosition(){
-        this.relative_position.equate(getRelativePosition());
-        return this;
     }
 
     updateRelativeCogOffset(){
@@ -51,19 +44,17 @@ class Force {
     updateTranslationComponentAndTorque(){
 
         this.translation_component.equate(this.value);
+        this.torque = 0;
 
-        if(this.absolute_cog_offset.getMagnitude() > 0.00000000000001){
-            this.translation_component.subtractAngle(this.absolute_cog_offset.getAngle());
+        // if we're super close to the CoG... we're done.
+        if(this.relative_cog_offset.getMagnitude() < 0.00000000000001){return;}
 
-            var x = this.translation_component.getX();
-            var y = this.translation_component.getY();
+        var angle = this.translation_component.getAngle() - this.absolute_cog_offset.getAngle();
+        var magnitude = this.translation_component.getMagnitude()
 
-            this.translation_component.setPolar(this.absolute_cog_offset.getAngle(), x);
-
-            this.torque = y * this.relative_cog_offset.getMagnitude();
-        }else{
-            this.torque = 0;
-        }
+        this.translation_component.setMagnitude(Math.sin(angle * Math.PI / 180) * magnitude);
+        this.torque = Math.cos(angle * Math.PI / 180) * magnitude;
     }
+
 
 }
