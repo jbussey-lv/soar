@@ -14,7 +14,7 @@ class Character {
     this.mass = mass || 1;
     this.angular_velocity = angular_velocity || 0;
     this.key_listener = key_listener;
-    this.moment_of_intertia = 0.4 * mass * (width/2) * (width/2)
+    this.moment_of_intertia = 0.001 * mass * (width/2) * (width/2)
     this.forces = [];
     this.net_force = Vector.create();
     this.netTorque = 0;
@@ -55,7 +55,7 @@ class Character {
   }
 
   updateAngularVelocity(interval){
-    this.angular_velocity += interval * this.net_torque / this.moment_of_intertia; 
+    this.angular_velocity += interval * this.net_torque / this.moment_of_intertia;
   }
 
   updateOrientation(interval){

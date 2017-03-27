@@ -107,7 +107,7 @@ var Vector = (function(){
         }
 
         var log = function(){
-            console.log('angle: ' + getAngleDegrees() + ', magnitude: ' + getMagnitude());
+            console.log('angle: ' + getAngle() + ', magnitude: ' + getMagnitude());
         }
 
         var equate = function(v2){
