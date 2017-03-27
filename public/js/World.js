@@ -1,7 +1,7 @@
 class World {
 
     constructor(characters, gravity, air_density) {
-        this.gravity     = gravity || 9.8; // m/s^s
+        this.gravity     = gravity == undefined ? 9.8 : gravity; // m/s^s
         this.air_density = air_density || 0.2;//1.225 // kg/ms^3
         this.characters  = [];
 
