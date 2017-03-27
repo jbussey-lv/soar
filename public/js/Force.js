@@ -9,14 +9,16 @@ class Force {
 
         this.relative_position      = Vector.create();
         this.relative_cog_offset    = Vector.create();
-        this.absolute_cog_offset    = Vector.create();
         this.absolute_position      = Vector.create();
+        this.absolute_cog_offset    = Vector.create();
         this.value                  = Vector.create();
         this.translation_component  = Vector.create();
         this.torque                 = 0; // N/m
     }
 
     update(){
+        this.updateRelativePosition();
+        this.updateRelativeCogOffset();
         this.updateAbsoluteCogOffset();
         this.updateAbsolutePosition();
         this.updateValue();
@@ -26,6 +28,7 @@ class Force {
     updateRelativeCogOffset(){
         this.relative_cog_offset.equate(this.relative_position)
                                 .subtract(this.character.cog);
+
         return this;
     }
 
@@ -52,8 +55,8 @@ class Force {
         var angle = this.translation_component.getAngle() - this.absolute_cog_offset.getAngle();
         var magnitude = this.translation_component.getMagnitude()
 
-        this.translation_component.setMagnitude(Math.sin(angle * Math.PI / 180) * magnitude);
-        this.torque = Math.cos(angle * Math.PI / 180) * magnitude;
+        this.translation_component.setMagnitude(Math.cos(angle * Math.PI / 180) * magnitude);
+        this.torque = Math.sin(angle * Math.PI / 180) * magnitude;
     }
 
 
