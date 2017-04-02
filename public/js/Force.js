@@ -56,7 +56,7 @@ class Force {
         var magnitude = this.translation_component.getMagnitude()
 
         this.translation_component.setMagnitude(Math.cos(angle * Math.PI / 180) * magnitude);
-        this.torque = Math.sin(angle * Math.PI / 180) * magnitude;
+        this.torque = Math.sin(angle * Math.PI / 180) * magnitude * this.absolute_cog_offset.getMagnitude();
     }
 
 

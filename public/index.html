@@ -19,7 +19,7 @@
 
     <script>
 
-        var key_listener = new KeyListener({'thrust': 'k'});
+        var key_listener = new KeyListener({'thrust': 'k', 'down': 'j', 'up': 'l'});
 
         var weight = new Force(function(){this.relative_position.equate(this.character.cog)},
                                function(){this.value.setPolar(90, this.character.mass * this.character.world.gravity)},
@@ -36,22 +36,28 @@
 
         var wing   = new WingForce(function(){
                                       this.relative_position.setXY(
-                                        this.character.cog.getX() - 0.5,
+                                        this.character.cog.getX() - 0.2,
                                         this.character.cog.getY() - 0.1
                                       );
                                    },
-                                   function(){return -3;},
+                                   function(){return -8;},
                                    16.2,
                                    'wing',
-                                   'orange');
+                                   'blue');
 
         var tail   = new WingForce(function(){
                                       this.relative_position.setXY(0.2, 2.3);
                                    },
-                                   function(){return 4;},
-                                   3.5,
-                                   'left',
-                                   'orange');
+                                   function(){
+                                    if(this.character.key_listener.isPushed('up')){
+                                      return -2;
+                                    } else if (this.character.key_listener.isPushed('down')){
+                                      return 18;
+                                    } else {return 8;}
+                                   },
+                                   10,
+                                   'tail',
+                                   'blue');
 
         var plane = new Character('plane',
                                   '/img/plane.png',
@@ -66,7 +72,7 @@
                                   0, // angular velocity
                                   key_listener); // moment of inertia
 
-        var world = new World([plane]);
+        var world = new World([plane], 4.9);
 
         var stage = new Stage('stage', world);
 
