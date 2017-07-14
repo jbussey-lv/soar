@@ -1,9 +1,7 @@
 class Angle {
 
     constructor(radians) {
-        this._radians = typeof(radians) === 'number' ?
-                        radians :
-                        0;
+        this._radians = radians || 0;
     }
 
     set radians(a) {
@@ -24,25 +22,26 @@ class Angle {
         return normalized_degrees;
     }
 
-    get sin() {
+    sin() {
         return Math.sin(this.radians);
     }
 
-    get cos() {
+    cos() {
         return Math.cos(this.radians);
     }
 
-    get tan() {
+    tan() {
         return Math.tan(this.radians);
     }
 
     add(a2) {
-        this.radians += v2.radians;
+        console.log(a2.radians);
+        this._radians += a2.radians;
         return this;
     }
 
     subtract(a2) {
-        this.radians -= v2.radians;
+        this._radians -= a2.radians;
         return this;
     }
 
