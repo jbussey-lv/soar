@@ -1,16 +1,24 @@
 class Vector {
 
     constructor(xy_array) {
-        this.angle = new Angle();
-        this._magnitude = 0;
+        this._angle = new Angle();
+        this.magnitude = 0;
         this.xy = xy_array || [0, 0];
+    }
+
+    set angle(a2) {
+        this._angle.equate(a2);
+    }
+
+    get angle() {
+        return this._angle;
     }
 
     set xy(xy_array) {
         var x = xy_array[0];
         var y = xy_array[1];
         this.angle.radians = Math.atan2(y, x);
-        this._magnitude = Math.sqrt(x * x + y * y);
+        this.magnitude = Math.sqrt(x * x + y * y);
     }
 
     get xy() {
@@ -22,7 +30,7 @@ class Vector {
     }
 
     get x() {
-        return this.angle.cos * this._magnitude;
+        return this.angle.cos() * this.magnitude;
     }
 
     set y(y){
@@ -30,15 +38,7 @@ class Vector {
     }
 
     get y() {
-        return this.angle.sin * this._magnitude;
-    }
-
-    set magnitude(m) {
-        this._magnitude = m;
-    }
-
-    get magnitude() {
-        return this._magnitude;
+        return this.angle.sin() * this.magnitude;
     }
 
     sumFromSet(set) {
@@ -72,11 +72,17 @@ class Vector {
     }
 
     scale(s) {
-        this._magnitude *= s;
+        this.magnitude *= s;
         return this;
     }
 
-    dot(v2) {
+    equate(v2) {
+        this.angle = v2.angle;
+        this.magnitude = v2.magnitude;
+        return this;
+    }
+
+    dotProduct(v2) {
         return (this.x * v2.x) + (this.y * v2.y);
     }
 }

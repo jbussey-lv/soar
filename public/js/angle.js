@@ -13,11 +13,11 @@ class Angle {
     }
 
     set degrees(degrees) {
-        this._radians = degrees * Math.PI / 180;
+        this.radians = degrees * Math.PI / 180;
     }
 
     get degrees() {
-        var degrees = this._radians * 180 / Math.PI;
+        var degrees = this.radians * 180 / Math.PI;
         var normalized_degrees = ((degrees%360)+360)%360;
         return normalized_degrees;
     }
@@ -35,14 +35,17 @@ class Angle {
     }
 
     add(a2) {
-        console.log(a2.radians);
-        this._radians += a2.radians;
+        this.radians += a2.radians;
         return this;
     }
 
     subtract(a2) {
-        this._radians -= a2.radians;
+        this.radians -= a2.radians;
         return this;
+    }
+
+    equate(a2) {
+        this.radians = a2.radians;
     }
 
 }
