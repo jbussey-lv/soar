@@ -1,173 +1,98 @@
-var Vector = (function(){
+class Vector {
 
-    var create = function(degrees, m){
-
-        var angle = d2r(degrees);
-        var magnitude = m || 0;
-
-        var getPolar = function(){
-            return [getAngle(), getMagnitude()];
-        }
-
-        var setPolar = function(degrees, m){
-            setAngle(degrees);
-            setMagnitude(m);
-            return this;
-        }
-
-        var getX = function(){
-            return Math.cos(angle) * magnitude;
-        }
-
-        var setX = function(x){
-            setXY(x, getY());
-            return this;
-        }
-
-        var getY = function(){
-            return Math.sin(angle) * magnitude;
-        }
-
-        var setY = function(y){
-            setXY(getX(), y);
-            return this;
-        }
-
-        var getXY = function(){
-            return [getX(), getY()];
-        }
-
-        var setXY = function(x, y){
-            angle = Math.atan2(y,x);
-            magnitude = Math.sqrt(x * x + y * y);
-            return this;
-        }
-
-        var getAngle = function(){
-            return r2d(angle);
-        }
-
-        var getMagnitude = function(){
-            return magnitude;
-        }
-
-        var setAngle = function(degrees){
-            angle = d2r(degrees);
-            return this;
-        }
-
-        var setMagnitude = function(m){
-            magnitude = m;
-            return this;
-        }
-
-        var addAngle = function(degrees){
-            angle += d2r(degrees);
-            return this;
-        }
-
-        var subtractAngle = function(degrees){
-            angle -= d2r(degrees);
-            return this;
-        }
-
-        var add = function(v2, scale){
-            var scale = scale || 1;
-            setX(getX() + v2.getX() * scale);
-            setY(getY() + v2.getY() * scale);
-            return this;
-        }
-
-        var subtract = function(v2){
-            setX(getX() - v2.getX());
-            setY(getY() - v2.getY());
-            return this;
-        }
-
-        var multiply = function(scale){
-            magnitude *= scale;
-            return this;
-        }
-
-        var reverse = function(){
-            magnitude *= -1;
-            return this;
-        }
-
-        var sin = function(){
-            return Math.sin(angle);
-        }
-
-        var cos = function(){
-            return Math.cos(angle);
-        }
-
-        var tan = function(){
-            return Math.tan(angle);
-        }
-
-        var log = function(){
-            console.log('angle: ' + getAngle() + ', magnitude: ' + getMagnitude());
-        }
-
-        var equate = function(v2){
-            var angle2 = v2.getAngle();
-            var magnitude2 = v2.getMagnitude();
-            this.setPolar(angle2, magnitude2);
-            return this;
-        }
-
-        function r2d(radians){
-            return radians * 180 / Math.PI;
-        }
-
-        function d2r(degrees){
-            degrees = degrees || 0;
-            return degrees * Math.PI / 180;
-        }
-
-        return {
-            getX,
-            setX,
-            getY,
-            setY,
-            getPolar,
-            setPolar,
-            getXY,
-            setXY,
-            getAngle,
-            setAngle,
-            addAngle,
-            subtractAngle,
-            getMagnitude,
-            setMagnitude,
-            add,
-            subtract,
-            multiply,
-            equate,
-            log
-        }
+    constructor(xy_array) {
+        this._angle = null;
+        this._magnitude = null;
+        this.xy = xy_array || [0, 0];
     }
 
-    var sum = function(vectors){
-        var total_x = 0;
-        var total_y = 0;
+    set xy(xy_array) {
+        var x = xy_array[0];
+        var y = xy_array[1];
+        this._angle = Math.atan2(y, x);
+        this._magnitude = Math.sqrt(x * x + y * y);
+    }
 
-        vectors.forEach(function(v){
-            total_x += v.getX()
-            total_y += v.getY();
+    get xy() {
+        return [this.x, this.y];
+    }
+
+    set x(x) {
+        this.xy = [x, this.y];
+    }
+
+    get x() {
+        return Math.cos(this._angle) * this._magnitude;
+    }
+
+    set y(y){
+        this.xy = [this.x, y];
+    }
+
+    get y() {
+        return Math.sin(this._angle) * this._magnitude;
+    }
+
+    set magnitude(m) {
+        this._magnitude = m;
+    }
+
+    get magnitude() {
+        return this._magnitude;
+    }
+
+    set angle(a) {
+        this._angle = a;
+    }
+
+    get angle() {
+        return this._angle;
+    }
+
+    set angle_degree(degrees) {
+        this._angle = degrees * Math.PI / 180;
+    }
+
+    get angle_degrees() {
+        var degrees = this._angle * 180 / Math.PI;
+        var normalized_degrees = ((degrees%360)+360)%360;
+        return normalized_degrees;
+    }
+
+    sumFromSet(set) {
+        var x = 0;
+        var y = 0;
+        set.forEach(function(v){
+            x += v.x;
+            y += v.y;
         });
-
-        return Vector.create().setXY(total_x, total_y);
+        this.xy = [x, y];
+        return this;
     }
 
-    var difference = function(v1, v2){
-
-        var total_x = v1.getX() - v2.getX();
-        var total_y = v1.getY() - v2.getY();
-
-        return Vector.create().setXY(total_x, total_y);
+    add(v2) {
+        this.x += v2.x;
+        this.y += v2.y;
+        return this;
     }
 
-    return {create, sum, difference};
-}());
+    subtract(v2) {
+        this.x -= v2.x;
+        this.y -= v2.y;
+        return this;
+    }
+
+    multiply(scale) {
+        this._magnitude *= scale;
+        return this;
+    }
+
+    reverse(){
+        this._angle += Math.PI;
+        return this;
+    }
+
+
+
+
+}
