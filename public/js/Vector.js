@@ -7,7 +7,7 @@ class Vector {
     }
 
     set angle(a2) {
-        this._angle.equate(a2);
+        this._angle.setEqualTo(a2);
     }
 
     get angle() {
@@ -76,10 +76,16 @@ class Vector {
         return this;
     }
 
-    equate(v2) {
+    setEqualTo(v2) {
         this.angle = v2.angle;
         this.magnitude = v2.magnitude;
         return this;
+    }
+
+    isEqualTo(v2) {
+        var angle_equal = this.angle.isEqualTo(v2.angle);
+        var magnitude_equal = this.magnitude === v2.magnitude;
+        return angle_equal && magnitude_equal;
     }
 
     dotProduct(v2) {

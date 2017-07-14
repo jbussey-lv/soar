@@ -44,8 +44,12 @@ class Angle {
         return this;
     }
 
-    equate(a2) {
+    setEqualTo(a2) {
         this.radians = a2.radians;
+    }
+
+    isEqualTo(a2) {
+        return this.radians === a2.radians;
     }
 
 }
