@@ -1,15 +1,15 @@
 class Vector {
 
     constructor(xy_array) {
-        this._angle = null;
-        this._magnitude = null;
+        this.angle = new Angle();
+        this._magnitude = 0;
         this.xy = xy_array || [0, 0];
     }
 
     set xy(xy_array) {
         var x = xy_array[0];
         var y = xy_array[1];
-        this._angle = Math.atan2(y, x);
+        this.angle.radians = Math.atan2(y, x);
         this._magnitude = Math.sqrt(x * x + y * y);
     }
 
@@ -22,7 +22,7 @@ class Vector {
     }
 
     get x() {
-        return Math.cos(this._angle) * this._magnitude;
+        return this.angle.cos * this._magnitude;
     }
 
     set y(y){
@@ -30,7 +30,7 @@ class Vector {
     }
 
     get y() {
-        return Math.sin(this._angle) * this._magnitude;
+        return this.angle.sin * this._magnitude;
     }
 
     set magnitude(m) {
@@ -39,24 +39,6 @@ class Vector {
 
     get magnitude() {
         return this._magnitude;
-    }
-
-    set angle(a) {
-        this._angle = a;
-    }
-
-    get angle() {
-        return this._angle;
-    }
-
-    set angle_degree(degrees) {
-        this._angle = degrees * Math.PI / 180;
-    }
-
-    get angle_degrees() {
-        var degrees = this._angle * 180 / Math.PI;
-        var normalized_degrees = ((degrees%360)+360)%360;
-        return normalized_degrees;
     }
 
     sumFromSet(set) {
@@ -71,14 +53,16 @@ class Vector {
     }
 
     add(v2) {
-        this.x += v2.x;
-        this.y += v2.y;
+        var new_x = this.x + v2.x;
+        var new_y = this.y + v2.y;
+        this.xy = [new_x, new_y];
         return this;
     }
 
     subtract(v2) {
-        this.x -= v2.x;
-        this.y -= v2.y;
+        var new_x = this.x - v2.x;
+        var new_y = this.y - v2.y;
+        this.xy = [new_x, new_y];
         return this;
     }
 
@@ -88,11 +72,7 @@ class Vector {
     }
 
     reverse(){
-        this._angle += Math.PI;
+        this.angle.radians += Math.PI;
         return this;
     }
-
-
-
-
 }
