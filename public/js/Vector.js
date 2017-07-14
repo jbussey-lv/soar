@@ -52,6 +52,11 @@ class Vector {
         return this;
     }
 
+    reverse(){
+        this.angle.radians += Math.PI;
+        return this;
+    }
+
     add(v2) {
         var new_x = this.x + v2.x;
         var new_y = this.y + v2.y;
@@ -66,13 +71,12 @@ class Vector {
         return this;
     }
 
-    multiply(scale) {
-        this._magnitude *= scale;
+    scale(s) {
+        this._magnitude *= s;
         return this;
     }
 
-    reverse(){
-        this.angle.radians += Math.PI;
-        return this;
+    dot(v2) {
+        return (this.x * v2.x) + (this.y * v2.y);
     }
 }
