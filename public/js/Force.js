@@ -1,30 +1,45 @@
 class Force {
 
-    constructor(offset, value) {
-        this.offset = offset || new Vector();
-        this.value = value || new Vector();
+    constructor(initial_position, updateValue) {
+        this.initial_position   = initial_position;
+        this.updateValue        = updateValue || (()=>{});
+        this.position           = new Vector();
+        this.offset             = new Vector();
+        this.value              = new Vector();
+        this.translation        = new Vector();
+        this.torque             = 0;
     }
 
-    translation() {
-        var trans = new Vector();
-        trans.setEqualTo(this.value);
-        trans.angle.subtract(this.offset.angle);
-        trans.magnitude = trans.x;
-        trans.angle.setEqualTo(this.offset.angle);
-
-        return trans;
+    update() {
+        updateOffset();
+        updatePosition();
+        updateValue();
+        updateTranslationAndTorque();
     }
 
-    torque() {
-        var trans = new Vector();
-        trans.setEqualTo(this.value);
-        trans.angle.subtract(this.offset.angle);
+    updateOffset() {
 
-        return trans.y * this.offset.magnitude;
     }
 
+    updatePosition() {
+        
 
+    }
 
+    updateValue() {
 
+    }
+
+    updateTranslationAndTorque() {
+        this.translation.setEqualTo(this.value);
+        this.translation.angle.subtract(this.offset.angle);
+        var x = this.translation.x;
+        var y = this.translation.y;
+
+        this.translation.magnitude = x;
+        this.translation.angle.setEqualTo(this.offset.angle);
+
+        this.torque = y * this.offset.magnitude;
+    }
 
 }

@@ -1,35 +1,27 @@
 class Character {
 
-  constructor(name, img, width, height, cog, position, orientation, 
-              forces, velocity, mass, angular_velocity, key_listener){
+  constructor(cog, mass, forces, key_listener){
 
-    this.name = name;
-    this.img = img;
-    this.width = width;
-    this.height = height;
-    this.cog = cog;
-    this.position = position;
-    this.velocity = velocity;
-    this._orientation = orientation * Math.PI / 180;
-    this.mass = mass || 1;
-    this.angular_velocity = angular_velocity || 0;
-    this.key_listener = key_listener;
+    this.cog                = cog || new Vector();
+    this.mass               = mass || 1;
+    this.forces             = forces || [];
+    this.key_listener       = key_listener;
+
+    this.position           = new Vector();
+    this.velocity           = new Vector();
     this.moment_of_intertia = 0.01 * mass * (width/2) * (width/2)
-    this.forces = [];
-    this.net_force = Vector.create();
-    this.netTorque = 0;
-    this.setForces(forces);
+    this.orientation        = new Angle();
+    this.angular_velocity   = 0;
+
+    this.customizeForces()
   }
 
-  setForces(forces){
-    var obj = this;
-    forces.forEach(function(force){
-      obj.forces.push(force);
-      force.character = obj;
-      force.updateRelativePosition();
-      force.updateRelativeCogOffset();
-    });
+  customizeForces() {
+
+
+
   }
+
 
   update(interval){
     // update all forces
