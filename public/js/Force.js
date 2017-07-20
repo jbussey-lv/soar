@@ -29,8 +29,14 @@ class Force {
     }
 
     get translation() {
+        
         var _translation = new Vector();
         _translation.setEqualTo(this.value);
+
+        if(this.initial_position.isEqualTo(this.character.cog)){
+            return _translation;
+        }
+
         _translation.angle.subtract(this.offset.angle);
 
         _translation.magnitude = _translation.x;

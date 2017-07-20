@@ -54,9 +54,10 @@ class Character {
 
   get net_force(){
     var _net_force = new Vector();
-    character.forces.forEach(function(force){
+    this.forces.forEach(function(force){
       _net_force.add(force.translation);
     });
+    return _net_force;
   }
 
   updateVelocity(interval){

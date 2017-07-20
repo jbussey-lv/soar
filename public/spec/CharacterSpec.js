@@ -21,8 +21,11 @@ describe("Character", function() {
 
   it("has just weight when no forces explicitly added", function() {
 
-    expect(character.forces[0].getValue().isEqualTo(new Vector([0, 9.8*200]))).toBeTruthy();
+    var f = character.forces[0];
+
     expect(character.forces.length).toEqual(1);
+    expect(f.value.isEqualTo(new Vector([0, 9.8*200]))).toBeTruthy();
+    expect(character.net_force.isEqualTo(new Vector([0, 9.8*200]))).toBeTruthy();
   });
 
   // it("returns weight as net force when no other forces applied", function() {
