@@ -7,7 +7,8 @@ describe("Force", function() {
     var character = {
       "position": new Vector(),
       "cog": new Vector(),
-      "orientation": new Angle()
+      "orientation": new Angle(),
+      "forces": []
     }
 
     var initial_position = new Vector();
@@ -33,54 +34,55 @@ describe("Force", function() {
     expect(force.torque).toBeCloseTo(0);
   });
 
-  // it("returns full force value for translation when offset same direction as value", function() {
-  //   force.offset.xy = [2,3];
-  //   force.value.xy = [4,6];
-  //   force.updateTranslationAndTorque();
+  it("returns full force value for translation when offset same direction as value", function() {
+    force.character.cog.xy = [1,1];
+    force.initial_position.xy = [31,21];
+    force.getValue = () => {return new Vector([60, 40]);};
 
-  //   expect(force.translation.isEqualTo(force.value)).toBeTruthy();
-  // });
+    expect(force.translation.isEqualTo(force.value)).toBeTruthy();
+  });
 
-  // it("returns 0 for translation when offset perpendicular to value", function() {
-  //   force.offset.xy = [4, -3];
-  //   force.value.xy = [3, 4];
-  //   force.updateTranslationAndTorque();
+  it("returns 0 for translation when offset perpendicular to value", function() {
+    force.character.cog.xy = [1,1];
+    force.initial_position.xy = [31,21];
+    force.getValue = () => {return new Vector([40, -60]);};
 
-  //   expect(force.translation.magnitude).toBeCloseTo(0);
-  // });
+    expect(force.translation.magnitude).toBeCloseTo(0);
+  });
 
-  // it("returns full magnitude for torque when offset perpendicular to value", function() {
-  //   force.offset.xy = [4, -3];
-  //   force.value.xy = [3, 4];
-  //   force.updateTranslationAndTorque();
+  it("returns full magnitude for torque when offset perpendicular to value", function() {
 
-  //   expect(force.torque).toBeCloseTo(25);
-  // });
+    force.character.cog.xy = [1,1];
+    force.initial_position.xy = [5,4];
+    force.getValue = () => {return new Vector([-3, 4]);};
 
-  // it("returns positive torque when counterclockwise", function() {
-  //   force.offset.xy = [4, -3];
-  //   force.value.xy = [3, 4];
-  //   force.updateTranslationAndTorque();
+    expect(force.torque).toBeCloseTo(25);
+  });
 
-  //   expect(force.torque).toBeGreaterThan(0);
-  // });
+  it("returns positive torque when clockwise", function() {
 
-  // it("returns negative torque when clockwise", function() {
-  //   force.offset.xy = [3, 4];
-  //   force.value.xy = [4, -3];
-  //   force.updateTranslationAndTorque();
+    force.initial_position.xy = [4,-3];
+    force.getValue = () => {return new Vector([3, 4]);};
 
-  //   expect(force.torque).toBeLessThan(0);
-  // });
+    expect(force.torque).toBeGreaterThan(0);
+  });
 
-  // it("returns correct values for scew offset vs value", function() {
-  //   force.offset.xy = [4, 4];
-  //   force.value.xy = [3, 0];
-  //   force.updateTranslationAndTorque();
+  it("returns negative torque when counterclockwise", function() {
 
-  //   expect(force.torque).toBeCloseTo(-1 * Math.sqrt(4.5) * Math.sqrt(32));
-  //   expect(force.translation.x).toBeCloseTo(1.5);
-  //   expect(force.translation.y).toBeCloseTo(1.5);
-  // });
+    force.initial_position.xy = [3,4];
+    force.getValue = () => {return new Vector([4, -3]);};
+
+    expect(force.torque).toBeLessThan(0);
+  });
+
+  it("returns correct values for scew offset vs value", function() {
+
+    force.initial_position.xy = [4,4];
+    force.getValue = () => {return new Vector([3,0]);};
+
+    expect(force.torque).toBeCloseTo(-1 * Math.sqrt(4.5) * Math.sqrt(32));
+    expect(force.translation.x).toBeCloseTo(1.5);
+    expect(force.translation.y).toBeCloseTo(1.5);
+  });
 
 });

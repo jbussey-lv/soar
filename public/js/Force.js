@@ -4,6 +4,8 @@ class Force {
         this.character          = character;
         this.initial_position   = initial_position;
         this.getValue           = getValue;
+
+        this.character.forces.push(this);
     }
 
     get offset() {
@@ -26,14 +28,14 @@ class Force {
     }
 
     get translation() {
-        var translation = new Vector();
-        translation.setEqualTo(this.value);
-        translation.angle.subtract(this.offset.angle);
+        var _translation = new Vector();
+        _translation.setEqualTo(this.value);
+        _translation.angle.subtract(this.offset.angle);
 
-        translation.magnitude = this.translation.x;
-        translation.angle.setEqualTo(this.offset.angle);
+        _translation.magnitude = _translation.x;
+        _translation.angle.setEqualTo(this.offset.angle);
 
-        return translation;
+        return _translation;
     }
 
     get torque() {
