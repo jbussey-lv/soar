@@ -38,7 +38,7 @@ describe("Force", function() {
     expect(force.translation.magnitude).toBeCloseTo(0);
   });
 
-  it("contributes full magnitude for torque when offset perpendicular to value", function() {
+  it("returns full magnitude for torque when offset perpendicular to value", function() {
     force.offset.xy = [4, -3];
     force.value.xy = [3, 4];
     force.updateTranslationAndTorque();
@@ -46,7 +46,7 @@ describe("Force", function() {
     expect(force.torque).toBeCloseTo(25);
   });
 
-  it("gives positive torque when counterclockwise", function() {
+  it("returns positive torque when counterclockwise", function() {
     force.offset.xy = [4, -3];
     force.value.xy = [3, 4];
     force.updateTranslationAndTorque();
@@ -54,7 +54,7 @@ describe("Force", function() {
     expect(force.torque).toBeGreaterThan(0);
   });
 
-  it("gives negative torque when clockwise", function() {
+  it("returns negative torque when clockwise", function() {
     force.offset.xy = [3, 4];
     force.value.xy = [4, -3];
     force.updateTranslationAndTorque();
@@ -62,5 +62,14 @@ describe("Force", function() {
     expect(force.torque).toBeLessThan(0);
   });
 
+  it("returns correct values for scew offset vs value", function() {
+    force.offset.xy = [4, 4];
+    force.value.xy = [3, 0];
+    force.updateTranslationAndTorque();
+
+    expect(force.torque).toBeCloseTo(-1 * Math.sqrt(4.5) * Math.sqrt(32));
+    expect(force.translation.x).toBeCloseTo(1.5);
+    expect(force.translation.y).toBeCloseTo(1.5);
+  });
 
 });

@@ -5,6 +5,7 @@ describe("Character", function() {
   beforeEach(function() {
     var cog = new Vector([20,5]);
     var mass = 800;
+    
 
     character = new Character(cog, mass);
   });

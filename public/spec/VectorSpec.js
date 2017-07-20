@@ -36,5 +36,38 @@ describe("Vector", function() {
     expect(vector.y).toBeCloseTo(11);
   });
 
+  it("scales correctly", function() {
+    vector.xy = [5,6];
+    vector.scale(3);
+
+    expect(vector.x).toBeCloseTo(15);
+    expect(vector.y).toBeCloseTo(18);
+  });
+
+  it("reverses correctly", function() {
+    vector.xy = [5,6];
+    vector.reverse();
+
+    expect(vector.x).toBeCloseTo(-5);
+    expect(vector.y).toBeCloseTo(-6);
+  });
+
+  it("adds correctly", function() {
+    vector.xy = [5,6];
+    v2 = new Vector([3,8]);
+    vector.add(v2);
+
+    expect(vector.x).toBeCloseTo(8);
+    expect(vector.y).toBeCloseTo(14);
+  });
+
+  it("subtracts correctly", function() {
+    vector.xy = [5,6];
+    v2 = new Vector([3,8]);
+    vector.subtract(v2);
+
+    expect(vector.x).toBeCloseTo(2);
+    expect(vector.y).toBeCloseTo(-2);
+  });
 
 });
