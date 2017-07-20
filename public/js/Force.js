@@ -1,9 +1,10 @@
 class Force {
 
-    constructor(character, initial_position, getValue) {
+    constructor(character, initial_position, getValue, name) {
         this.character          = character;
         this.initial_position   = initial_position;
         this.getValue           = getValue;
+        this.name               = name || "no-name";
 
         this.character.forces.push(this);
     }

@@ -1,21 +1,29 @@
 describe("Character", function() {
 
-  // var character;
+  var character;
 
-  // beforeEach(function() {
-  //   var cog = new Vector([20,5]);
-  //   var mass = 800;
+  beforeEach(function() {
     
-  //   character = new Character(50, 20, cog, mass);
-  //   character.world = {"g": 9.8};
-  // });
+    character = new Character(
+      world = {"gravity": 9.8, "characters": []},
+      width = 10,
+      height = 3,
+      cog = new Vector([5, 2]),
+      mass = 200,
+      position = new Vector(20, 10),
+      velocity = new Vector(),
+      orientation = new Angle(),
+      angular_velocity = 0,
+      key_listener = new KeyListener()
+    );
 
-  // it("returns correct weight value", function() {
-  //   character.update();
+  });
 
-  //   expect(character.forces[0].value.y).toBeCloseTo(9.8 * 800);
-  //   expect(character.forces[0].value.x).toBeCloseTo(0);
-  // });
+  it("has just weight when no forces explicitly added", function() {
+
+    expect(character.forces[0].getValue().isEqualTo(new Vector([0, 9.8*200]))).toBeTruthy();
+    expect(character.forces.length).toEqual(1);
+  });
 
   // it("returns weight as net force when no other forces applied", function() {
   //   character.update();
