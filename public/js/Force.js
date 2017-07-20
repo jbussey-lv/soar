@@ -1,45 +1,47 @@
 class Force {
 
-    constructor(initial_position, updateValue, color) {
-        this.initial_position   = initial_position || new Vector();
-        this.updateValue        = updateValue || (()=>{});
-        this.color              = color || "#ccc";
-        this.position           = new Vector();
-        this.offset             = new Vector();
-        this.value              = new Vector();
-        this.translation        = new Vector();
-        this.torque             = 0;
-        this.character          = null;
+    constructor(character, initial_position, getValue) {
+        this.character          = character;
+        this.initial_position   = initial_position;
+        this.getValue           = getValue;
     }
 
-    update() {
-        this.updateOffset();
-        this.updatePosition();
-        this.updateValue();
-        this.updateTranslationAndTorque();
+    get offset() {
+        var offset = new Vector();
+        offset.setEqualTo(this.initial_position);
+        offset.subtract(this.character.cog);
+        offset.angle.add(this.character.orientation);
+        return offset;
     }
 
-    updateOffset() {
-        this.offset.setEqualTo(this.initial_position);
-        this.offset.subtract(this.character.cog);
-        this.offset.angle.add(this.character.orientation);
+    get position() {
+        var position = new Vector()
+        position.setEqualTo(this.offset);
+        position.add(this.character.position);
+        return position;
     }
 
-    updatePosition() {
-        this.position.setEqualTo(this.offset);
-        this.position.add(this.character.position);
+    get value() {
+        return this.getValue();
     }
 
-    updateTranslationAndTorque() {
-        this.translation.setEqualTo(this.value);
-        this.translation.angle.subtract(this.offset.angle);
-        var x = this.translation.x;
-        var y = this.translation.y;
+    get translation() {
+        var translation = new Vector();
+        translation.setEqualTo(this.value);
+        translation.angle.subtract(this.offset.angle);
 
-        this.translation.magnitude = x;
-        this.translation.angle.setEqualTo(this.offset.angle);
+        translation.magnitude = this.translation.x;
+        translation.angle.setEqualTo(this.offset.angle);
 
-        this.torque = y * this.offset.magnitude;
+        return translation;
+    }
+
+    get torque() {
+        var t = new Vector();
+        t.setEqualTo(this.value);
+        t.angle.subtract(this.offset.angle);
+
+        return (t.y) * (this.offset.magnitude);
     }
 
 }

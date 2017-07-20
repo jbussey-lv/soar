@@ -1,7 +1,7 @@
 class Angle {
 
-    constructor(radians) {
-        this._radians = radians || 0;
+    constructor(degrees) {
+        this.degrees = degrees || 0;
     }
 
     set radians(a) {
@@ -13,7 +13,7 @@ class Angle {
     }
 
     set degrees(degrees) {
-        this.radians = degrees * Math.PI / 180;
+        this._radians = degrees * Math.PI / 180;
     }
 
     get degrees() {
