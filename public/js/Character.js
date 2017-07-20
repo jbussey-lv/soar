@@ -1,20 +1,23 @@
 class Character {
 
-  constructor(cog, mass, forces, key_listener){
+  constructor(width, height, cog, mass, forces, key_listener){
 
+    this.width              = width;
+    this.height             = height;
     this.cog                = cog || new Vector();
     this.mass               = mass || 1;
-    this.key_listener       = key_listener;
+    this.key_listener       = key_listener || null;
     this.forces             = forces || [];
 
     this.customizeForces();
 
     this.position           = new Vector();
     this.velocity           = new Vector();
+    this.net_force          = new Vector();
     this.moment_of_intertia = 0.01 * mass * (width/2) * (width/2)
     this.orientation        = new Angle();
     this.angular_velocity   = 0;
-
+    this.net_torque         = 0;
   }
 
   customizeForces() {
@@ -49,8 +52,9 @@ class Character {
 
   updateNetTorque(){
     this.net_torque = 0;
+    var character = this;
     this.forces.forEach(function(force){
-      net_torque += force.torque;
+      character.net_torque += force.torque;
     });
   }
 
@@ -64,9 +68,11 @@ class Character {
   }
 
   updateNetForce(){
-    this.net_force.setXY(0,0);
-    this.forces.forEach(function(force){
-      this.net_force.add(force.translation);
+    var character = this;
+    this.net_force.zero();
+    character.forces.forEach(function(force){
+      console.log(force);
+      character.net_force.add(force.translation);
     });
   }
 

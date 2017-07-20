@@ -9,13 +9,14 @@ class Force {
         this.value              = new Vector();
         this.translation        = new Vector();
         this.torque             = 0;
+        this.character          = null;
     }
 
     update() {
-        updateOffset();
-        updatePosition();
-        updateValue();
-        updateTranslationAndTorque();
+        this.updateOffset();
+        this.updatePosition();
+        this.updateValue();
+        this.updateTranslationAndTorque();
     }
 
     updateOffset() {

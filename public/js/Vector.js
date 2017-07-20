@@ -91,4 +91,8 @@ class Vector {
     dotProduct(v2) {
         return (this.x * v2.x) + (this.y * v2.y);
     }
+
+    zero() {
+        this.xy = [0,0];
+    }
 }
