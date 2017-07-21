@@ -28,23 +28,6 @@ class Force {
         return this.getValue();
     }
 
-    get translation() {
-        
-        var _translation = new Vector();
-        _translation.setEqualTo(this.value);
-
-        if(this.initial_position.isEqualTo(this.character.cog)){
-            return _translation;
-        }
-
-        _translation.angle.subtract(this.offset.angle);
-
-        _translation.magnitude = _translation.x;
-        _translation.angle.setEqualTo(this.offset.angle);
-
-        return _translation;
-    }
-
     get torque() {
         var t = new Vector();
         t.setEqualTo(this.value);

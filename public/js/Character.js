@@ -55,7 +55,7 @@ class Character {
   get net_force(){
     var _net_force = new Vector();
     this.forces.forEach(function(force){
-      _net_force.add(force.translation);
+      _net_force.add(force.value);
     });
     return _net_force;
   }

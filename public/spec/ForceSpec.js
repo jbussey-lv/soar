@@ -34,22 +34,6 @@ describe("Force", function() {
     expect(force.torque).toBeCloseTo(0);
   });
 
-  it("returns full force value for translation when offset same direction as value", function() {
-    force.character.cog.xy = [1,1];
-    force.initial_position.xy = [31,21];
-    force.getValue = () => {return new Vector([60, 40]);};
-
-    expect(force.translation.isEqualTo(force.value)).toBeTruthy();
-  });
-
-  it("returns 0 for translation when offset perpendicular to value", function() {
-    force.character.cog.xy = [1,1];
-    force.initial_position.xy = [31,21];
-    force.getValue = () => {return new Vector([40, -60]);};
-
-    expect(force.translation.magnitude).toBeCloseTo(0);
-  });
-
   it("returns full magnitude for torque when offset perpendicular to value", function() {
 
     force.character.cog.xy = [1,1];
@@ -75,14 +59,12 @@ describe("Force", function() {
     expect(force.torque).toBeLessThan(0);
   });
 
-  it("returns correct values for scew offset vs value", function() {
+  it("returns correct torque for scew offset force", function() {
 
     force.initial_position.xy = [4,4];
     force.getValue = () => {return new Vector([3,0]);};
 
     expect(force.torque).toBeCloseTo(-1 * Math.sqrt(4.5) * Math.sqrt(32));
-    expect(force.translation.x).toBeCloseTo(1.5);
-    expect(force.translation.y).toBeCloseTo(1.5);
   });
 
 });
