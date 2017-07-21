@@ -39,6 +39,10 @@ class Angle {
         return this;
     }
 
+    scale(num) {
+        this.radians *= num;
+    }
+
     subtract(a2) {
         this.radians -= a2.radians;
         return this;

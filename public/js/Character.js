@@ -46,11 +46,16 @@ class Character {
   }
 
   updateAngularVelocity(interval){
-    this.angular_velocity.radians += interval * this.net_torque / this.moment_of_inertia;
+    var da = new Angle();
+    da.radians = interval * this.net_torque / this.moment_of_inertia;
+    this.angular_velocity.add(da);
   }
 
   updateOrientation(interval){
-    this.orientation.radians += interval * this.angular_velocity.radians;
+    var da = new Angle();
+    da.setEqualTo(this.angular_velocity);
+    da.scale(interval)
+    this.orientation.add(da);
   }
 
   get net_force(){
@@ -73,7 +78,6 @@ class Character {
     var dp = new Vector();
     dp.setEqualTo(this.velocity)
       .scale(interval);
-      console.log(dp);
     this.position.add(dp);
   }
 

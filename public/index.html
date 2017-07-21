@@ -40,7 +40,7 @@
         var stage = new Stage('stage', world);
 
         var go = 1;
-        var interval = 2000;// in milliseconds
+        var interval = 0.01;// in seconds
 
 
         setInterval(
@@ -48,7 +48,7 @@
                 world.update(interval);
                 stage.render();
             },
-            interval
+            interval * 1000
         );
 
     </script>
