@@ -1,6 +1,6 @@
 class Stage {
 
-    constructor(id, world, pixel_width=900, pixel_height=600, background_color='#CCC', pixels_per_meter=3, pixels_per_newton=0.018) {
+    constructor(id, world, pixel_width=900, pixel_height=600, background_color='#CCC', pixels_per_meter=3, pixels_per_newton=0.1) {
         this.id               = id;
         this.world            = world;
         this.pixel_width      = pixel_width;
