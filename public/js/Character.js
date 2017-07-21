@@ -1,18 +1,19 @@
 class Character {
 
-  constructor(world, width, height, cog, mass, position, velocity, orientation, angular_velocity, key_listener){
+  constructor(world, image, width, height, cog, mass, position, velocity, orientation, angular_velocity, key_listener){
 
     this.world              = world;
+    this.image              = image;
     this.width              = width;
     this.height             = height;
     this.cog                = cog;
     this.mass               = mass;
-    this.position           = position || new Vector();
-    this.velocity           = velocity || new Vector();
+    this.position           = position;
+    this.velocity           = velocity;
     this.moment_of_inertia  = 1;
-    this.orientation        = orientation || new Angle();
-    this.angular_velocity   = angular_velocity || 0;
-    this.key_listener       = key_listener || new KeyListener();
+    this.orientation        = orientation;
+    this.angular_velocity   = angular_velocity;
+    this.key_listener       = key_listener;
     this.forces             = [];
 
     // add in weight
@@ -45,11 +46,11 @@ class Character {
   }
 
   updateAngularVelocity(interval){
-    this.angular_velocity += interval * this.net_torque / this.moment_of_intertia;
+    this.angular_velocity.radians += interval * this.net_torque / this.moment_of_inertia;
   }
 
   updateOrientation(interval){
-    this.orientation += interval * this.angular_velocity;
+    this.orientation.radians += interval * this.angular_velocity.radians;
   }
 
   get net_force(){
@@ -72,6 +73,7 @@ class Character {
     var dp = new Vector();
     dp.setEqualTo(this.velocity)
       .scale(interval);
+      console.log(dp);
     this.position.add(dp);
   }
 
