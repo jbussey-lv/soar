@@ -24,4 +24,15 @@ export default class Vector {
     return Math.atan2(this.y, this.x);
   }
 
+  // need tests
+  public add(vector: Vector): void {
+    this.x += vector.x;
+    this.y += vector.y;
+  }
+
+  public subtract(vector: Vector): void {
+    this.x -= vector.x;
+    this.y -= vector.y;
+  }
+
 }
