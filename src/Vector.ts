@@ -25,14 +25,31 @@ export default class Vector {
   }
 
   // need tests
-  public add(vector: Vector): void {
-    this.x += vector.x;
-    this.y += vector.y;
+
+  public set angle(angle: number) {
+    let magnitude = this.magnitude;
+    this.x = magnitude * Math.cos(angle);
+    this.y = magnitude * Math.sin(angle);
   }
 
-  public subtract(vector: Vector): void {
-    this.x -= vector.x;
-    this.y -= vector.y;
+  public add(...vectors: Vector[]): Vector {
+    vectors.forEach(vector => {
+      this.x += vector.x;
+      this.y += vector.y;
+    });
+    return this;
+  }
+
+  public subtract(...vectors: Vector[]): Vector {
+    vectors.forEach(vector => {
+      this.x -= vector.x;
+      this.y -= vector.y;
+    });
+    return this;
+  }
+
+  static sum(vectors: Vector[]): Vector {
+    return new Vector().add(...vectors);
   }
 
 }
