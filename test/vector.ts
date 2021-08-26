@@ -18,4 +18,25 @@ describe('Vector', () => {
     const v = new Vector(3, 4);
     expect(v.angle).to.roughly.eql(0.9272952);
   });
+  it('sets magnitude', () => {
+    const v = new Vector(3, 4);
+    v.magnitude = 15;
+    expect(v.magnitude).to.eql(15);
+    expect(v.x).to.eql(9);
+    expect(v.y).to.eql(12);
+  });
+  it('mutliplies magnitude', () => {
+    const v = new Vector(3, 4);
+    v.magnitude *= 2
+    expect(v.magnitude).to.eql(10);
+    expect(v.x).to.eql(6);
+    expect(v.y).to.eql(8);
+  });
+  it('adds magnitude', () => {
+    const v = new Vector(3, 4);
+    v.magnitude += 15
+    expect(v.magnitude).to.eql(20);
+    expect(v.x).to.eql(12);
+    expect(v.y).to.eql(16);
+  });
 });
