@@ -39,4 +39,12 @@ describe('Vector', () => {
     expect(v.x).to.eql(12);
     expect(v.y).to.eql(16);
   });
+  it('sets angle', () => {
+    const v = new Vector(3, 4);
+    v.angle = (Math.PI / 4);
+    expect(v.x).to.roughly.eql(Math.sqrt(12.5));
+    expect(v.y).to.roughly.eql(Math.sqrt(12.5));
+    expect(v.magnitude).to.roughly.eql(5);
+    expect(v.angle).to.roughly.eql(Math.PI / 4);
+  });
 });

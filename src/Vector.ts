@@ -26,10 +26,10 @@ export default class Vector {
 
   // need tests
 
-  public set angle(angle: number) {
+  public set angle(a: number) {
     let magnitude = this.magnitude;
-    this.x = magnitude * Math.cos(angle);
-    this.y = magnitude * Math.sin(angle);
+    this.x = magnitude * Math.cos(a);
+    this.y = magnitude * Math.sin(a);
   }
 
   public add(...vectors: Vector[]): Vector {
