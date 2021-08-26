@@ -47,4 +47,9 @@ describe('Vector', () => {
     expect(v.magnitude).to.roughly.eql(5);
     expect(v.angle).to.roughly.eql(Math.PI / 4);
   });
+  it('adds multiple vectors on', () => {
+    const v = new Vector(3, 4).add(new Vector(2,1), new Vector(6,5));
+    expect(v.x).to.eql(11);
+    expect(v.y).to.eql(10);
+  });
 });
