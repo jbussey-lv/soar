@@ -1,25 +1,27 @@
-import Vector from "./Vector";
+import Vec from "./Vec";
+import Setting from "./Setting";
 
 export default class Plane {
 
-  public position: Vector;
-  public velocity: Vector;
-  public mass: number;
+  public pos: Vec;
+  public vel: Vec;
+  private setting: Setting;
+  public mass: number = 100;
 
-  constructor(position: Vector = new Vector(), velocity: Vector = new Vector(), mass: number = 0) {
-    this.position = position;
-    this.velocity = velocity;
-    this.mass = mass;
+  constructor(position: Vec, velocity: Vec, setting: Setting) {
+    this.pos = position;
+    this.vel = velocity;
+    this.setting = setting;
   }
 
   updatePoisition(dt: number) {
-    let acceleration = this.netForce.divide(this.mass);
-    this.velocity.add(acceleration.multiply(dt))
-    this.position.add(this.velocity.clone().multiply(dt));
+    let acc = this.netForce.divide(this.mass);
+    this.vel = this.vel.add(acc.times(dt))
+    this.pos = this.pos.add(this.vel.times(dt));
   }
 
-  private get netForce(): Vector {
-    return new Vector(4,3);
+  private get netForce(): Vec {
+    return this.setting.g(this.pos).times(this.mass);
   }
 
 

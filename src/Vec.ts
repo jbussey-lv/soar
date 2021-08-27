@@ -1,6 +1,6 @@
 
 
-export default class Vector {
+export default class Vec {
 
   private _x: number;
   private _y: number;
@@ -38,20 +38,20 @@ export default class Vector {
     this._y = magnitude * Math.sin(a);
   }
 
-  public multiply(factor: number): Vector {
-    let response: Vector = this.clone();
+  public times(factor: number): Vec {
+    let response: Vec = this.clone();
     response.magnitude *= factor;
     return response;
   }
 
-  public divide(dividend: number): Vector {
-    let response: Vector = this.clone();
+  public divide(dividend: number): Vec {
+    let response: Vec = this.clone();
     response.magnitude /= dividend;
     return response;
   }
 
-  public add(...vectors: Vector[]): Vector {
-    let response: Vector = this.clone();
+  public add(...vectors: Vec[]): Vec {
+    let response: Vec = this.clone();
     vectors.forEach(vector => {
       response._x += vector.x;
       response._y += vector.y;
@@ -59,8 +59,8 @@ export default class Vector {
     return response;
   }
 
-  public subtract(...vectors: Vector[]): Vector {
-    let response: Vector = this.clone();
+  public subtract(...vectors: Vec[]): Vec {
+    let response: Vec = this.clone();
     vectors.forEach(vector => {
       response._x -= vector.x;
       response._y -= vector.y;
@@ -68,18 +68,21 @@ export default class Vector {
     return response;
   }
 
-  public rotate(angle: number): Vector {
-    let response: Vector = this.clone();
+  public rotate(angle: number): Vec {
+    let response: Vec = this.clone();
     response.angle += angle;
     return response;
   }
 
-  public clone(): Vector {
-    return new Vector(this.x, this.y);
+  public clone(): Vec {
+    return new Vec(this.x, this.y);
   }
 
-  static sum(...vectors: Vector[]): Vector {
-    return new Vector().add(...vectors);
+  static sum(...vectors: Vec[]): Vec {
+    return new Vec().add(...vectors);
   }
 
+  static n(x: number = 0, y: number = 0): Vec {
+    return new Vec(x, y);
+  }
 }
