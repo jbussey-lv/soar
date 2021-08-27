@@ -18,37 +18,33 @@ describe('Vector', () => {
     const v = new Vector(3, 4);
     expect(v.angle).to.roughly.eql(0.9272952);
   });
-  it('sets magnitude', () => {
-    const v = new Vector(3, 4);
-    v.magnitude = 15;
-    expect(v.magnitude).to.eql(15);
-    expect(v.x).to.eql(9);
-    expect(v.y).to.eql(12);
+  it('adds angle correctly', () => {
+    const v1 = new Vector(3, 3);
+    let v2 = v1.rotate(Math.PI / 2);
+    expect(v2.angle).to.roughly.eql(3 * Math.PI / 4);
   });
-  it('mutliplies magnitude', () => {
-    const v = new Vector(3, 4);
-    v.magnitude *= 2
-    expect(v.magnitude).to.eql(10);
-    expect(v.x).to.eql(6);
-    expect(v.y).to.eql(8);
-  });
-  it('adds magnitude', () => {
-    const v = new Vector(3, 4);
-    v.magnitude += 15
-    expect(v.magnitude).to.eql(20);
-    expect(v.x).to.eql(12);
-    expect(v.y).to.eql(16);
-  });
-  it('sets angle', () => {
-    const v = new Vector(3, 4);
-    v.angle = (Math.PI / 4);
-    expect(v.x).to.roughly.eql(Math.sqrt(12.5));
-    expect(v.y).to.roughly.eql(Math.sqrt(12.5));
-    expect(v.magnitude).to.roughly.eql(5);
-    expect(v.angle).to.roughly.eql(Math.PI / 4);
+  it('adds single vector on', () => {
+    const v = new Vector(3, 4).add(new Vector(2,5));
+    expect(v.x).to.eql(5);
+    expect(v.y).to.eql(9);
   });
   it('adds multiple vectors on', () => {
     const v = new Vector(3, 4).add(new Vector(2,1), new Vector(6,5));
+    expect(v.x).to.eql(11);
+    expect(v.y).to.eql(10);
+  });
+  it('subtracts single vector off', () => {
+    const v = new Vector(3, 4).subtract(new Vector(2,5));
+    expect(v.x).to.eql(1);
+    expect(v.y).to.eql(-1);
+  });
+  it('subtracts multiple vectors off', () => {
+    const v = new Vector(3, 4).subtract(new Vector(2,1), new Vector(6,5));
+    expect(v.x).to.eql(-5);
+    expect(v.y).to.eql(-2);
+  });
+  it('creates a vector sum', () => {
+    const v = Vector.sum(new Vector(3, 4), new Vector(2,1), new Vector(6,5));
     expect(v.x).to.eql(11);
     expect(v.y).to.eql(10);
   });

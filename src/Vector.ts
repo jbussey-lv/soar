@@ -2,53 +2,83 @@
 
 export default class Vector {
 
-  public x: number;
-  public y: number;
+  private _x: number;
+  private _y: number;
 
   constructor(x: number = 0, y: number = 0) {
-    this.x = x;
-    this.y = y;
+    this._x = x;
+    this._y = y;
+  }
+
+  public get x(): number {
+    return this._x;
+  }
+
+  public get y(): number {
+    return this._y;
   }
 
   public get magnitude(): number {
     return Math.sqrt(this.x * this.x + this.y * this.y)
   }
 
-  public set magnitude(magnitude: number) {
+  private set magnitude(magnitude: number) {
     let multiplier = magnitude / this.magnitude;
-    this.x *= multiplier;
-    this.y *= multiplier;
+    this._x *= multiplier;
+    this._y *= multiplier;
   }
 
   public get angle(): number {
     return Math.atan2(this.y, this.x);
   }
 
-  // need tests
-
-  public set angle(a: number) {
+  private set angle(a: number) {
     let magnitude = this.magnitude;
-    this.x = magnitude * Math.cos(a);
-    this.y = magnitude * Math.sin(a);
+    this._x = magnitude * Math.cos(a);
+    this._y = magnitude * Math.sin(a);
+  }
+
+  public multiply(factor: number): Vector {
+    let response: Vector = this.clone();
+    response.magnitude *= factor;
+    return response;
+  }
+
+  public divide(dividend: number): Vector {
+    let response: Vector = this.clone();
+    response.magnitude /= dividend;
+    return response;
   }
 
   public add(...vectors: Vector[]): Vector {
+    let response: Vector = this.clone();
     vectors.forEach(vector => {
-      this.x += vector.x;
-      this.y += vector.y;
+      response._x += vector.x;
+      response._y += vector.y;
     });
-    return this;
+    return response;
   }
 
   public subtract(...vectors: Vector[]): Vector {
+    let response: Vector = this.clone();
     vectors.forEach(vector => {
-      this.x -= vector.x;
-      this.y -= vector.y;
+      response._x -= vector.x;
+      response._y -= vector.y;
     });
-    return this;
+    return response;
   }
 
-  static sum(vectors: Vector[]): Vector {
+  public rotate(angle: number): Vector {
+    let response: Vector = this.clone();
+    response.angle += angle;
+    return response;
+  }
+
+  public clone(): Vector {
+    return new Vector(this.x, this.y);
+  }
+
+  static sum(...vectors: Vector[]): Vector {
     return new Vector().add(...vectors);
   }
 
