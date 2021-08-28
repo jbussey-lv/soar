@@ -4,7 +4,7 @@
     "target": "ES2016",
     "allowSyntheticDefaultImports": true,
     "outFile": "build/bundle.js",
-    "module": "system"
+    "module": "ES2016"
   },
   "include": ["src/**/*"],
 }
