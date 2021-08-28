@@ -2,32 +2,32 @@ import Vec from "./Vec";
 
 export default class Stage {
 
-  pixelWidth: number = 800;
-  pixelHeight: number = 600;
+  pixelWidth: number;
+  pixelHeight: number;
   pixelsPerMeter: number = 10;
-  origin: Vec = Vec.n(0, 0); // where bottom left of stage shows in real coords
-  svg: SVGSVGElement;
+  origin: Vec = Vec.n(0, 0); // where bottom left of stage shows in real meter coords
+  stage: HTMLElement;
 
-  constructor(containerDiv: HTMLElement) {
+  constructor(stage: HTMLElement) {
 
-    let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute('style', 'border: 1px solid black');
-    svg.setAttribute('width', '700');
-    svg.setAttribute('height', '500');
-    svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
-    this.svg = svg;
+    this.stage = stage;
+    this.setDimensions();
+    window.onresize = () => {
+      this.setDimensions();
+    }
+  }
 
-    let circle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
-    circle.setAttribute('cx', '50');
-    circle.setAttribute('cy', '50');
-    circle.setAttribute('r', '40');
-    circle.setAttribute('stroke', 'black');
-    circle.setAttribute('stroke-width', '3');
-    circle.setAttribute('fill', 'red');
+  private setDimensions(){
+    let style = window.getComputedStyle(this.stage, null);
 
-    this.svg.appendChild(circle);
+    var horizontalPadding = parseFloat(style.paddingLeft) +
+                            parseFloat(style.paddingRight);
 
-    containerDiv.appendChild(this.svg);
+    var verticalPadding = parseFloat(style.paddingTop) +
+                            parseFloat(style.paddingBottom);
+
+    this.pixelWidth = this.stage.clientWidth -  horizontalPadding;
+    this.pixelHeight = this.stage.clientHeight - verticalPadding;
   }
 
   public getPaintPos(realMeterPos: Vec): Vec {

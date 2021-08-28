@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
+    "watch": "webpack --watch",
     "test": "mocha --require ts-node/register test/**/*.ts"
   },
   "keywords": [],
