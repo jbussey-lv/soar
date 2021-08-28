@@ -2,7 +2,9 @@
   "compilerOptions": {
     "types": ["chai", "mocha"],
     "target": "ES2016",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "outFile": "build/bundle.js",
+    "module": "system"
   },
+  "include": ["src/**/*"],
 }
