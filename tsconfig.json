@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
+    "module": "commonjs",
+    "lib": ["es5", "es6", "dom"],
+    "rootDir": "src",
+    "esModuleInterop": true,
     "types": ["chai", "mocha"],
-    "target": "ES2016",
-    "allowSyntheticDefaultImports": true,
-    "outFile": "build/bundle.js",
-    "module": "ES2016"
+    "target": "ES2016"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*"]
 }
