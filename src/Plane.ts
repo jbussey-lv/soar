@@ -8,9 +8,9 @@ export default class Plane {
   private setting: Setting;
   public mass: number = 100;
 
-  constructor(position: Vec, velocity: Vec, setting: Setting) {
-    this.pos = position;
-    this.vel = velocity;
+  constructor(pos: Vec, vel: Vec, setting: Setting) {
+    this.pos = pos;
+    this.vel = vel;
     this.setting = setting;
   }
 
