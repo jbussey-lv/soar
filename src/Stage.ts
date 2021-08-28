@@ -6,15 +6,27 @@ export default class Stage {
   pixelHeight: number = 600;
   pixelsPerMeter: number = 10;
   origin: Vec = Vec.n(0, 0); // where bottom left of stage shows in real coords
-  svg: HTMLElement;
+  svg: SVGSVGElement;
 
   constructor(containerDiv: HTMLElement) {
-    this.svg = document.createElement('SVG');
-    this.svg.setAttribute('style', 'border: 1px solid black');
-    this.svg.setAttribute('width', '600');
-    this.svg.setAttribute('height', '250');
-    this.svg.setAttribute('version', '1.1');
-    this.svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+
+    let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute('style', 'border: 1px solid black');
+    svg.setAttribute('width', '700');
+    svg.setAttribute('height', '500');
+    svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
+    this.svg = svg;
+
+    let circle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+    circle.setAttribute('cx', '50');
+    circle.setAttribute('cy', '50');
+    circle.setAttribute('r', '40');
+    circle.setAttribute('stroke', 'black');
+    circle.setAttribute('stroke-width', '3');
+    circle.setAttribute('fill', 'red');
+
+    this.svg.appendChild(circle);
+
     containerDiv.appendChild(this.svg);
   }
 
