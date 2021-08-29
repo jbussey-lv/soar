@@ -1,8 +1,8 @@
 import chai, { expect } from 'chai';
-import chaiRoughly from 'chai-roughly';
+import chaiAlmost from 'chai-almost';
 import Vec from '../src/Vec';
 
-chai.use(chaiRoughly);
+chai.use(chaiAlmost());
 
 describe('Vector', () => {
   it('can be initialized without arguments and set x and y to 0', () => {
@@ -16,12 +16,12 @@ describe('Vector', () => {
   });
   it('returns angle correctly', () => {
     const v = new Vec(3, 4);
-    expect(v.angle).to.roughly.eql(0.9272952);
+    expect(v.angle).to.almost.eql(0.9272952);
   });
   it('adds angle correctly', () => {
     const v1 = new Vec(3, 3);
     let v2 = v1.rotate(Math.PI / 2);
-    expect(v2.angle).to.roughly.eql(3 * Math.PI / 4);
+    expect(v2.angle).to.almost.eql(3 * Math.PI / 4);
   });
   it('adds single vector on', () => {
     const v = new Vec(3, 4).add(new Vec(2,5));
