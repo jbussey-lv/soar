@@ -21,7 +21,19 @@ export default class Plane {
   }
 
   private get netForce(): Vec {
-    return this.setting.g(this.pos).times(this.mass);
+    let response = Vec.n(0, this.mass * this.setting.g)
+    if(this.setting.isKeyDown("ArrowUp")){
+      response = response.add(Vec.n(0, this.setting.g * -2 * this.mass));
+    }
+    if(this.setting.isKeyDown("ArrowLeft")){
+      response = response.add(Vec.n(this.setting.g * 2 * this.mass, 0));
+    }
+    if(this.setting.isKeyDown("ArrowRight")){
+      response = response.add(Vec.n(this.setting.g * -2 * this.mass, 0));
+    }
+
+
+    return response;
   }
 
 
