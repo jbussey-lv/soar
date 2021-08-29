@@ -17,6 +17,7 @@ let ts = 1/60;
 
 setInterval(
   () => {
+    setting.setGamepad(navigator.getGamepads()[0]);
     plane.updatePoisition(ts);
     stage.render();
   }, 

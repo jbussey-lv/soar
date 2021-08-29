@@ -21,18 +21,16 @@ export default class Plane {
   }
 
   private get netForce(): Vec {
-    let response = Vec.n(0, this.mass * this.setting.g)
-    if(this.setting.isKeyDown("ArrowUp")){
-      response = response.add(Vec.n(0, this.setting.g * -2 * this.mass));
-    }
-    if(this.setting.isKeyDown("ArrowLeft")){
-      response = response.add(Vec.n(this.setting.g * 2 * this.mass, 0));
-    }
-    if(this.setting.isKeyDown("ArrowRight")){
-      response = response.add(Vec.n(this.setting.g * -2 * this.mass, 0));
-    }
+    let gForce = this.mass * this.setting.g;
 
+    // add weight
+    let response = Vec.n(0, gForce)
 
+    // add user designated thrust
+    response = response.add(Vec.n(
+      -2 * gForce * this.setting.getAilerons(), 
+      2 * gForce * this.setting.getElevator()
+    ));
     return response;
   }
 
