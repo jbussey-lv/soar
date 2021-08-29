@@ -4,12 +4,12 @@ export default class Setting {
 
   private keysDown: Set<String> = new Set();
 
-  public keyDown(e: KeyboardEvent) {
-    this.keysDown.add(e.key);
+  public keyDown(key: String) {
+    this.keysDown.add(key);
   }
 
-  public keyUp(e: KeyboardEvent) {
-    this.keysDown.delete(e.key);
+  public keyUp(key: String) {
+    this.keysDown.delete(key);
   }
 
   public isKeyDown(key: String): boolean {
