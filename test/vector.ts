@@ -24,22 +24,22 @@ describe('Vector', () => {
     expect(v2.angle).to.almost.eql(3 * Math.PI / 4);
   });
   it('adds single vector on', () => {
-    const v = new Vec(3, 4).add(new Vec(2,5));
+    const v = new Vec(3, 4).plus(new Vec(2,5));
     expect(v.x).to.eql(5);
     expect(v.y).to.eql(9);
   });
   it('adds multiple vectors on', () => {
-    const v = new Vec(3, 4).add(new Vec(2,1), new Vec(6,5));
+    const v = new Vec(3, 4).plus(new Vec(2,1), new Vec(6,5));
     expect(v.x).to.eql(11);
     expect(v.y).to.eql(10);
   });
-  it('subtracts single vector off', () => {
-    const v = new Vec(3, 4).subtract(new Vec(2,5));
+  it('minuss single vector off', () => {
+    const v = new Vec(3, 4).minus(new Vec(2,5));
     expect(v.x).to.eql(1);
     expect(v.y).to.eql(-1);
   });
-  it('subtracts multiple vectors off', () => {
-    const v = new Vec(3, 4).subtract(new Vec(2,1), new Vec(6,5));
+  it('minuss multiple vectors off', () => {
+    const v = new Vec(3, 4).minus(new Vec(2,1), new Vec(6,5));
     expect(v.x).to.eql(-5);
     expect(v.y).to.eql(-2);
   });

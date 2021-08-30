@@ -38,10 +38,8 @@ export default class Setting {
 
   public g = -9.8;
 
-  private _wind = new Vec(0, 0);
-
   public wind(position: Vec): Vec {
-    return this._wind;
+    return Vec.n();
   }
 
 

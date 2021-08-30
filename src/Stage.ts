@@ -55,7 +55,7 @@ export default class Stage {
   }
 
   public getPaintPos(realMeterPos: Vec): Vec {
-    let stageMeterPos = realMeterPos.subtract(this.origin);
+    let stageMeterPos = realMeterPos.minus(this.origin);
     let stagePixelPos = stageMeterPos.times(this.pixelsPerMeter);
     let PaintPos = Vec.n(stagePixelPos.x, this.pixelHeight - stagePixelPos.y);
     return PaintPos;

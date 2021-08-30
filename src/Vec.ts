@@ -23,9 +23,14 @@ export default class Vec {
   }
 
   private set magnitude(magnitude: number) {
-    let multiplier = magnitude / this.magnitude;
-    this._x *= multiplier;
-    this._y *= multiplier;
+    if(this.magnitude === 0){
+      this._x = magnitude;
+      this._y = 0;
+    } else {
+      let multiplier = magnitude / this.magnitude;
+      this._x *= multiplier;
+      this._y *= multiplier;
+    }
   }
 
   public get angle(): number {
@@ -50,7 +55,7 @@ export default class Vec {
     return response;
   }
 
-  public add(...vectors: Vec[]): Vec {
+  public plus(...vectors: Vec[]): Vec {
     let response: Vec = this.clone();
     vectors.forEach(vector => {
       response._x += vector.x;
@@ -59,7 +64,7 @@ export default class Vec {
     return response;
   }
 
-  public subtract(...vectors: Vec[]): Vec {
+  public minus(...vectors: Vec[]): Vec {
     let response: Vec = this.clone();
     vectors.forEach(vector => {
       response._x -= vector.x;
@@ -79,7 +84,7 @@ export default class Vec {
   }
 
   static sum(...vectors: Vec[]): Vec {
-    return new Vec().add(...vectors);
+    return new Vec().plus(...vectors);
   }
 
   static n(x: number = 0, y: number = 0): Vec {
