@@ -1,14 +1,23 @@
 import Vec from "./Vec";
 import Plane from "./Plane";
+import Wing from "./Wing";
+import { addSyntheticTrailingComment } from "typescript";
+
+
+type PlaneGroup = {
+  group: SVGElement;
+  wingSprites: SVGElement[];
+}
 
 export default class Stage {
 
+
   private pixelWidth: number;
   private pixelHeight: number;
-  private pixelsPerMeter: number = 10;
+  private pixelsPerMeter: number = 30;
   private origin: Vec = Vec.n(0, 0); // where bottom left of stage shows in real meter coords
   private container: HTMLElement;
-  private planes: Map<Plane, SVGElement> = new Map();
+  private planes: Map<Plane, PlaneGroup> = new Map();
 
 
   constructor(container: HTMLElement) {
@@ -23,9 +32,48 @@ export default class Stage {
     return document.createElementNS("http://www.w3.org/2000/svg", type+"");
   }
 
+  addRect(width: number, height: number, group: SVGElement){
+
+    let rect: SVGElement = this.createSvgElement('rect');
+    rect.setAttribute('x', '0');
+    rect.setAttribute('y', (-1 * height *this.pixelsPerMeter).toString());
+    rect.setAttribute('width', (width*this.pixelsPerMeter).toString());
+    rect.setAttribute('height', (height*this.pixelsPerMeter).toString());
+    rect.setAttribute('stroke', 'black');
+    rect.setAttribute('stroke-width', '3');
+    rect.setAttribute('fill', 'transparent');
+    group.appendChild(rect);
+
+    for(let i = 1; i < width; i++){
+      let line: SVGElement = this.createSvgElement('line');
+      line.setAttribute("x1", (i * this.pixelsPerMeter).toString());
+      line.setAttribute("y1", '0');
+      line.setAttribute("x2", (i * this.pixelsPerMeter).toString());
+      line.setAttribute("y2", (-1 * height * this.pixelsPerMeter).toString());
+      line.setAttribute('stroke', 'grey');
+      line.setAttribute('stroke-width', '1');
+      group.appendChild(line);
+    }
+
+    for(let i = 1; i < height; i++){
+      let line: SVGElement = this.createSvgElement('line');
+      line.setAttribute("x1", '0');
+      line.setAttribute("y1", (-1 * i * this.pixelsPerMeter).toString());
+      line.setAttribute("x2", (width * this.pixelsPerMeter).toString());
+      line.setAttribute("y2", (-1 * i * this.pixelsPerMeter).toString());
+      line.setAttribute('stroke', 'grey');
+      line.setAttribute('stroke-width', '1');
+      group.appendChild(line);
+    }
+  }
+
   addPlane(plane: Plane) {
 
-    let sprite: SVGElement = this.createSvgElement('g');
+    let group: SVGElement = this.createSvgElement('g');
+
+    let width = 20;
+    let height = 10;
+    this.addRect(width, height, group);
 
     let circle: SVGElement = this.createSvgElement('circle');
     circle.setAttribute('cx', '0');
@@ -34,7 +82,7 @@ export default class Stage {
     circle.setAttribute('stroke', 'black');
     circle.setAttribute('stroke-width', '3');
     circle.setAttribute('fill', 'red');
-    sprite.appendChild(circle);
+    group.appendChild(circle);
 
     let circle2: SVGElement = this.createSvgElement('circle');
     circle2.setAttribute('cx', '80');
@@ -43,21 +91,30 @@ export default class Stage {
     circle2.setAttribute('stroke', 'black');
     circle2.setAttribute('stroke-width', '3');
     circle2.setAttribute('fill', 'red');
-    sprite.appendChild(circle2);
+    group.appendChild(circle2);
 
-    let line: SVGElement = this.createSvgElement('line');
-    line.setAttribute("x1", "0");
-    line.setAttribute("y1", "0");
-    line.setAttribute("x2", "80");
-    line.setAttribute("y2", "-30");
-    line.setAttribute('stroke', 'black');
-    line.setAttribute('stroke-width', '3');
+    let wingSprites: SVGElement[] = [];
+    plane.wings.forEach(wing => {
+      let wingSprite = this.getWingSprite(wing);
+      group.appendChild(wingSprite);
+      wingSprites.push(wingSprite);
+    })
 
-    sprite.appendChild(line);
 
-    this.container.appendChild(sprite);
+    this.container.appendChild(group);
 
-    this.planes.set(plane, sprite);
+    this.planes.set(plane, {group: group, wingSprites: []});
+  }
+
+  getWingSprite(wing: Wing){
+    let wingSprite: SVGElement = this.createSvgElement('line');
+    wingSprite.setAttribute("x1", ((wing.pos.x - wing.width / 2) * this.pixelsPerMeter).toString());
+    wingSprite.setAttribute("y1", (-1 * wing.pos.y * this.pixelsPerMeter).toString());
+    wingSprite.setAttribute("x2", ((wing.pos.x + wing.width / 2) * this.pixelsPerMeter).toString());
+    wingSprite.setAttribute("y2", (-1 * wing.pos.y * this.pixelsPerMeter).toString());
+    wingSprite.setAttribute('stroke', 'black');
+    wingSprite.setAttribute('stroke-width', '3');
+    return wingSprite;
   }
 
   render() {
@@ -65,7 +122,7 @@ export default class Stage {
       let paintPos = this.getPaintPos(plane.pos);
       let translate = " translate(" + paintPos.x + " " + paintPos.y + ")";
       let rotate = " rotate("+ plane.ang * 180 / Math.PI + " " + plane.cog.x * this.pixelsPerMeter + " " + -1 * plane.cog.y * this.pixelsPerMeter + ")";
-      sprite.setAttribute("transform", translate + rotate);
+      sprite.group.setAttribute("transform", translate + rotate);
     })
   }
 

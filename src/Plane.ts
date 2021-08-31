@@ -11,7 +11,7 @@ export default class Plane {
   public cog: Vec;
   public mass: number = 100;
   public moment: number = 0.033;
-  public wings: Wing[];
+  public wings: Wing[] = [];
   private setting: Setting;
 
 

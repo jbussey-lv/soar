@@ -2,6 +2,7 @@ import Stage from "./Stage";
 import Setting from "./Setting";
 import Plane from "./Plane";
 import Vec from "./Vec";
+import Wing from "./Wing";
 
 
 let stage = new Stage(document.getElementById('stage'));
@@ -10,10 +11,11 @@ document.addEventListener('keydown', (e) => {setting.keyDown(e.key)});
 document.addEventListener('keyup', (e) => {setting.keyUp(e.key)});
 
 let plane = new Plane(Vec.n(0, 0), Vec.n(20,40), 0, 0, Vec.n(5, 3), setting);
+plane.addWing(new Wing(Vec.n(3,2), Math.PI/12, 10, 2, 20))
 
 stage.addPlane(plane);
 
-let ts = 1/60;
+let ts = 50;//1/60;
 
 setInterval(
   () => {
