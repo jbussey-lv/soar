@@ -19,11 +19,15 @@ export default class Stage {
     }
   }
 
+  private createSvgElement(type: String): SVGElement {
+    return document.createElementNS("http://www.w3.org/2000/svg", type+"");
+  }
+
   addPlane(plane: Plane) {
 
-    let sprite: SVGElement = document.createElementNS("http://www.w3.org/2000/svg", 'g');
+    let sprite: SVGElement = this.createSvgElement('g');
 
-    let circle: SVGElement = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+    let circle: SVGElement = this.createSvgElement('circle');
     circle.setAttribute('cx', '0');
     circle.setAttribute('cy', '0');
     circle.setAttribute('r', '40');
@@ -32,16 +36,24 @@ export default class Stage {
     circle.setAttribute('fill', 'red');
     sprite.appendChild(circle);
 
-
-
-    let circle2: SVGElement = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
-    circle2.setAttribute('cx', '20');
+    let circle2: SVGElement = this.createSvgElement('circle');
+    circle2.setAttribute('cx', '80');
     circle2.setAttribute('cy', '-30');
     circle2.setAttribute('r', '40');
     circle2.setAttribute('stroke', 'black');
     circle2.setAttribute('stroke-width', '3');
     circle2.setAttribute('fill', 'red');
     sprite.appendChild(circle2);
+
+    let line: SVGElement = this.createSvgElement('line');
+    line.setAttribute("x1", "0");
+    line.setAttribute("y1", "0");
+    line.setAttribute("x2", "80");
+    line.setAttribute("y2", "-30");
+    line.setAttribute('stroke', 'black');
+    line.setAttribute('stroke-width', '3');
+
+    sprite.appendChild(line);
 
     this.container.appendChild(sprite);
 
