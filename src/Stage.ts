@@ -23,9 +23,6 @@ export default class Stage {
 
     let sprite: SVGElement = document.createElementNS("http://www.w3.org/2000/svg", 'g');
 
-    sprite.setAttribute('x', '0');
-    sprite.setAttribute('y', '0');
-
     let circle: SVGElement = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
     circle.setAttribute('cx', '0');
     circle.setAttribute('cy', '0');
@@ -39,7 +36,7 @@ export default class Stage {
 
     let circle2: SVGElement = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
     circle2.setAttribute('cx', '20');
-    circle2.setAttribute('cy', '45');
+    circle2.setAttribute('cy', '-30');
     circle2.setAttribute('r', '40');
     circle2.setAttribute('stroke', 'black');
     circle2.setAttribute('stroke-width', '3');
@@ -55,7 +52,7 @@ export default class Stage {
     this.planes.forEach((sprite, plane) => {
       let paintPos = this.getPaintPos(plane.pos);
       let translate = " translate(" + paintPos.x + " " + paintPos.y + ")";
-      let rotate = " rotate("+ plane.ang * 180 / Math.PI +")";
+      let rotate = " rotate("+ plane.ang * 180 / Math.PI + " " + plane.cog.x * this.pixelsPerMeter + " " + -1 * plane.cog.y * this.pixelsPerMeter + ")";
       sprite.setAttribute("transform", translate + rotate);
     })
   }

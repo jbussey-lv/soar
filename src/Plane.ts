@@ -10,6 +10,7 @@ export default class Plane {
   public angVel: number;
   public cog: Vec;
   public mass: number = 100;
+  public moment: number = 0.033;
   public wings: Wing[];
   private setting: Setting;
 
@@ -27,11 +28,14 @@ export default class Plane {
     this.wings.push(wing);
   }
 
-  updatePoisition(dt: number) {
+  updatePosition(dt: number) {
     let acc = this.netForce.divide(this.mass);
     this.vel = this.vel.plus(acc.times(dt))
     this.pos = this.pos.plus(this.vel.times(dt));
-    this.ang += 0.05;
+
+    let angAcc = this.netTorque / this.moment;
+    this.angVel += angAcc * dt;
+    this.ang += this.angVel * dt;
   }
 
   getPosVelocity(pos: Vec): Vec {
@@ -49,18 +53,30 @@ export default class Plane {
 
   private get netForce(): Vec {
 
+    let weight = Vec.n(0, this.mass * this.setting.g);
+
+    let lift = this.getLift();
+
+    let thrust = this.getThrust();
+
+    return Vec.sum(weight, lift, thrust);
+  }
+
+  private get netTorque(): number {
+    return this.setting.getRudder() * 0.05; // STUBBED
+  }
+
+  private getLift(): Vec {
+    return this.vel.times(-50); // STUBBED
+  }
+
+  private getThrust(): Vec {
+
     let gMag = this.mass * this.setting.g;
-
-    let weight = Vec.n(0, gMag);
-
-    let lift = this.vel.times(-50);
-
-    let thrust = Vec.n(
+    return Vec.n(
       -2 * gMag * this.setting.getAilerons(), 
       2 * gMag * this.setting.getElevator()
     );
-
-    return Vec.sum(weight, lift, thrust);
   }
 
 

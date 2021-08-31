@@ -9,19 +9,24 @@ export default class Setting {
     this.gamepad = gamepad;
   }
 
+  public getRudder(): number {
+    if(!this.gamepad){return 0};
+    return this.gamepad.axes[0];
+  }
+
   public getThrust(): number{
     if(!this.gamepad){return 0};
     return this.gamepad.axes[1];
   }
 
-  public getElevator(): number {
-    if(!this.gamepad){return 0};
-    return this.gamepad.axes[3];
-  }
-
   public getAilerons(): number {
     if(!this.gamepad){return 0};
     return this.gamepad.axes[2];
+  }
+
+  public getElevator(): number {
+    if(!this.gamepad){return 0};
+    return this.gamepad.axes[3];
   }
 
   public keyDown(key: String) {
