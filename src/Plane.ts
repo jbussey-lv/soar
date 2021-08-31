@@ -40,17 +40,19 @@ export default class Plane {
   }
 
   private get netForce(): Vec {
-    let gForce = this.mass * this.setting.g;
 
-    // add weight
-    let response = Vec.n(0, gForce)
+    let gMag = this.mass * this.setting.g;
 
-    // add user designated thrust
-    response = response.plus(Vec.n(
-      -2 * gForce * this.setting.getAilerons(), 
-      2 * gForce * this.setting.getElevator()
-    ));
-    return response;
+    let weight = Vec.n(0, gMag);
+
+    let lift = this.vel.times(-50);
+
+    let thrust = Vec.n(
+      -2 * gMag * this.setting.getAilerons(), 
+      2 * gMag * this.setting.getElevator()
+    );
+
+    return Vec.sum(weight, lift, thrust);
   }
 
 
