@@ -2,21 +2,23 @@ import Vec from "./Vec";
 
 export default class Wing {
 
-  private _pos: Vec;
-  private _angle: number;
-  private _length: number;
-  private _mass: number;
+  public pos: Vec;
+  public angle: number;
+  public length: number;
+  public width: number;
+  public mass: number;
 
-  constructor(pos: Vec, angle: number, length: number, mass: number) {
-    this._pos = pos;
-    this._angle = angle;
-    this._length = length;
-    this._mass = mass;
+  constructor(pos: Vec, angle: number, length: number, width: number, mass: number) {
+    this.pos = pos;
+    this.angle = angle;
+    this.length = length;
+    this.width = width;
+    this.mass = mass;
   }
 
   public getForceMagnitude(airSpeed: number, airAngle: number, airDensity: number): number {
     let sinTheta = Math.sin(airAngle);
-    return 2 * airSpeed * airSpeed * sinTheta * sinTheta * this._length * airDensity;
+    return 2 * airSpeed * airSpeed * sinTheta * sinTheta * this.length * airDensity;
   }
 
 

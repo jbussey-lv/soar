@@ -10,6 +10,7 @@ export default class Stage {
   private container: HTMLElement;
   private planes: Map<Plane, SVGElement> = new Map();
 
+
   constructor(container: HTMLElement) {
     this.container = container;
     this.setDimensions();
@@ -20,13 +21,31 @@ export default class Stage {
 
   addPlane(plane: Plane) {
 
-    let sprite: SVGElement = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
-    sprite.setAttribute('cx', '0');
-    sprite.setAttribute('cy', '0');
-    sprite.setAttribute('r', '40');
-    sprite.setAttribute('stroke', 'black');
-    sprite.setAttribute('stroke-width', '3');
-    sprite.setAttribute('fill', 'red');
+    let sprite: SVGElement = document.createElementNS("http://www.w3.org/2000/svg", 'g');
+
+    sprite.setAttribute('x', '0');
+    sprite.setAttribute('y', '0');
+
+    let circle: SVGElement = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+    circle.setAttribute('cx', '0');
+    circle.setAttribute('cy', '0');
+    circle.setAttribute('r', '40');
+    circle.setAttribute('stroke', 'black');
+    circle.setAttribute('stroke-width', '3');
+    circle.setAttribute('fill', 'red');
+    sprite.appendChild(circle);
+
+
+
+    let circle2: SVGElement = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+    circle2.setAttribute('cx', '20');
+    circle2.setAttribute('cy', '45');
+    circle2.setAttribute('r', '40');
+    circle2.setAttribute('stroke', 'black');
+    circle2.setAttribute('stroke-width', '3');
+    circle2.setAttribute('fill', 'red');
+    sprite.appendChild(circle2);
+
     this.container.appendChild(sprite);
 
     this.planes.set(plane, sprite);
@@ -35,8 +54,9 @@ export default class Stage {
   render() {
     this.planes.forEach((sprite, plane) => {
       let paintPos = this.getPaintPos(plane.pos);
-      sprite.setAttribute('cx', paintPos.x.toString());
-      sprite.setAttribute('cy', paintPos.y.toString());
+      let translate = " translate(" + paintPos.x + " " + paintPos.y + ")";
+      let rotate = " rotate("+ plane.ang * 180 / Math.PI +")";
+      sprite.setAttribute("transform", translate + rotate);
     })
   }
 
