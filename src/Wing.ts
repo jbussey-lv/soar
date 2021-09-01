@@ -3,14 +3,14 @@ import Vec from "./Vec";
 export default class Wing {
 
   public pos: Vec;
-  public angle: number;
+  public ang: number;
   public length: number;
   public width: number;
   public mass: number;
 
-  constructor(pos: Vec, angle: number, length: number, width: number, mass: number) {
+  constructor(pos: Vec, ang: number, length: number, width: number, mass: number) {
     this.pos = pos;
-    this.angle = angle;
+    this.ang = ang;
     this.length = length;
     this.width = width;
     this.mass = mass;

@@ -75,23 +75,23 @@ export default class Stage {
     let height = 10;
     this.addRect(width, height, group);
 
-    let circle: SVGElement = this.createSvgElement('circle');
-    circle.setAttribute('cx', '0');
-    circle.setAttribute('cy', '0');
-    circle.setAttribute('r', '40');
-    circle.setAttribute('stroke', 'black');
-    circle.setAttribute('stroke-width', '3');
-    circle.setAttribute('fill', 'red');
-    group.appendChild(circle);
+    // let circle: SVGElement = this.createSvgElement('circle');
+    // circle.setAttribute('cx', '0');
+    // circle.setAttribute('cy', '0');
+    // circle.setAttribute('r', '40');
+    // circle.setAttribute('stroke', 'black');
+    // circle.setAttribute('stroke-width', '3');
+    // circle.setAttribute('fill', 'red');
+    // group.appendChild(circle);
 
-    let circle2: SVGElement = this.createSvgElement('circle');
-    circle2.setAttribute('cx', '80');
-    circle2.setAttribute('cy', '-30');
-    circle2.setAttribute('r', '40');
-    circle2.setAttribute('stroke', 'black');
-    circle2.setAttribute('stroke-width', '3');
-    circle2.setAttribute('fill', 'red');
-    group.appendChild(circle2);
+    // let circle2: SVGElement = this.createSvgElement('circle');
+    // circle2.setAttribute('cx', '80');
+    // circle2.setAttribute('cy', '-30');
+    // circle2.setAttribute('r', '40');
+    // circle2.setAttribute('stroke', 'black');
+    // circle2.setAttribute('stroke-width', '3');
+    // circle2.setAttribute('fill', 'red');
+    // group.appendChild(circle2);
 
     let wingSprites: SVGElement[] = [];
     plane.wings.forEach(wing => {
@@ -108,12 +108,23 @@ export default class Stage {
 
   getWingSprite(wing: Wing){
     let wingSprite: SVGElement = this.createSvgElement('line');
-    wingSprite.setAttribute("x1", ((wing.pos.x - wing.width / 2) * this.pixelsPerMeter).toString());
-    wingSprite.setAttribute("y1", (-1 * wing.pos.y * this.pixelsPerMeter).toString());
-    wingSprite.setAttribute("x2", ((wing.pos.x + wing.width / 2) * this.pixelsPerMeter).toString());
-    wingSprite.setAttribute("y2", (-1 * wing.pos.y * this.pixelsPerMeter).toString());
-    wingSprite.setAttribute('stroke', 'black');
+    let x1 = (wing.pos.x - wing.width / 2) * this.pixelsPerMeter;
+    let y1 = -1 * wing.pos.y * this.pixelsPerMeter;
+    let x2 = (wing.pos.x + wing.width / 2) * this.pixelsPerMeter;
+    let y2 = (-1 * wing.pos.y * this.pixelsPerMeter)
+    let cx = (x2 + x1) / 2;
+    let cy = (y2 + y1) / 2;
+    console.log(cx +", " + cy);
+    wingSprite.setAttribute("x1", x1.toString());
+    wingSprite.setAttribute("y1", y1.toString());
+    wingSprite.setAttribute("x2", x2.toString());
+    wingSprite.setAttribute("y2", y2.toString());
+    wingSprite.setAttribute('stroke', 'red');
     wingSprite.setAttribute('stroke-width', '3');
+    let rotate = " rotate(" + wing.ang * -180 / Math.PI + " " + cx + " " + cy + ")";
+    // let rotate = " rotate(" + wing.ang * 180 / Math.PI + " " + cx * this.pixelsPerMeter + " " + -1 * cy * this.pixelsPerMeter + ")";
+    // + " " + cx * this.pixelsPerMeter + " " + -1 * cy * this.pixelsPerMeter + ")";
+    wingSprite.setAttribute("transform", rotate);
     return wingSprite;
   }
 
