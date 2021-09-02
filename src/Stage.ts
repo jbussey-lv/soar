@@ -75,26 +75,8 @@ export default class Stage {
     let height = 10;
     this.addRect(width, height, group);
 
-    // let circle: SVGElement = this.createSvgElement('circle');
-    // circle.setAttribute('cx', '0');
-    // circle.setAttribute('cy', '0');
-    // circle.setAttribute('r', '40');
-    // circle.setAttribute('stroke', 'black');
-    // circle.setAttribute('stroke-width', '3');
-    // circle.setAttribute('fill', 'red');
-    // group.appendChild(circle);
-
-    // let circle2: SVGElement = this.createSvgElement('circle');
-    // circle2.setAttribute('cx', '80');
-    // circle2.setAttribute('cy', '-30');
-    // circle2.setAttribute('r', '40');
-    // circle2.setAttribute('stroke', 'black');
-    // circle2.setAttribute('stroke-width', '3');
-    // circle2.setAttribute('fill', 'red');
-    // group.appendChild(circle2);
-
     let wingSprites: SVGElement[] = [];
-    plane.wings.forEach(wing => {
+    plane.wings.forEach((wing, index) => {
       let wingSprite = this.getWingSprite(wing);
       group.appendChild(wingSprite);
       wingSprites.push(wingSprite);
@@ -103,7 +85,7 @@ export default class Stage {
 
     this.container.appendChild(group);
 
-    this.planes.set(plane, {group: group, wingSprites: []});
+    this.planes.set(plane, {group: group, wingSprites});
   }
 
   getWingSprite(wing: Wing){
@@ -114,7 +96,6 @@ export default class Stage {
     let y2 = (-1 * wing.pos.y * this.pixelsPerMeter)
     let cx = (x2 + x1) / 2;
     let cy = (y2 + y1) / 2;
-    console.log(cx +", " + cy);
     wingSprite.setAttribute("x1", x1.toString());
     wingSprite.setAttribute("y1", y1.toString());
     wingSprite.setAttribute("x2", x2.toString());
@@ -130,11 +111,26 @@ export default class Stage {
 
   render() {
     this.planes.forEach((sprite, plane) => {
+      plane.wings.forEach((wing, i) => {
+        let wingSprite = sprite.wingSprites[i];
+        let x1 = (wing.pos.x - wing.width / 2) * this.pixelsPerMeter;
+        let y1 = -1 * wing.pos.y * this.pixelsPerMeter;
+        let x2 = (wing.pos.x + wing.width / 2) * this.pixelsPerMeter;
+        let y2 = (-1 * wing.pos.y * this.pixelsPerMeter)
+        let cx = (x2 + x1) / 2;
+        let cy = (y2 + y1) / 2;
+        this.setAng(wingSprite, wing.ang, cx, cy);
+      })
       let paintPos = this.getPaintPos(plane.pos);
       let translate = " translate(" + paintPos.x + " " + paintPos.y + ")";
       let rotate = " rotate("+ plane.ang * 180 / Math.PI + " " + plane.cog.x * this.pixelsPerMeter + " " + -1 * plane.cog.y * this.pixelsPerMeter + ")";
       sprite.group.setAttribute("transform", translate + rotate);
     })
+  }
+
+  private setAng(element: SVGElement, ang: number, cx: number, cy: number) {
+    let rotate = " rotate(" + ang * -180 / Math.PI + " " + cx + " " + cy + ")";
+    element.setAttribute("transform", rotate);
   }
 
 
