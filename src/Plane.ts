@@ -51,6 +51,12 @@ export default class Plane {
     return absVel;
   }
 
+  getPosPos(pos: Vec) {
+    return pos.minus(this.cog)
+              .rotate(this.ang)
+              .plus(this.pos);
+  }
+
   private get netForce(): Vec {
 
     let weight = Vec.n(0, this.mass * this.setting.g);
