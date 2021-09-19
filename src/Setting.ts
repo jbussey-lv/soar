@@ -41,9 +41,9 @@ export default class Setting {
     return this.keysDown.has(key);
   }
 
-  public g: number = 0;//-9.8;
+  public g: number = -9.8;
 
-  public atm: number = 1.225;
+  public airDensity: number = 1.225;
 
   public wind(position: Vec): Vec {
     return Vec.n();

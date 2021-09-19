@@ -32,5 +32,7 @@ export default class Wing {
     return this.angMid + (this.angDiff * this.setting.getElevator());
   }
 
+  
+
 
 }

@@ -51,10 +51,24 @@ export default class Plane {
     return absVel;
   }
 
+<<<<<<< HEAD
   getPosPos(pos: Vec) {
     return pos.minus(this.cog)
               .rotate(this.ang)
               .plus(this.pos);
+=======
+  getAbsWingAngle(wing: Wing): number {
+    return wing.ang + this.ang;
+  }
+
+  getWingForce(wing: Wing): Vec {
+    let airSpeed = 5;
+    let airAngle = 0;
+    let airDensity = this.setting.airDensity;
+    let forceMagnitude: number = wing.getForceMagnitude(airSpeed, airAngle, airDensity);
+    let forceAngle: number = this.getAbsWingAngle(wing) + Math.PI / 2;
+    return Vec.n(forceMagnitude).rotate(forceAngle);
+>>>>>>> 87100a2 (got wing force method started)
   }
 
   private get netForce(): Vec {
