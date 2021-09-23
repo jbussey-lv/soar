@@ -37,25 +37,29 @@ export default class Plane {
   }
 
   updatePosition(dt: number) {
-    let acc = this.netForce.divide(this.mass);
+    let forceArms = this.getAllForceArms();
+    let acc = this.getNetForce(forceArms).divide(this.mass);
     this.vel = this.vel.plus(acc.times(dt))
     this.pos = this.pos.plus(this.vel.times(dt));
 
-    let angAcc = this.netTorque / this.moment;
+    let angAcc = this.getNetTorque(forceArms) / this.moment;
     this.angVel += angAcc * dt;
     this.ang += this.angVel * dt;
   }
 
-  getAbsPos(pos: Vec) {
+  getArm(pos: Vec): Vec {
     return pos.minus(this.cog)
-              .rotate(this.ang)
-              .plus(this.pos);
+              .rotate(this.ang);
+  }
+
+  getAbsPos(pos: Vec) {
+    return this.getArm(pos)
+               .plus(this.pos);
   }
 
   getAbsVel(pos: Vec): Vec {
 
-    let rawArm: Vec = pos.minus(this.cog);
-    let norArm: Vec = rawArm.rotate(this.ang);
+    let norArm: Vec = this.getArm(pos);
     let velMag: number = norArm.magnitude * this.angVel;
     let velAng: number = norArm.angle + Math.PI / 2;
 
@@ -80,7 +84,7 @@ export default class Plane {
 
     let airVel: Vec = this.getAirVel(wing.pos);
 
-    let wingForce: Vec = wing.getLift(absWingAngle, airVel);
+    let wingForce: Vec = wing.getForce(absWingAngle, airVel);
 
     return {
       force: wingForce,
@@ -98,7 +102,7 @@ export default class Plane {
 
   private getEngineForceArm(): ForceArm {
     let force = Vec.n(this.engine.thrust).rotate(this.engine.ang).rotate(this.ang);
-    let arm = this.engine.pos.minus(this.cog);
+    let arm = this.getArm(this.engine.pos);
     return {force, arm};
   }
 
@@ -113,7 +117,7 @@ export default class Plane {
     return forceArms;
   }
 
-  private get netForce(allForceArms: ForceArm[]): Vec {
+  private getNetForce(allForceArms: ForceArm[]): Vec {
 
     let netForce = Vec.n();
 
@@ -124,33 +128,8 @@ export default class Plane {
     return netForce;
   }
 
-  private get netTorque(allForceArms: ForceArm[]): number {
+  private getNetTorque(allForceArms: ForceArm[]): number {
     return this.setting.getRudder() * 0.05; // STUBBED
   }
-
-  // private getLift(): Vec {
-  //   let lift: Vec = new Vec();
-  //   this.wings.forEach(wing => {
-  //     lift.plus(this.getWingForce(wing));
-  //   });
-  //   return lift;
-  // }
-
-  private getThrustForceArms: ForceArm[] {
-    return {
-      force: getThrust(),
-
-    }
-  }
-
-  private getThrust(): Vec {
-
-    let gMag = this.mass * this.setting.g;
-    return Vec.n(
-      -2 * gMag * this.setting.getAilerons(), 
-      2 * gMag * this.setting.getElevator()
-    );
-  }
-
 
 }

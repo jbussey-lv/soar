@@ -21,20 +21,25 @@ export default class Wing {
     this.setting = setting;
   }
 
-  public getLiftMagnitude(AoA: number, airSpeed: number): number {
-    let sinTheta: number = Math.sin(AoA);
-    return 2 * this.width * this.length * this.setting.airDensity * sinTheta * sinTheta * airSpeed;
+  public getForce(absWingAngle: number, airVel: Vec): Vec {
+
+    let AoA: number = absWingAngle - airVel.angle;
+
+    let forceMagnitude: number = this.getForceMagnitude(airVel.magnitude, AoA, this.setting.airDensity);
+
+    let forceAngle: number = absWingAngle + Math.PI/2;
+
+    return Vec.n(forceMagnitude).rotate(forceAngle);
+
+  }
+
+  public getForceMagnitude(airSpeed: number, AoA: number, airDensity: number): number {
+    let sinTheta = Math.sin(AoA);
+    return 2 * airSpeed * airSpeed * sinTheta * sinTheta * this.length * this.width * airDensity;
   }
 
   public get ang(): number{
     return this.angMid + (this.angDiff * this.setting.getElevator());
-  }
-
-  public getLift(absAng: number, airVel: Vec): Vec {
-    let AoA: number = absAng - airVel.angle;
-    let liftMag: number = this.getLiftMagnitude(AoA, airVel.magnitude);
-    let liftAng: number = absAng + Math.PI / 2;
-    return Vec.n(liftMag).rotate(liftAng);
   }
 
   
