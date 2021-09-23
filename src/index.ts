@@ -32,11 +32,12 @@ plane.addWing(tail);
 stage.addPlane(plane);
 
 let ts = 1/60;
+let speedRatio = 0.01;
 
 setInterval(
   () => {
     setting.setGamepad(navigator.getGamepads()[0]);
-    plane.updatePosition(ts);
+    plane.updatePosition(ts * speedRatio);
     stage.render();
   }, 
   ts * 1000

@@ -1,8 +1,6 @@
 import Vec from "./Vec";
 import Plane from "./Plane";
 import Wing from "./Wing";
-import { addSyntheticTrailingComment } from "typescript";
-
 
 type PlaneGroup = {
   group: SVGElement;
@@ -10,7 +8,6 @@ type PlaneGroup = {
 }
 
 export default class Stage {
-
 
   private pixelWidth: number;
   private pixelHeight: number;
@@ -103,6 +100,7 @@ export default class Stage {
     wingSprite.setAttribute('stroke', 'red');
     wingSprite.setAttribute('stroke-width', '3');
     let rotate = " rotate(" + wing.ang * -180 / Math.PI + " " + cx + " " + cy + ")";
+
     // let rotate = " rotate(" + wing.ang * 180 / Math.PI + " " + cx * this.pixelsPerMeter + " " + -1 * cy * this.pixelsPerMeter + ")";
     // + " " + cx * this.pixelsPerMeter + " " + -1 * cy * this.pixelsPerMeter + ")";
     wingSprite.setAttribute("transform", rotate);
@@ -130,6 +128,7 @@ export default class Stage {
 
   private setAng(element: SVGElement, ang: number, cx: number, cy: number) {
     let rotate = " rotate(" + ang * -180 / Math.PI + " " + cx + " " + cy + ")";
+    console.log(rotate);
     element.setAttribute("transform", rotate);
   }
 
