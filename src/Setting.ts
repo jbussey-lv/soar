@@ -45,7 +45,7 @@ export default class Setting {
 
   public airDensity: number = 1.225;
 
-  public wind(position: Vec): Vec {
+  public getWind(pos: Vec): Vec {
     return Vec.n();
   }
 
