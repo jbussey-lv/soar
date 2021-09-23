@@ -47,6 +47,7 @@ describe('Plane', () => {
       let angVel: number = 2 * Math.PI;
 
       let plane: Plane = getBasicPlane();
+      plane.cog = Vec.n(0,0);
       plane.angVel = angVel;
 
       expect(plane.getAbsVel(Vec.n(1,0))).to.be.deep.almost(Vec.n(0, angVel));
@@ -61,7 +62,7 @@ describe('Plane', () => {
       let plane = getBasicPlane();
       plane.ang = Math.PI/6;
       plane.angVel = Math.PI/4;
-      plane.cog = Vec.n(8, 2);
+      plane.cog = Vec.n(2, 1);
 
       expect(plane.getAbsVel(Vec.n(5,2))).to.be.deep.almost(Vec.n(-1.854, 1.651));
     });
