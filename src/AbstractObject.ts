@@ -34,11 +34,11 @@ export default abstract class AbstractObject {
     let forceArms = this.getAllForceArms();
     let acc = this.getNetForce(forceArms).divide(this.mass);
     this.vel = this.vel.plus(acc.times(dt))
-    this.pos = this.pos.plus(this.vel.times(dt));
+    // this.pos = this.pos.plus(this.vel.times(dt));
 
     let angAcc = this.getNetTorque(forceArms) / this.moment;
     this.angVel += angAcc * dt;
-    this.ang += this.angVel * dt;
+    // this.ang += this.angVel * dt;
   }
 
   getArm(pos: Vec): Vec {

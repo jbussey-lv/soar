@@ -16,7 +16,7 @@ export default class Setting {
 
   public getThrust(): number{
     if(!this.gamepad){return 0};
-    return this.gamepad.axes[1];
+    return -1 * this.gamepad.axes[1];
   }
 
   public getAilerons(): number {
@@ -26,7 +26,7 @@ export default class Setting {
 
   public getElevator(): number {
     if(!this.gamepad){return 0};
-    return this.gamepad.axes[3];
+    return -1 * this.gamepad.axes[3];
   }
 
   public keyDown(key: String) {

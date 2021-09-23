@@ -12,6 +12,7 @@ export default class Plane extends AbstractObject {
 
   constructor(pos: Vec, vel: Vec, ang: number, angVel: number, cog: Vec, engine: Engine, setting: Setting) {
     super(pos, vel, ang, angVel, cog, setting);
+    this.engine = engine;
   }
 
   addWing(wing: Wing) {

@@ -10,9 +10,11 @@ let setting = new Setting();
 document.addEventListener('keydown', (e) => {setting.keyDown(e.key)});
 document.addEventListener('keyup', (e) => {setting.keyUp(e.key)});
 
-let engine: Engine = new Engine(Vec.n(10,2), 0, 200, ()=>1);
+let engine: Engine = new Engine(Vec.n(10,2), 0, 200, ()=>setting.getThrust());
 
-let wing: Wing = new Wing(Vec.n(7.2), 0, 0, 2, 10, ()=>0)
+let wing: Wing = new Wing(Vec.n(7,2), 0, 0, 10, 2, ()=>0);
+
+let tail: Wing = new Wing(Vec.n(0.5,2), -0.05, Math.PI/6, 2, 1, ()=>setting.getElevator());
 
 let plane = new Plane(
   Vec.n(0, 0),
@@ -25,6 +27,7 @@ let plane = new Plane(
 );
 
 plane.addWing(wing);
+plane.addWing(tail);
 
 stage.addPlane(plane);
 
