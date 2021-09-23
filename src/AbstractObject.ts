@@ -24,6 +24,11 @@ export default abstract class AbstractObject {
   }
 
   protected abstract getAllForceArms(): ForceArm[];
+
+  getAirVel(pos: Vec): Vec {
+    return this.getAbsVel(pos)
+               .minus(this.setting.getWind(pos));
+  }
  
   updatePosition(dt: number) {
     let forceArms = this.getAllForceArms();

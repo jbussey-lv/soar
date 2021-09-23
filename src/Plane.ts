@@ -22,11 +22,6 @@ export default class Plane extends AbstractObject {
     return wing.ang + this.ang;
   }
 
-  getAirVel(pos: Vec): Vec {
-    return this.getAbsVel(pos)
-               .minus(this.setting.getWind(pos));
-  }
-
   getWingForceArm(wing: Wing): ForceArm {
 
     let absWingAngle: number = this.getAbsWingAngle(wing);
