@@ -73,6 +73,14 @@ export default class Vec {
     return response;
   }
 
+  public dot(vec: Vec): number {
+    return this.x * vec.x + this.y * vec.y;
+  }
+
+  public cross(vec: Vec): number {
+    return this.x * vec.y - this.y * vec.x;
+  }
+
   public rotate(angle: number): Vec {
     let response: Vec = this.clone();
     response.angle += angle;

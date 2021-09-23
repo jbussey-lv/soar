@@ -84,7 +84,7 @@ export default class Plane {
 
     let airVel: Vec = this.getAirVel(wing.pos);
 
-    let wingForce: Vec = wing.getForce(absWingAngle, airVel);
+    let wingForce: Vec = wing.getForce(absWingAngle, airVel, this.setting.airDensity);
 
     return {
       force: wingForce,
@@ -129,7 +129,18 @@ export default class Plane {
   }
 
   private getNetTorque(allForceArms: ForceArm[]): number {
-    return this.setting.getRudder() * 0.05; // STUBBED
+    let netTorque: number = 0;
+    allForceArms.forEach(forceArm => {
+      netTorque += this.getTorque(forceArm);
+    });
+    return netTorque;
+  }
+
+  private getTorque(forceArm: ForceArm): number {
+    let theta: number = forceArm.force.angle - forceArm.arm.angle;
+    return forceArm.force.magnitude * 
+           forceArm.arm.magnitude *
+           Math.sin(theta);
   }
 
 }

@@ -6,17 +6,17 @@ export default class Engine {
   public pos: Vec;
   public ang: number;
   public maxThrust: number;
-  public setting: Setting;
+  public getControlVal: () => number;
 
-  constructor(pos: Vec, ang: number, maxThrust: number, setting: Setting) {
+  constructor(pos: Vec, ang: number, maxThrust: number, getControlVal: () => number) {
     this.pos = pos;
     this.ang = ang;
     this.maxThrust = maxThrust;
-    this.setting = setting;
+    this.getControlVal = getControlVal;
   }
 
   public get thrust(): number{
-    return this.maxThrust * this.setting.getThrust();
+    return this.maxThrust * this.getControlVal();
   }
 
 

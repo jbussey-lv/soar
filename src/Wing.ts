@@ -6,26 +6,24 @@ export default class Wing {
   public pos: Vec;
   public angMid: number;
   public angDiff: number;
-  public control: string;
   public length: number;
   public width: number;
-  public setting: Setting;
+  public getControlVal: () => number;
 
-  constructor(pos: Vec, angMid: number, angDiff: number, control: string, length: number, width: number, setting: Setting) {
+  constructor(pos: Vec, angMid: number, angDiff: number, length: number, width: number, getControlVal: () => number) {
     this.pos = pos;
     this.angMid = angMid;
     this.angDiff = angDiff;
-    this.control = control;
     this.length = length;
     this.width = width;
-    this.setting = setting;
+    this.getControlVal = getControlVal;
   }
 
-  public getForce(absWingAngle: number, airVel: Vec): Vec {
+  public getForce(absWingAngle: number, airVel: Vec, airDensity: number): Vec {
 
     let AoA: number = absWingAngle - airVel.angle;
 
-    let forceMagnitude: number = this.getForceMagnitude(airVel.magnitude, AoA, this.setting.airDensity);
+    let forceMagnitude: number = this.getForceMagnitude(airVel.magnitude, AoA, airDensity);
 
     let forceAngle: number = absWingAngle + Math.PI/2;
 
@@ -39,7 +37,7 @@ export default class Wing {
   }
 
   public get ang(): number{
-    return this.angMid + (this.angDiff * this.setting.getElevator());
+    return this.angMid + (this.angDiff * this.getControlVal());
   }
 
   
