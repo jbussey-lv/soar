@@ -17,22 +17,24 @@ let wing: Wing = new Wing(Vec.n(7,2), 0, 0, 10, 2, ()=>0);
 let tail: Wing = new Wing(Vec.n(0.5,2), -0.05, Math.PI/6, 2, 1, ()=>setting.getElevator());
 
 let plane = new Plane(
-  Vec.n(0, 0),
+  Vec.n(40, 20),
   Vec.n(0,0),
   0,
   0,
-  Vec.n(5, 3),
-  engine,
+  Vec.n(3, 1),
   setting
 );
 
-plane.addWing(wing);
-plane.addWing(tail);
+// plane.addWing(wing);
+// plane.addWing(tail);
+
+plane.addEngine(new Engine(Vec.n(1,1), Math.PI/2, 9, ()=>setting.getThrust()));
+plane.addEngine(new Engine(Vec.n(5,1), Math.PI/2, 10, ()=>setting.getElevator()));
 
 stage.addPlane(plane);
 
 let ts = 1/60;
-let speedRatio = 0.01;
+let speedRatio = 1;
 
 setInterval(
   () => {

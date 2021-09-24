@@ -10,8 +10,8 @@ export default abstract class AbstractObject {
   public ang: number;
   public angVel: number;
   public cog: Vec;
-  public mass: number = 100;
-  public moment: number = 0.033;
+  public mass: number = 10;
+  public moment: number = 300;
   public setting: Setting;
 
   constructor(pos: Vec, vel: Vec, ang: number, angVel: number, cog: Vec, setting: Setting) {
@@ -36,10 +36,18 @@ export default abstract class AbstractObject {
     this.vel = this.vel.plus(acc.times(dt))
     this.pos = this.pos.plus(this.vel.times(dt));
 
-    let angAcc = this.getNetTorque(forceArms) / this.moment;
+    let angAcc = -1* this.getNetTorque(forceArms) / this.moment;
     this.angVel += angAcc * dt;
-    this.ang += this.angVel * dt;
+    this.ang = this.mod(this.ang + this.angVel * dt, 2*Math.PI);
+
+    if (isNaN(this.angVel) || isNaN(this.ang)) {
+      return 'Not a Number!';
+    }
   }
+
+  mod = function(number, base) {
+    return ((number%base)+base)%base;
+  };
 
   getArm(pos: Vec): Vec {
     return pos.minus(this.cog)
@@ -68,7 +76,8 @@ export default abstract class AbstractObject {
     let netForce = Vec.n();
 
     allForceArms.forEach(forceArm => {
-      netForce.plus(forceArm.force);
+      netForce.x -= forceArm.force.x;
+      netForce.y += forceArm.force.y;
     })
 
     return netForce;

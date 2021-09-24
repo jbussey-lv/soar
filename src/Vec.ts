@@ -14,8 +14,16 @@ export default class Vec {
     return this._x;
   }
 
+  public set x(val: number) {
+    this._x = val;
+  }
+
   public get y(): number {
     return this._y;
+  }
+
+  public set y(val: number) {
+    this._y = val;
   }
 
   public get magnitude(): number {
@@ -46,6 +54,18 @@ export default class Vec {
   public times(factor: number): Vec {
     let response: Vec = this.clone();
     response.magnitude *= factor;
+    return response;
+  }
+
+  public mirrorX(): Vec {
+    let response: Vec = this.clone();
+    response.x = -1 * response.x;
+    return response;
+  }
+
+  public mirrorY(): Vec {
+    let response: Vec = this.clone();
+    response.y = -1 * response.y;
     return response;
   }
 

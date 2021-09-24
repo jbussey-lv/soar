@@ -8,15 +8,18 @@ import { ForceArm } from "./ForceArm";
 export default class Plane extends AbstractObject {
 
   public wings: Wing[] = [];
-  public engine: Engine;
+  public engines: Engine[] = [];
 
-  constructor(pos: Vec, vel: Vec, ang: number, angVel: number, cog: Vec, engine: Engine, setting: Setting) {
+  constructor(pos: Vec, vel: Vec, ang: number, angVel: number, cog: Vec, setting: Setting) {
     super(pos, vel, ang, angVel, cog, setting);
-    this.engine = engine;
   }
 
   addWing(wing: Wing) {
     this.wings.push(wing);
+  }
+
+  addEngine(engine: Engine) {
+    this.engines.push(engine);
   }
 
   getAbsWingAngle(wing: Wing): number {
@@ -45,17 +48,17 @@ export default class Plane extends AbstractObject {
     }
   }
 
-  private getEngineForceArm(): ForceArm {
-    let force = Vec.n(this.engine.thrust).rotate(this.engine.ang).rotate(this.ang);
-    let arm = this.getArm(this.engine.pos);
+  private getEngineForceArm(engine: Engine): ForceArm {
+    let force = Vec.n(engine.thrust).rotate(engine.ang).rotate(this.ang);
+    let arm = this.getArm(engine.pos);
     return {force, arm};
   }
 
-  protected getAllForceArms(): ForceArm[]{
-    let forceArms: ForceArm[] = [
-      this.getWeightForceArm(),
-      this.getEngineForceArm()
-    ];
+  public getAllForceArms(): ForceArm[]{
+    let forceArms: ForceArm[] = [this.getWeightForceArm()];
+    this.engines.forEach(engine => {
+      forceArms.push(this.getEngineForceArm(engine));
+    });
     this.wings.forEach(wing => {
       forceArms.push(this.getWingForceArm(wing));
     });

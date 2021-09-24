@@ -16,6 +16,7 @@ export default class Engine {
   }
 
   public get thrust(): number{
+    console.log("e: " + this.getControlVal());
     return this.maxThrust * this.getControlVal();
   }
 

@@ -1,17 +1,22 @@
 import Vec from "./Vec";
 import Plane from "./Plane";
 import Wing from "./Wing";
+import Engine from "./Engine";
+import { ForceArm } from "./ForceArm";
 
 type PlaneGroup = {
   group: SVGElement;
   wingSprites: SVGElement[];
+  engineSprites: SVGElement[];
+  forceSprites: SVGElement[];
 }
 
 export default class Stage {
 
   private pixelWidth: number;
   private pixelHeight: number;
-  private pixelsPerMeter: number = 30;
+  private pixelsPerMeter: number = 10;
+  private metersPerNewton: number = 0.2;  // to draw force vectors
   private origin: Vec = Vec.n(0, 0); // where bottom left of stage shows in real meter coords
   private container: HTMLElement;
   private planes: Map<Plane, PlaneGroup> = new Map();
@@ -68,24 +73,48 @@ export default class Stage {
 
     let group: SVGElement = this.createSvgElement('g');
 
-    let width = 20;
-    let height = 10;
+    let width = 6;
+    let height = 2;
     this.addRect(width, height, group);
 
     let wingSprites: SVGElement[] = [];
-    plane.wings.forEach((wing, index) => {
+    plane.wings.forEach(wing => {
       let wingSprite = this.getWingSprite(wing);
       group.appendChild(wingSprite);
       wingSprites.push(wingSprite);
+    });
+
+    let engineSprites: SVGElement[] = [];
+    plane.engines.forEach(engine => {
+      let engineSprite = this.getEngineSprite(engine);
+      group.appendChild(engineSprite);
+      engineSprites.push(engineSprite);
+    });
+
+    let forceSprites: SVGElement[] = [];
+    plane.getAllForceArms().forEach(forceArm => {
+      let forceSprite = this.getForceSprite();
+      this.container.appendChild(forceSprite);
+      forceSprites.push(forceSprite);
     })
 
 
     this.container.appendChild(group);
 
-    this.planes.set(plane, {group: group, wingSprites});
+    this.planes.set(plane, {group: group, wingSprites, engineSprites, forceSprites});
   }
 
-  getWingSprite(wing: Wing){
+  getForceSprite(): SVGElement {
+    let forceSprite: SVGElement = this.createSvgElement('line');
+
+    forceSprite.setAttribute("stroke", "#000");
+    forceSprite.setAttribute("stroke-width", "2");
+    forceSprite.setAttribute("marker-end", "url(#arrowhead)");
+
+    return forceSprite;
+  }
+
+  getWingSprite(wing: Wing): SVGElement {
     let wingSprite: SVGElement = this.createSvgElement('line');
     let x1 = (wing.pos.x - wing.width / 2) * this.pixelsPerMeter;
     let y1 = -1 * wing.pos.y * this.pixelsPerMeter;
@@ -107,6 +136,20 @@ export default class Stage {
     return wingSprite;
   }
 
+  getEngineSprite(engine: Engine){
+
+    let radius = 0.5;
+    
+    let engineSprite: SVGElement = this.createSvgElement('circle');
+    engineSprite.setAttribute("cx", (engine.pos.x * this.pixelsPerMeter).toString());
+    engineSprite.setAttribute("cy", (-1 * engine.pos.y * this.pixelsPerMeter).toString());
+    engineSprite.setAttribute("r", (radius * this.pixelsPerMeter).toString());
+    engineSprite.setAttribute('stroke', 'red');
+    engineSprite.setAttribute('fill', 'red');
+
+    return engineSprite;
+  }
+
   render() {
     this.planes.forEach((sprite, plane) => {
       plane.wings.forEach((wing, i) => {
@@ -118,17 +161,40 @@ export default class Stage {
         let cx = (x2 + x1) / 2;
         let cy = (y2 + y1) / 2;
         this.setAng(wingSprite, wing.ang, cx, cy);
-      })
+      });
+      plane.getAllForceArms().forEach((forceArm, i) => {
+        let forceSprite = sprite.forceSprites[i];
+        let start = plane.pos.plus(plane.cog, forceArm.arm.mirrorY());
+        let end = start.minus(forceArm.force.mirrorY().times(this.metersPerNewton));
+
+        let startPaintPos = this.getPaintPos(start);
+        let endPaintPos = this.getPaintPos(end);
+
+        forceSprite.setAttribute("x1", startPaintPos.x.toString());
+        forceSprite.setAttribute("y1", (startPaintPos.y).toString());
+        forceSprite.setAttribute("x2", endPaintPos.x.toString());
+        forceSprite.setAttribute("y2", (endPaintPos.y).toString());
+      });
+
       let paintPos = this.getPaintPos(plane.pos);
       let translate = " translate(" + paintPos.x + " " + paintPos.y + ")";
-      let rotate = " rotate("+ plane.ang * 180 / Math.PI + " " + plane.cog.x * this.pixelsPerMeter + " " + -1 * plane.cog.y * this.pixelsPerMeter + ")";
+      let rotate = " rotate("+ this.decimalize(plane.ang * 180 / Math.PI) + " " + this.decimalize(plane.cog.x * this.pixelsPerMeter) + " " + this.decimalize(-1 * plane.cog.y * this.pixelsPerMeter) + ")";
+      console.log("plane: " + rotate);
+      console.log("---------------");
       sprite.group.setAttribute("transform", translate + rotate);
     })
   }
 
+  private decimalize(number: number): String {
+    if(-0.00001 < number && number < 0.00001){
+      number = 0;
+    }
+    return number.toFixed(5);
+  }
+
   private setAng(element: SVGElement, ang: number, cx: number, cy: number) {
-    let rotate = " rotate(" + ang * -180 / Math.PI + " " + cx + " " + cy + ")";
-    console.log(rotate);
+    let rotate = " rotate(" + this.decimalize(ang * -180 / Math.PI) + " " + this.decimalize(cx) + " " + this.decimalize(cy) + ")";
+    console.log("wing: " + rotate);
     element.setAttribute("transform", rotate);
   }
 

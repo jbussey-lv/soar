@@ -8,7 +8,6 @@ import Engine from '../src/Engine';
 chai.use(chaiAlmost());
 
 function getBasicPlane(): Plane {
-  let engine: Engine = new Engine(Vec.n(10, 2), 0, 200, () => 1);
 
   return new Plane(
     Vec.n(), // pos
@@ -16,14 +15,11 @@ function getBasicPlane(): Plane {
     0, // ang
     0, // angVel
     Vec.n(8, 2), // cog
-    engine,
     new Setting()
   );
 }
 
 describe('Plane', () => {
-
-  let setting = new Setting();
 
   describe('Position Velocity', () => {
 
