@@ -23,7 +23,7 @@ export default class Wing {
 
     let AoA: number = absWingAngle - airVel.angle;
 
-    let forceMagnitude: number = this.getForceMagnitude(airVel.magnitude, AoA, airDensity);
+    let forceMagnitude: number = 0.001 * this.getForceMagnitude(airVel.magnitude, AoA, airDensity);
 
     let forceAngle: number = absWingAngle + Math.PI/2;
 

@@ -10,30 +10,30 @@ let setting = new Setting();
 document.addEventListener('keydown', (e) => {setting.keyDown(e.key)});
 document.addEventListener('keyup', (e) => {setting.keyUp(e.key)});
 
-let engine: Engine = new Engine(Vec.n(5,2), Math.PI/4, 10, ()=>setting.getThrust());
+let engine: Engine = new Engine(Vec.n(9,2), 0, 100, ()=>setting.getThrust());
 
-let wing: Wing = new Wing(Vec.n(7,2), 0, 0, 10, 2, ()=>0);
+let wing: Wing = new Wing(Vec.n(6,3), 0, 0, 10, 4, ()=>0);
 
-let tail: Wing = new Wing(Vec.n(0.5,2), -0.05, Math.PI/6, 2, 1, ()=>setting.getElevator());
+let tail: Wing = new Wing(Vec.n(1,2), -0.05, Math.PI/6, 3, 2, ()=>setting.getElevator());
 
 let plane = new Plane(
-  Vec.n(40, 20),
-  Vec.n(0,0),
+  Vec.n(10, 50),
+  Vec.n(30,0),
   0,
   0,
-  Vec.n(3, 1),
+  Vec.n(7, 2),
   setting
 );
 
-// plane.addWing(wing);
-// plane.addWing(tail);
+plane.addWing(wing);
+plane.addWing(tail);
 
 plane.addEngine(engine);
 
 stage.addPlane(plane);
 
 let ts = 1/60;
-let speedRatio = 1;
+let speedRatio = 0.1;
 
 setInterval(
   () => {

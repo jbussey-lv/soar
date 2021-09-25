@@ -15,7 +15,7 @@ export default class Stage {
 
   private pixelWidth: number;
   private pixelHeight: number;
-  private pixelsPerMeter: number = 10;
+  private pixelsPerMeter: number = 4;
   private metersPerNewton: number = 0.2;  // to draw force vectors
   private origin: Vec = Vec.n(0, 0); // where bottom left of stage shows in real meter coords
   private container: HTMLElement;
@@ -41,8 +41,8 @@ export default class Stage {
     rect.setAttribute('y', (-1 * height *this.pixelsPerMeter).toString());
     rect.setAttribute('width', (width*this.pixelsPerMeter).toString());
     rect.setAttribute('height', (height*this.pixelsPerMeter).toString());
-    rect.setAttribute('stroke', 'black');
-    rect.setAttribute('stroke-width', '3');
+    rect.setAttribute('stroke', 'grey');
+    rect.setAttribute('stroke-width', '2');
     rect.setAttribute('fill', 'transparent');
     group.appendChild(rect);
 
@@ -73,9 +73,11 @@ export default class Stage {
 
     let group: SVGElement = this.createSvgElement('g');
 
-    let width = 6;
-    let height = 2;
+    let width = 10;
+    let height = 4;
     this.addRect(width, height, group);
+
+    group.appendChild(this.getCogSprite(plane.cog));
 
     let wingSprites: SVGElement[] = [];
     plane.wings.forEach(wing => {
@@ -104,6 +106,16 @@ export default class Stage {
     this.planes.set(plane, {group: group, wingSprites, engineSprites, forceSprites});
   }
 
+  getCogSprite(cog: Vec): SVGElement {
+    let cogSprite: SVGElement = this.createSvgElement('circle');
+    cogSprite.setAttribute("cx", (cog.x * this.pixelsPerMeter).toString());
+    cogSprite.setAttribute("cy", (-1 * cog.y * this.pixelsPerMeter).toString());
+    cogSprite.setAttribute("r", (0.5 * this.pixelsPerMeter).toString());
+    cogSprite.setAttribute('stroke', 'green');
+    cogSprite.setAttribute('fill', 'green');
+    return cogSprite;
+  }
+
   getForceSprite(): SVGElement {
     let forceSprite: SVGElement = this.createSvgElement('line');
 
@@ -130,8 +142,6 @@ export default class Stage {
     wingSprite.setAttribute('stroke-width', '3');
     let rotate = " rotate(" + wing.ang * -180 / Math.PI + " " + cx + " " + cy + ")";
 
-    // let rotate = " rotate(" + wing.ang * 180 / Math.PI + " " + cx * this.pixelsPerMeter + " " + -1 * cy * this.pixelsPerMeter + ")";
-    // + " " + cx * this.pixelsPerMeter + " " + -1 * cy * this.pixelsPerMeter + ")";
     wingSprite.setAttribute("transform", rotate);
     return wingSprite;
   }
@@ -144,8 +154,8 @@ export default class Stage {
     engineSprite.setAttribute("cx", (engine.pos.x * this.pixelsPerMeter).toString());
     engineSprite.setAttribute("cy", (-1 * engine.pos.y * this.pixelsPerMeter).toString());
     engineSprite.setAttribute("r", (radius * this.pixelsPerMeter).toString());
-    engineSprite.setAttribute('stroke', 'red');
-    engineSprite.setAttribute('fill', 'red');
+    engineSprite.setAttribute('stroke', 'blue');
+    engineSprite.setAttribute('fill', 'blue');
 
     return engineSprite;
   }
@@ -170,10 +180,17 @@ export default class Stage {
         let startPaintPos = this.getPaintPos(start);
         let endPaintPos = this.getPaintPos(end);
 
+        console.log(forceArm.force.magnitude);
+
+        let visibility = Math.abs(forceArm.force.magnitude) > 0.1 ?
+                         "visible" :
+                         "hidden";
+
         forceSprite.setAttribute("x1", startPaintPos.x.toString());
         forceSprite.setAttribute("y1", (startPaintPos.y).toString());
         forceSprite.setAttribute("x2", endPaintPos.x.toString());
         forceSprite.setAttribute("y2", (endPaintPos.y).toString());
+        forceSprite.setAttribute("visibility", visibility);
       });
 
       let paintPos = this.getPaintPos(plane.pos);

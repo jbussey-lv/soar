@@ -36,7 +36,7 @@ export default class Plane extends AbstractObject {
 
     return {
       force: wingForce,
-      arm: this.getAbsPos(wing.pos)
+      arm: this.getArm(wing.pos)
     }
   }
 
@@ -50,7 +50,6 @@ export default class Plane extends AbstractObject {
 
   private getEngineForceArm(engine: Engine): ForceArm {
     let force = Vec.n(engine.thrust).rotate(engine.ang).rotate(this.ang);
-    console.log(force);
     let arm = this.getArm(engine.pos);
     return {force, arm};
   }
