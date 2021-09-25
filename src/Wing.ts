@@ -23,7 +23,7 @@ export default class Wing {
 
     let AoA: number = absWingAngle - airVel.angle;
 
-    let forceMagnitude: number = 0.001 * this.getForceMagnitude(airVel.magnitude, AoA, airDensity);
+    let forceMagnitude: number = this.getForceMagnitude(airVel.magnitude, AoA, airDensity);
 
     let forceAngle: number = absWingAngle + Math.PI/2;
 
@@ -33,7 +33,7 @@ export default class Wing {
 
   public getForceMagnitude(airSpeed: number, AoA: number, airDensity: number): number {
     let sinTheta = Math.sin(AoA);
-    return 2 * airSpeed * airSpeed * sinTheta * sinTheta * this.length * this.width * airDensity;
+    return 2 * airSpeed * airSpeed * Math.abs(sinTheta) * sinTheta * this.length * this.width * airDensity;
   }
 
   public get ang(): number{

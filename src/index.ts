@@ -5,14 +5,14 @@ import Vec from "./Vec";
 import Wing from "./Wing";
 import Engine from "./Engine";
 
-let stage = new Stage(document.getElementById('stage'));
+let stage = new Stage(document.getElementById('stage'), true);
 let setting = new Setting();
 document.addEventListener('keydown', (e) => {setting.keyDown(e.key)});
 document.addEventListener('keyup', (e) => {setting.keyUp(e.key)});
 
 let engine: Engine = new Engine(Vec.n(9,2), 0, 100, ()=>setting.getThrust());
 
-let wing: Wing = new Wing(Vec.n(6,3), 0, 0, 10, 4, ()=>0);
+let wing: Wing = new Wing(Vec.n(6,3), 0.08, 0, 10, 4, ()=>0);
 
 let tail: Wing = new Wing(Vec.n(1,2), -0.05, Math.PI/6, 3, 2, ()=>setting.getElevator());
 
@@ -33,7 +33,7 @@ plane.addEngine(engine);
 stage.addPlane(plane);
 
 let ts = 1/60;
-let speedRatio = 0.1;
+let speedRatio = 1;
 
 setInterval(
   () => {

@@ -20,10 +20,12 @@ export default class Stage {
   private origin: Vec = Vec.n(0, 0); // where bottom left of stage shows in real meter coords
   private container: HTMLElement;
   private planes: Map<Plane, PlaneGroup> = new Map();
+  private debug: boolean = false;
 
 
-  constructor(container: HTMLElement) {
+  constructor(container: HTMLElement, debug: boolean = false) {
     this.container = container;
+    this.debug = debug;
     this.setDimensions();
     window.onresize = () => {
       this.setDimensions();
@@ -34,7 +36,10 @@ export default class Stage {
     return document.createElementNS("http://www.w3.org/2000/svg", type+"");
   }
 
-  addRect(width: number, height: number, group: SVGElement){
+  addRect(plane: Plane, group: SVGElement){
+
+    let width = 10;
+    let height = 4;
 
     let rect: SVGElement = this.createSvgElement('rect');
     rect.setAttribute('x', '0');
@@ -73,9 +78,9 @@ export default class Stage {
 
     let group: SVGElement = this.createSvgElement('g');
 
-    let width = 10;
-    let height = 4;
-    this.addRect(width, height, group);
+    if(this.debug){
+      this.addRect(plane, group);
+    }
 
     group.appendChild(this.getCogSprite(plane.cog));
 
@@ -94,12 +99,13 @@ export default class Stage {
     });
 
     let forceSprites: SVGElement[] = [];
-    plane.getAllForceArms().forEach(forceArm => {
-      let forceSprite = this.getForceSprite();
-      this.container.appendChild(forceSprite);
-      forceSprites.push(forceSprite);
-    })
-
+    if(this.debug){
+      plane.getAllForceArms().forEach(forceArm => {
+        let forceSprite = this.getForceSprite();
+        this.container.appendChild(forceSprite);
+        forceSprites.push(forceSprite);
+      })
+    }
 
     this.container.appendChild(group);
 
@@ -172,26 +178,27 @@ export default class Stage {
         let cy = (y2 + y1) / 2;
         this.setAng(wingSprite, wing.ang, cx, cy);
       });
-      plane.getAllForceArms().forEach((forceArm, i) => {
-        let forceSprite = sprite.forceSprites[i];
-        let start = plane.pos.plus(plane.cog, forceArm.arm);
-        let end = start.plus(forceArm.force.times(this.metersPerNewton));
+      if(this.debug){
+        plane.getAllForceArms().forEach((forceArm, i) => {
+          let forceSprite = sprite.forceSprites[i];
+          let start = plane.pos.plus(plane.cog, forceArm.arm);
+          let end = start.plus(forceArm.force.times(this.metersPerNewton));
+  
+          let startPaintPos = this.getPaintPos(start);
+          let endPaintPos = this.getPaintPos(end);
+  
+          let visibility = Math.abs(forceArm.force.magnitude) > 0.1 ?
+                           "visible" :
+                           "hidden";
+  
+          forceSprite.setAttribute("x1", startPaintPos.x.toString());
+          forceSprite.setAttribute("y1", (startPaintPos.y).toString());
+          forceSprite.setAttribute("x2", endPaintPos.x.toString());
+          forceSprite.setAttribute("y2", (endPaintPos.y).toString());
+          forceSprite.setAttribute("visibility", visibility);
+        });
+      }
 
-        let startPaintPos = this.getPaintPos(start);
-        let endPaintPos = this.getPaintPos(end);
-
-        console.log(forceArm.force.magnitude);
-
-        let visibility = Math.abs(forceArm.force.magnitude) > 0.1 ?
-                         "visible" :
-                         "hidden";
-
-        forceSprite.setAttribute("x1", startPaintPos.x.toString());
-        forceSprite.setAttribute("y1", (startPaintPos.y).toString());
-        forceSprite.setAttribute("x2", endPaintPos.x.toString());
-        forceSprite.setAttribute("y2", (endPaintPos.y).toString());
-        forceSprite.setAttribute("visibility", visibility);
-      });
 
       let paintPos = this.getPaintPos(plane.pos);
       let translate = " translate(" + paintPos.x + " " + paintPos.y + ")";
