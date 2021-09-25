@@ -12,9 +12,9 @@ document.addEventListener('keyup', (e) => {setting.keyUp(e.key)});
 
 let engine: Engine = new Engine(Vec.n(9,2), 0, 100, ()=>setting.getThrust());
 
-let wing: Wing = new Wing(Vec.n(6,3), 0.08, 0, 10, 4, ()=>0);
+let wing: Wing = new Wing(Vec.n(6,3), 0.07, 0, 10, 4, ()=>0);
 
-let tail: Wing = new Wing(Vec.n(1,2), -0.05, Math.PI/6, 3, 2, ()=>setting.getElevator());
+let tail: Wing = new Wing(Vec.n(1,2), -0.01, Math.PI/6, 3, 2, ()=>setting.getElevator());
 
 let plane = new Plane(
   Vec.n(10, 50),

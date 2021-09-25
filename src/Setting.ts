@@ -46,7 +46,12 @@ export default class Setting {
   public airDensity: number = 1.225;
 
   public getWind(pos: Vec): Vec {
-    return Vec.n();
+    if(pos.y < 60){
+      return Vec.n();
+    } else {
+      return Vec.n(-9,0);
+    }
+    
   }
 
 

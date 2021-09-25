@@ -30,10 +30,27 @@ export default class Stage {
     window.onresize = () => {
       this.setDimensions();
     }
+    this.addSky();
   }
 
   private createSvgElement(type: String): SVGElement {
     return document.createElementNS("http://www.w3.org/2000/svg", type+"");
+  }
+
+  addSky() {
+    let height = 60;
+    let start = Vec.n(0, height);
+    let paintStart = this.getPaintPos(start);
+
+    let line: SVGElement = this.createSvgElement('line');
+    line.setAttribute("x1", paintStart.x.toString());
+    line.setAttribute("y1", paintStart.y.toString());
+    line.setAttribute("x2", this.pixelWidth.toString());
+    line.setAttribute("y2", paintStart.y.toString());
+    line.setAttribute('stroke', 'grey');
+    line.setAttribute('stroke-width', '1');
+    this.container.appendChild(line);
+
   }
 
   addRect(plane: Plane, group: SVGElement){

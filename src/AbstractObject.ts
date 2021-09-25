@@ -27,7 +27,7 @@ export default abstract class AbstractObject {
 
   getAirVel(pos: Vec): Vec {
     return this.getAbsVel(pos)
-               .minus(this.setting.getWind(pos));
+               .minus(this.setting.getWind(this.getAbsPos(pos)));
   }
  
   updatePosition(dt: number) {
