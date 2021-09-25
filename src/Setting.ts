@@ -41,7 +41,7 @@ export default class Setting {
     return this.keysDown.has(key);
   }
 
-  public g: number = -1; // -9.8;
+  public g: number = -0.1; // -9.8;
 
   public airDensity: number = 1.225;
 

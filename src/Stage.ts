@@ -164,8 +164,8 @@ export default class Stage {
       });
       plane.getAllForceArms().forEach((forceArm, i) => {
         let forceSprite = sprite.forceSprites[i];
-        let start = plane.pos.plus(plane.cog, forceArm.arm.mirrorY());
-        let end = start.minus(forceArm.force.mirrorY().times(this.metersPerNewton));
+        let start = plane.pos.plus(plane.cog, forceArm.arm);
+        let end = start.plus(forceArm.force.times(this.metersPerNewton));
 
         let startPaintPos = this.getPaintPos(start);
         let endPaintPos = this.getPaintPos(end);
@@ -178,9 +178,7 @@ export default class Stage {
 
       let paintPos = this.getPaintPos(plane.pos);
       let translate = " translate(" + paintPos.x + " " + paintPos.y + ")";
-      let rotate = " rotate("+ this.decimalize(plane.ang * 180 / Math.PI) + " " + this.decimalize(plane.cog.x * this.pixelsPerMeter) + " " + this.decimalize(-1 * plane.cog.y * this.pixelsPerMeter) + ")";
-      console.log("plane: " + rotate);
-      console.log("---------------");
+      let rotate = " rotate("+ this.decimalize(plane.ang * -180 / Math.PI) + " " + this.decimalize(plane.cog.x * this.pixelsPerMeter) + " " + this.decimalize(-1 * plane.cog.y * this.pixelsPerMeter) + ")";
       sprite.group.setAttribute("transform", translate + rotate);
     })
   }
@@ -194,7 +192,6 @@ export default class Stage {
 
   private setAng(element: SVGElement, ang: number, cx: number, cy: number) {
     let rotate = " rotate(" + this.decimalize(ang * -180 / Math.PI) + " " + this.decimalize(cx) + " " + this.decimalize(cy) + ")";
-    console.log("wing: " + rotate);
     element.setAttribute("transform", rotate);
   }
 

@@ -36,7 +36,7 @@ export default abstract class AbstractObject {
     this.vel = this.vel.plus(acc.times(dt))
     this.pos = this.pos.plus(this.vel.times(dt));
 
-    let angAcc = -1* this.getNetTorque(forceArms) / this.moment;
+    let angAcc = this.getNetTorque(forceArms) / this.moment;
     this.angVel += angAcc * dt;
     this.ang = this.mod(this.ang + this.angVel * dt, 2*Math.PI);
 
@@ -76,7 +76,7 @@ export default abstract class AbstractObject {
     let netForce = Vec.n();
 
     allForceArms.forEach(forceArm => {
-      netForce.x -= forceArm.force.x;
+      netForce.x += forceArm.force.x;
       netForce.y += forceArm.force.y;
     })
 
