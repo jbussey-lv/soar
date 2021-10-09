@@ -639,7 +639,7 @@ let tail = new Wing_1.default(Vec_1.default.n(1, 2), -0.01, Math.PI / 6, 3, 2, (
     if (setting.isKeyDown("L")) {
         return 0.8;
     }
-    else if (setting.isKeyDown("q")) {
+    else if (setting.isKeyDown("s")) {
         return 0.8;
     }
     else if (setting.isKeyDown("a")) {
