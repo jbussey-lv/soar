@@ -10,11 +10,21 @@ let setting = new Setting();
 document.addEventListener('keydown', (e) => {setting.keyDown(e.key)});
 document.addEventListener('keyup', (e) => {setting.keyUp(e.key)});
 
-let engine: Engine = new Engine(Vec.n(9,2), 0, 100, ()=>setting.getThrust());
+let engine: Engine = new Engine(Vec.n(9,2), 0, 100, ()=>setting.isKeyDown(" ") ? 0.8 : 0);
 
 let wing: Wing = new Wing(Vec.n(6,3), 0.07, 0, 10, 4, ()=>0);
 
-let tail: Wing = new Wing(Vec.n(1,2), -0.01, Math.PI/6, 3, 2, ()=>setting.getElevator());
+let tail: Wing = new Wing(Vec.n(1,2), -0.01, Math.PI/6, 3, 2, () => {
+  if(setting.isKeyDown("L")){
+    return 0.8;
+  } else if (setting.isKeyDown("q")){
+    return 0.8;
+  } else if (setting.isKeyDown("a")){
+    return -0.8;
+  } else {
+    return 0;
+  }
+});
 
 let plane = new Plane(
   Vec.n(10, 50),
