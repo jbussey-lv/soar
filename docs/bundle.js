@@ -636,10 +636,7 @@ document.addEventListener('keyup', (e) => { setting.keyUp(e.key); });
 let engine = new Engine_1.default(Vec_1.default.n(9, 2), 0, 100, () => setting.isKeyDown(" ") ? 0.8 : 0);
 let wing = new Wing_1.default(Vec_1.default.n(6, 3), 0.07, 0, 10, 4, () => 0);
 let tail = new Wing_1.default(Vec_1.default.n(1, 2), -0.01, Math.PI / 6, 3, 2, () => {
-    if (setting.isKeyDown("L")) {
-        return 0.8;
-    }
-    else if (setting.isKeyDown("s")) {
+    if (setting.isKeyDown("s")) {
         return 0.8;
     }
     else if (setting.isKeyDown("a")) {
