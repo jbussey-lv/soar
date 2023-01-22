@@ -1,5 +1,3 @@
-
-
 export default class Vec {
 
   private _x: number;
