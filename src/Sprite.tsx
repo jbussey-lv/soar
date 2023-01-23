@@ -7,6 +7,8 @@ abstract class Sprite {
 
   abstract get angle(): number;
 
+  abstract get cog(): Vec;
+
   abstract get svg(): JSX.Element;
 
   private get angleInDegrees(): number {
@@ -14,7 +16,9 @@ abstract class Sprite {
   }
 
   private get svgTransform(): string {
-    return `translate(${this.position.x},${this.position.y}) rotate(${this.angleInDegrees})`;
+    let translate = `translate(${this.position.x}, ${this.position.y})`;
+    let rotate = `rotate(${this.angleInDegrees}, ${this.cog.x}, ${this.cog.y})`;
+    return `${translate} ${rotate}`;
   }
 
   render(): JSX.Element {
