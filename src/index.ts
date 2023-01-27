@@ -1,5 +1,15 @@
+import ReactDOMServer from "react-dom/server";
 import Plane from "./Plane";
 
-let plane = new Plane();
+let sprites = [
+  new Plane(20, 30),
+  new Plane(100, 130),
+  new Plane(400, 200)
+];
 
-document.getElementById("stage").innerHTML = plane.render();
+let content = "";
+for(let sprite of sprites){
+  content += ReactDOMServer.renderToString(sprite.render())
+}
+
+document.getElementById("stage").innerHTML = content;

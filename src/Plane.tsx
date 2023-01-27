@@ -9,6 +9,11 @@ export default class Plane extends Sprite {
   private _width = 200;
   private _height = 100;
 
+  constructor(x: number, y: number) {
+    super();
+    this._position = Vec.n(x, y)
+  }
+
   get cog(){
     return this._cog;
   }
@@ -27,6 +32,8 @@ export default class Plane extends Sprite {
       strokeWidth: 3,
       stroke: "rgb(0,0,0)"
     };
+
+    let s2 = new
 
     return (
       <rect width={this._width} height={this._height} style={style} />
