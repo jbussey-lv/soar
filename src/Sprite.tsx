@@ -1,7 +1,8 @@
 import Vec from "./Vec";
 import React = require("react");
+import ReactDOMServer from "react-dom/server";
 
-abstract class Sprite {
+export default abstract class Sprite {
   
   abstract get position(): Vec;
 
@@ -21,8 +22,8 @@ abstract class Sprite {
     return `${translate} ${rotate}`;
   }
 
-  render(): JSX.Element {
-    return (
+  public render(): string {
+    return ReactDOMServer.renderToString(
       <g transform={this.svgTransform} >
         {this.svg}
       </g>
